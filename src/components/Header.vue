@@ -6,11 +6,11 @@
           <div class="container nav-wrapper">
             <a
               href="https://www.android-kiosk.com"
-              class="waves-effect waves-light"
+              class="header-logo waves-effect waves-light"
             >
               <span class="hide-on-small-only"
                 ><img
-                  src="https://www.android-kiosk.com/wp-content/themes/androidkioskcom/images/brand__white.png"
+                  src="/img/youtubeLogo.png"
                   width="30"
                   id="appicon"
                   style="
@@ -22,49 +22,54 @@
               <span
                 id="header-large"
                 style="font-weight: 300; font-size: 1.3rem"
-                >Android Kiosk</span
+                >Youtube Reviewer</span
               >
             </a>
-
-            <ul id="nav-mobile" class="hide-on-med-and-down right">
+            <div class="row">
+              <form class="col s12">
+                <div class="row">
+                  <div class="input-field col s12">
+                    <textarea
+                      id="textarea1"
+                      class="materialize-textarea"
+                    ></textarea>
+                    <label for="textarea1">Textarea</label>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <ul
+              id="nav-mobile"
+              class="hide-on-med-and-down right menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-5 current_page_item menu-item-24"
+            >
+              <li class="row">
+                <form class="col s12">
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <textarea
+                        id="textarea1"
+                        class="materialize-textarea"
+                      ></textarea>
+                      <label for="textarea1">Textarea</label>
+                    </div>
+                  </div>
+                </form>
+              </li>
               <li
                 id="menu-item-24"
                 class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-5 current_page_item menu-item-24"
               >
                 <a href="https://www.android-kiosk.com/" aria-current="page"
-                  >App</a
+                  >リンクボタン</a
                 >
               </li>
               <li
-                id="menu-item-1252"
-                class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1252"
+                id="menu-item-24"
+                class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-5 current_page_item menu-item-24"
               >
-                <a href="https://www.android-kiosk.com/remote-management/"
-                  >Remote Management</a
+                <a href="https://www.android-kiosk.com/" aria-current="page"
+                  >リンクボタン</a
                 >
-              </li>
-              <li
-                id="menu-item-1253"
-                class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1253"
-              >
-                <a href="#features">Features</a>
-              </li>
-              <li
-                id="menu-item-1150"
-                class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1150"
-              >
-                <a
-                  target="_blank"
-                  rel="noopener"
-                  href="https://kioskbrowser.crisp.help"
-                  >Help</a
-                >
-              </li>
-              <li
-                id="menu-item-1263"
-                class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1263"
-              >
-                <a href="https://www.android-kiosk.com/contact-us/">Contact</a>
               </li>
             </ul>
             <a href="#" data-activates="slide-out" class="button-collapse"
@@ -72,42 +77,6 @@
             ></a>
           </div>
         </nav>
-      </div>
-      <div class="side-nav-start">
-        <ul id="slide-out" class="side-nav">
-          <li
-            class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-5 current_page_item menu-item-24"
-          >
-            <a href="https://www.android-kiosk.com/" aria-current="page">App</a>
-          </li>
-          <li
-            class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1252"
-          >
-            <a href="https://www.android-kiosk.com/remote-management/"
-              >Remote Management</a
-            >
-          </li>
-          <li
-            class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1253"
-          >
-            <a href="#features">Features</a>
-          </li>
-          <li
-            class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1150"
-          >
-            <a
-              target="_blank"
-              rel="noopener"
-              href="https://kioskbrowser.crisp.help"
-              >Help</a
-            >
-          </li>
-          <li
-            class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1263"
-          >
-            <a href="https://www.android-kiosk.com/contact-us/">Contact</a>
-          </li>
-        </ul>
       </div>
     </header>
   </div>
@@ -119,4 +88,8 @@ import { Component, Vue } from "vue-property-decorator";
 export default class XXXComponent extends Vue {}
 </script>
 
-<style scoped></style>
+<style scoped>
+.header-logo {
+  display: flexbox;
+}
+</style>
