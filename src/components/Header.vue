@@ -25,19 +25,6 @@
                 >Youtube Reviewer</span
               >
             </a>
-            <div class="row">
-              <form class="col s12">
-                <div class="row">
-                  <div class="input-field col s12">
-                    <textarea
-                      id="textarea1"
-                      class="materialize-textarea"
-                    ></textarea>
-                    <label for="textarea1">Textarea</label>
-                  </div>
-                </div>
-              </form>
-            </div>
             <ul
               id="nav-mobile"
               class="hide-on-med-and-down right menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-5 current_page_item menu-item-24"
@@ -45,13 +32,12 @@
               <li class="row">
                 <form class="col s12">
                   <div class="row">
-                    <div class="input-field col s12">
+                    <span class="input-field col s12">
                       <textarea
                         id="textarea1"
                         class="materialize-textarea"
                       ></textarea>
-                      <label for="textarea1">Textarea</label>
-                    </div>
+                    </span>
                   </div>
                 </form>
               </li>
