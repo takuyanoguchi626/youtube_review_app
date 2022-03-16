@@ -61,7 +61,9 @@
     <div class="popular-youtubers">
       <img src="/img/まあたそ.jpeg" />
       <img src="/img/hikakin.jpeg" />
-      <img src="/img/tokaionair.jpeg" />
+      <router-link to="/youtuberDetail"
+        ><img src="/img/tokaionair.jpeg"
+      /></router-link>
       <img src="/img/george.jpeg" />
     </div>
   </div>
