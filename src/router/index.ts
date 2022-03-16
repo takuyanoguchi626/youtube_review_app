@@ -1,6 +1,5 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import Home from "../views/Home.vue";
 
 Vue.use(VueRouter);
 
@@ -16,15 +15,6 @@ const routes: Array<RouteConfig> = [
   {
     path: "/top",
     component: () => import("../views/Top.vue"),
-  },
-  {
-    path: "/",
-    name: "Home",
-    component: Home,
-  },
-  {
-    path: "/about",
-    component: () => import("../views/About.vue"),
   },
   {
     path: "/myProfile",
