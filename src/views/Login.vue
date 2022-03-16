@@ -1,4 +1,5 @@
 <template>
+
   <div>
     <div class="container">
       <div class="row login-page">
@@ -43,6 +44,7 @@
       </div>
     </div>
   </div>
+
 </template>
 
 <script lang="ts">
