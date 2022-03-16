@@ -6,13 +6,25 @@ Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
+
+    path: "/youtuberDetail",
+    component: () => import("../views/YoutuberDetail.vue"),
+  },
+  {
+    path: "/videoDetail",
+    component: () => import("../views/VideoDetail.vue"),
+  },
+  {
+    path: "/top",
+    component: () => import("../views/Top.vue"),
+  },
+  {
     path: "/",
     name: "Home",
     component: Home,
   },
   {
     path: "/about",
-    name: "About",
     component: () => import("../views/About.vue"),
   },
   {
@@ -20,6 +32,7 @@ const routes: Array<RouteConfig> = [
     name: "",
     component: () => import("../views/MyProfile.vue"),
   },
+
 ];
 
 const router = new VueRouter({
