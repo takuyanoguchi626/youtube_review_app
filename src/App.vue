@@ -13,6 +13,7 @@
         >SelfIntroductionChange</router-link
       >
       |
+      <router-link to="/searchedList">SearchedList</router-link>|
     </div>
     <router-view />
     <!-- <Footer /> -->
