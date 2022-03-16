@@ -5,6 +5,10 @@ Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
+    path: "/registerUser",
+    component: () => import("../views/RegisterUser.vue"),
+  },
+  {
     path: "/youtuberDetail",
     component: () => import("../views/YoutuberDetail.vue"),
   },
@@ -16,6 +20,7 @@ const routes: Array<RouteConfig> = [
     path: "/top",
     component: () => import("../views/Top.vue"),
   },
+
   {
     path: "/myProfile",
     name: "",
