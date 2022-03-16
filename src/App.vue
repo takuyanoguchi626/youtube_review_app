@@ -21,7 +21,6 @@
 
 <script>
 import { Component, Vue } from "vue-property-decorator";
-import M from "materialize-css/dist/js/materialize.min";
 import Header from "./components/Header.vue";
 // import Footer from "./components/Footer.vue";
 
