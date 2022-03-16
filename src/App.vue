@@ -1,14 +1,13 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
+      <router-link to="/iconChange">IconChange</router-link> |
+      <router-link to="/registerUser">RegisterUser</router-link> |
       <router-link to="/login">Login</router-link> |
-      <router-link to="/registerUser">RegisterUser</router-link> 
       <router-link to="/top">Top</router-link> |
       <router-link to="/videoDetail">VideoDetail</router-link> |
-      <router-link to="/youtuberDetail">YoutuberDetail</router-link>
-      <router-link to="/myProfile">myProfile</router-link>|
+      <router-link to="/youtuberDetail">YoutuberDetail</router-link> |
+      <router-link to="/myProfile">myProfile</router-link> |
     </div>
     <router-view />
   </div>
