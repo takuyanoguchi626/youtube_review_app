@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header />
+    <!-- <Header /> -->
     <div id="nav">
       <router-link to="/iconChange">IconChange</router-link> |
       <router-link to="/registerUser">RegisterUser</router-link> |
