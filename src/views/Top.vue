@@ -62,7 +62,7 @@
       <img src="/img/まあたそ.jpeg" />
       <img src="/img/hikakin.jpeg" />
       <router-link to="/youtuberDetail"
-        ><img src="/img/tokaionair.jpeg"
+        ><img class="tokai" src="/img/tokaionair.jpeg"
       /></router-link>
       <img src="/img/george.jpeg" />
     </div>
@@ -98,6 +98,11 @@ export default class XXXComponent extends Vue {}
   width: 250px;
   height: 250px;
   /* 画像の縦横比を維持したまま表示ができるプロパティ */
+  object-fit: cover;
+}
+.tokai {
+  width: 350px;
+  height: 250px;
   object-fit: cover;
 }
 </style>
