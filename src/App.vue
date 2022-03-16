@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <!-- <Header /> -->
     <div id="nav">
       <router-link to="/iconChange">IconChange</router-link> |
       <router-link to="/registerUser">RegisterUser</router-link> |
@@ -14,8 +15,23 @@
       |
     </div>
     <router-view />
+    <!-- <Footer /> -->
   </div>
 </template>
+
+<script>
+import { Component, Vue } from "vue-property-decorator";
+import Header from "./components/Header.vue";
+// import Footer from "./components/Footer.vue";
+
+@Component({
+  components: {
+    Header,
+    // Footer,
+  },
+})
+export default class App extends Vue {}
+</script>
 
 <style>
 #app {
