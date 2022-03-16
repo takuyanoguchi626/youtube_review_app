@@ -6,10 +6,13 @@ Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
+    path: "/youtuberDetail",
+    component: () => import("../views/YoutuberDetail.vue"),
+  },
+  {
     path: "/videoDetail",
     component: () => import("../views/VideoDetail.vue"),
   },
-
   {
     path: "/top",
     component: () => import("../views/Top.vue"),
