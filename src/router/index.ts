@@ -10,6 +10,11 @@ const routes: Array<RouteConfig> = [
       import(/* webpackChunkName: "about" */ "../views/Login.vue"),
   },
   {
+    path: "/iconChange",
+    name: "",
+    component: () => import("../views/IconChange.vue"),
+  },
+  {
     path: "/registerUser",
     component: () => import("../views/RegisterUser.vue"),
   },
@@ -29,6 +34,11 @@ const routes: Array<RouteConfig> = [
     path: "/myProfile",
     name: "",
     component: () => import("../views/MyProfile.vue"),
+  },
+  {
+    path: "/selfIntroductionChange",
+    name: "",
+    component: () => import("../views/SelfIntroductionChange.vue"),
   },
 ];
 
