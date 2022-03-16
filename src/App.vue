@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <!-- <Header /> -->
     <div id="nav">
       <router-link to="/iconChange">IconChange</router-link> |
       <router-link to="/registerUser">RegisterUser</router-link> |
@@ -12,14 +13,15 @@
         >SelfIntroductionChange</router-link
       >
       |
+      <router-link to="/searchedList">SearchedList</router-link>|
     </div>
     <router-view />
     <Footer />
   </div>
 </template>
+
 <script>
 import { Component, Vue } from "vue-property-decorator";
-
 import Footer from "./components/Footer.vue";
 @Component({
   components: {
