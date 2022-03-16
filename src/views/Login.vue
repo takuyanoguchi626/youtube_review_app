@@ -34,7 +34,7 @@
             <div class="row">
               <div class="input-field col s6 m6 l6">
                 <p class="margin medium-small">
-                  <a href="register_admin.html">管理者登録はこちら</a>
+                  <a href="register_admin.html">ユーザー登録はこちら</a>
                 </p>
               </div>
             </div>
