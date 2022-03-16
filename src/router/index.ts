@@ -5,6 +5,15 @@ Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
+    path: "/login",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Login.vue"),
+  },
+  {
+    path: "/registerUser",
+    component: () => import("../views/RegisterUser.vue"),
+  },
+  {
     path: "/youtuberDetail",
     component: () => import("../views/YoutuberDetail.vue"),
   },
