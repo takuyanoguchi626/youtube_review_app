@@ -49,6 +49,11 @@ const routes: Array<RouteConfig> = [
     name: "",
     component: () => import("../views/SelfIntroductionChange.vue"),
   },
+  {
+    path: "/searchedList",
+    name: "",
+    component: () => import("../views/SearchedList.vue"),
+  },
 ];
 
 const router = new VueRouter({
