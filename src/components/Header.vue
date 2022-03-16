@@ -49,14 +49,6 @@
                   >リンクボタン</a
                 >
               </li>
-              <li
-                id="menu-item-24"
-                class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-5 current_page_item menu-item-24"
-              >
-                <a href="https://www.android-kiosk.com/" aria-current="page"
-                  >リンクボタン</a
-                >
-              </li>
             </ul>
             <a href="#" data-activates="slide-out" class="button-collapse"
               ><i class="mdi mdi-menu"></i
