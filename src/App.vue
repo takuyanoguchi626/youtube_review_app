@@ -7,12 +7,11 @@
       <router-link to="/login">Login</router-link> |
       <router-link to="/top">Top</router-link> |
       <router-link to="/videoDetail">VideoDetail</router-link> |
-      <router-link to="/youtuberDetail">YoutuberDetail</router-link>
+      <router-link to="/youtuberDetail">YoutuberDetail</router-link>|
       <router-link to="/myProfile">MyProfile</router-link>|
       <router-link to="/selfIntroductionChange"
         >SelfIntroductionChange</router-link
-      >
-      |
+      >| <router-link to="/addReview">AddReview</router-link>|
       <router-link to="/searchedList">SearchedList</router-link>|
     </div>
     <router-view />
