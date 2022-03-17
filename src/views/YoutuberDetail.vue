@@ -11,7 +11,9 @@
       ><span> チャンネル登録者数：635万人</span>
     </div>
     <div class="videos">
-      <img src="/img/tokai1.jpeg" />
+      <router-link to="/videoDetail"
+        ><img src="/img/tokai1.jpeg"
+      /></router-link>
       <div>
         【女子待望】延々と彼氏にプレゼントを贈りつづけたら何にたどり着くの？
       </div>
