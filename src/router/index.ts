@@ -28,8 +28,8 @@ const routes: Array<RouteConfig> = [
     component: () => import("../views/RegisterUser.vue"),
   },
   {
-    path: "/youtuberDetail",
-    component: () => import("../views/YoutuberDetail.vue"),
+    path: "/channelDetail",
+    component: () => import("../views/ChannelDetail.vue"),
   },
   {
     path: "/videoDetail",
