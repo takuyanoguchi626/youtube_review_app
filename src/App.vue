@@ -10,8 +10,7 @@
       <router-link to="/myProfile">MyProfile</router-link>|
       <router-link to="/selfIntroductionChange"
         >SelfIntroductionChange</router-link
-      >
-      |
+      >| <router-link to="/addReview">AddReview</router-link>|
     </div>
     <router-view />
   </div>

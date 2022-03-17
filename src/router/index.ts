@@ -40,6 +40,11 @@ const routes: Array<RouteConfig> = [
     name: "",
     component: () => import("../views/SelfIntroductionChange.vue"),
   },
+  {
+    path: "/addReview",
+    name: "",
+    component: () => import("../components/AddReview.vue"),
+  },
 ];
 
 const router = new VueRouter({
