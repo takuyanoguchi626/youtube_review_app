@@ -1,22 +1,22 @@
-import { Snippet } from "@/types/Snippet";
-import { Statistics } from "@/types/Statistics";
-
-export class Youtube {
+export class Channels {
   constructor(
-    private _etag: string,
+    //チャンネルID
     private _id: string,
-    private _kind: string,
-    private _snippetList: Array<Snippet>,
-    private _statisticsList: Array<Statistics>
+    //チャンネル名
+    private _title: string,
+    //チャンネル説明
+    private _description: string,
+    //設立日
+    private _publishedAt: string,
+    //チャンネルアイコン
+    private _thumbnailsUrl: string,
+    //総再生回数
+    private _viewCount: number,
+    //チャンネル登録者数
+    private _subscriberCount: number,
+    //総動画数
+    private _videoCount: number
   ) {}
-
-  public get etag(): string {
-    return this._etag;
-  }
-
-  public set etag(etag: string) {
-    this._etag = etag;
-  }
 
   public get id(): string {
     return this._id;
@@ -26,27 +26,59 @@ export class Youtube {
     this._id = id;
   }
 
-  public get kind(): string {
-    return this._kind;
+  public get title(): string {
+    return this._title;
   }
 
-  public set kind(kind: string) {
-    this._kind = kind;
+  public set title(title: string) {
+    this._title = title;
   }
 
-  public get snippetList(): Array<Snippet> {
-    return this._snippetList;
+  public get description(): string {
+    return this._description;
   }
 
-  public set snippetList(snippetList: Array<Snippet>) {
-    this._snippetList = snippetList;
+  public set description(description: string) {
+    this._description = description;
   }
 
-  public get statisticsList(): Array<Statistics> {
-    return this._statisticsList;
+  public get publishedAt(): string {
+    return this._publishedAt;
   }
 
-  public set statisticsList(statisticsList: Array<Statistics>) {
-    this._statisticsList = statisticsList;
+  public set publishedAt(publishedAt: string) {
+    this._publishedAt = publishedAt;
+  }
+
+  public get thumbnailsUrl(): string {
+    return this._thumbnailsUrl;
+  }
+
+  public set thumbnailsUrl(thumbnailsUrl: string) {
+    this._thumbnailsUrl = thumbnailsUrl;
+  }
+
+  public get viewCount(): number {
+    return this._viewCount;
+  }
+
+  public set viewCount(viewCount: number) {
+    this._viewCount = viewCount;
+  }
+
+  public get subscriberCount(): number {
+    return this._subscriberCount;
+  }
+
+  public set subscriberCount(subscriberCount: number) {
+    this._subscriberCount = subscriberCount;
+  }
+
+  public get videoCount(): number {
+    return this._videoCount;
+  }
+
+  public set videoCount(videoCount: number) {
+    this._videoCount = videoCount;
   }
 }
