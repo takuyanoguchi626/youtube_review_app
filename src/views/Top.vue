@@ -4,15 +4,15 @@
     <div><button>ユーザー登録はこちらから</button></div>
     <div class="name">急上昇動画</div>
     <div class="soaring-videos">
-      <iframe
+      <!-- <iframe
         width="560"
         height="315"
-        src="https://www.youtube.com/embed/`${video.id}`"
+        src="`https://www.youtube.com/embed/${video.id}`"
         title="YouTube video player"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen
-      ></iframe>
+      ></iframe> -->
     </div>
     <div class="name">人気のアカウント</div>
     <div class="popular-accounts">
