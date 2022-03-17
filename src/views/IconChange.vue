@@ -2,6 +2,7 @@
   <div>
     <img :src="image" alt="" />
     <input type="file" ref="newImage" v-on:change="iconChange" />
+    <button>変更</button>
   </div>
 </template>
 
