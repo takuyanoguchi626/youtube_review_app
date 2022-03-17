@@ -13,6 +13,7 @@
         >SelfIntroductionChange</router-link
       >| <router-link to="/addReview">AddReview</router-link>|
       <router-link to="/searchedList">SearchedList</router-link>|
+      <router-link to="/showReview">showReview</router-link>|
     </div>
     <router-view />
     <Footer />
