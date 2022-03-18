@@ -7,6 +7,8 @@ export class Account {
     private _id: number,
     //アカウント名
     private _name: string,
+    //自己紹介文
+    private _introduction: string,
     //アイコン
     private _img: string,
     //メールアドレス
@@ -35,6 +37,14 @@ export class Account {
 
   public set name(name: string) {
     this._name = name;
+  }
+
+  public get introduction(): string {
+    return this._introduction;
+  }
+
+  public set introduction(introduction: string) {
+    this._introduction = introduction;
   }
 
   public get img(): string {

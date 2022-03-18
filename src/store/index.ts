@@ -1,12 +1,14 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
+import { Account } from "@/types/Account";
 import { Videos } from "@/types/Videos";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    accountList: new Array<Account>(),
     soaringVideos: Array<Videos>(),
   },
   actions: {
@@ -43,6 +45,9 @@ export default new Vuex.Store({
   getters: {
     getSoaringVideosInfo(state) {
       return state.soaringVideos;
+    },
+    getAccountList(state) {
+      return state.accountList;
     },
   },
 });
