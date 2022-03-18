@@ -1,32 +1,39 @@
-import { Account } from "./Account";
-import { Videos } from "./Videos";
-
 export class Review {
   constructor(
+    //
+    private _reviewId: number,
     //アカウント
-    private _account: Account,
+    private _accountId: number,
     //動画
-    private _video: Videos,
+    private _videoId: number,
     //レビュー
     private _review: string,
     //いいね数
     private _favoriteCount: number
   ) {}
 
-  public get account(): Account {
-    return this._account;
+  public get reviewId(): number {
+    return this._reviewId;
   }
 
-  public set account(account: Account) {
-    this._account = account;
+  public set reviewId(reviewId: number) {
+    this._reviewId = reviewId;
   }
 
-  public get video(): Videos {
-    return this._video;
+  public get accountId(): number {
+    return this._accountId;
   }
 
-  public set video(video: Videos) {
-    this._video = video;
+  public set accountId(accountId: number) {
+    this._accountId = accountId;
+  }
+
+  public get videoId(): number {
+    return this._videoId;
+  }
+
+  public set videoId(videoId: number) {
+    this._videoId = videoId;
   }
 
   public get review(): string {
