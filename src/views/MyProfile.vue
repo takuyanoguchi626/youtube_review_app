@@ -1,22 +1,24 @@
 <template>
   <div>
-    <div>名前：チームYouTube</div>
-    <img src="/img/pagu.jpg" alt="" />
+    <div>名前：{{ currentAccount.name }}</div>
+    <img :src="currentAccount.img" />
     <div>
-      自己紹介文：はじめまして。YouTubeのレビューをたくさん書いていきます。
+      {{ currentAccount.introduction }}
     </div>
-    <div>
-      <img class="image" src="/img/heiseihuramingo.jpg" alt="" />
-      <img class="image" src="/img/hikakin.jpg" alt="" />
-      <img class="image" src="/img/kazisakku.jpg" alt="" />
-      <img class="image" src="/img/paparapi-zu.jpg" alt="" />
-      <img class="image" src="/img/yorunohitowarai.jpg" alt="" />
+    <div
+      v-for="favoriteChannel of currentAccount.favoriteChannelList"
+      :key="favoriteChannel.id"
+    >
+      <img class="image" :src="favoriteChannel.thumbnailsUrl" />
     </div>
-    <div>
-      <img class="image2" src="/img/review.jpg" alt="" />
-      <img class="image2" src="/img/review.jpg" alt="" />
-      <img class="image2" src="/img/review.jpg" alt="" />
-      <img class="image2" src="/img/review.jpg" alt="" />
+    <div v-for="review of currentAccount.reviewList" :key="review.id">
+      <div>
+        <img class="image2" :src="review.videos.thumbnailsUrl" />
+        {{ review.videos.title }}
+        {{ review.videos.publishedAt }}
+        {{ review.videos.channelTitle }}
+        {{ review.review }}
+      </div>
     </div>
   </div>
 </template>
@@ -26,21 +28,69 @@ import { Component, Vue } from "vue-property-decorator";
 import { Account } from "@/types/Account";
 import { Channels } from "@/types/Channels";
 import { Review } from "@/types/Review";
+import { Videos } from "@/types/Videos";
 @Component
 export default class XXXComponent extends Vue {
   private currentAccount = new Account(
     1,
     "aaa",
+    "wwwwww",
     "/img/pagu.jpg",
     "aaa.com",
     "09011112222",
     "pass",
-    [new Channels("id", "ddd", "ddd", "sss", "sss", 1, 1, 1)],
-    [new Review(1, 1, 1, "eee", 1)]
+    [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
+    [
+      new Review(
+        1,
+        1,
+        new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+        "レビューのプレビュー",
+        1
+      ),
+      new Review(
+        1,
+        1,
+        new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+        "レビューのプレビュー",
+        1
+      ),
+      new Review(
+        1,
+        1,
+        new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+        "レビューのプレビュー",
+        1
+      ),
+      new Review(
+        1,
+        1,
+        new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+        "レビューのプレビュー",
+        1
+      ),
+    ]
   );
 
-  created(): void {
-    console.log(this.$route.params.id);
+  async created(): Promise<void> {
+    // console.log(this.$route.params.id);
+    const accountId = this.$route.params.id;
+    const accountList = this.$store.getters.getAccountList;
+    for (const account of accountList) {
+      if (account.id === accountId) {
+        this.currentAccount = new Account(
+          account.id,
+          account.name,
+          account.introduction,
+          account.img,
+          account.mailaddless,
+          account.telephone,
+          account.password,
+          account.favoriteChannelList,
+          account.reviewList
+        );
+      }
+    }
   }
 }
 </script>

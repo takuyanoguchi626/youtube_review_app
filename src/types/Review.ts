@@ -1,11 +1,13 @@
+import { Videos } from "./Videos";
+
 export class Review {
   constructor(
-    //
+    //レビューID
     private _reviewId: number,
-    //アカウント
+    //アカウントID
     private _accountId: number,
-    //動画
-    private _videoId: number,
+    //動画ID
+    private _videos: Videos,
     //レビュー
     private _review: string,
     //いいね数
@@ -28,12 +30,12 @@ export class Review {
     this._accountId = accountId;
   }
 
-  public get videoId(): number {
-    return this._videoId;
+  public get videos(): Videos {
+    return this._videos;
   }
 
-  public set videoId(videoId: number) {
-    this._videoId = videoId;
+  public set videos(videos: Videos) {
+    this._videos = videos;
   }
 
   public get review(): string {
