@@ -63,8 +63,32 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import { Account } from "@/types/Account";
+import { Channels } from "@/types/Channels";
+import { Review } from "@/types/Review";
 @Component
-export default class XXXComponent extends Vue {}
+export default class XXXComponent extends Vue {
+  private lastName = "";
+  private firstName = "";
+  private email = "";
+  private tel = "";
+  private password = "";
+  private passwordConfirm = "";
+
+  public register(): void {
+    const newAccount = new Account(
+      0,
+      this.lastName + this.firstName,
+      "",
+      this.email,
+      this.tel,
+      this.password,
+      new Array<Channels>(),
+      new Array<Review>()
+    );
+    this.$store.commit("addNewAccount", newAccount);
+  }
+}
 </script>
 
 <style scoped></style>
