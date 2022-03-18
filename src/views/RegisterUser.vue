@@ -7,17 +7,35 @@
           <div class="error">エラーメッセージ</div>
           <div class="row">
             <div class="input-field col s6">
-              <input id="last_name" type="text" class="validate" required />
+              <input
+                id="last_name"
+                type="text"
+                class="validate"
+                v-model="lastName"
+                required
+              />
               <label for="last_name">姓</label>
             </div>
             <div class="input-field col s6">
-              <input id="first_name" type="text" class="validate" required />
+              <input
+                id="first_name"
+                type="text"
+                class="validate"
+                v-model="firstName"
+                required
+              />
               <label for="first_name">名</label>
             </div>
           </div>
           <div class="row">
             <div class="input-field col s12">
-              <input id="email" type="email" class="validate" required />
+              <input
+                id="email"
+                type="email"
+                class="validate"
+                v-model="email"
+                required
+              />
               <label for="email">メールアドレス</label>
             </div>
           </div>
@@ -29,6 +47,7 @@
                 type="password"
                 class="validate"
                 minlength="8"
+                v-model="password"
                 required
               />
               <label for="password">パスワード</label>
@@ -41,17 +60,14 @@
                 type="password"
                 class="validate"
                 minlength="8"
+                v-model="passwordComfirm"
                 required
               />
               <label for="confirmation_password">確認用パスワード</label>
             </div>
           </div>
           <div class="row register-admin-btn">
-            <button
-              class="btn"
-              type="button"
-              onclick="location.href='login.html'"
-            >
+            <button class="btn" type="button" v-on:click="register()">
               <span>登録<i class="material-icons right">done</i></span>
             </button>
           </div>
@@ -86,6 +102,7 @@ export default class XXXComponent extends Vue {
       new Array<Channels>(),
       new Array<Review>()
     );
+    console.log(newAccount);
     this.$store.commit("addNewAccount", newAccount);
   }
 }
