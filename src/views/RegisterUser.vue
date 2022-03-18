@@ -21,7 +21,13 @@
               <label for="email">メールアドレス</label>
             </div>
           </div>
-
+          <div class="row">
+            <div class="error">{{ errorTelephone }}</div>
+            <div class="input-field col s12">
+              <input id="tel" type="tel" maxlength="14" v-model="telephone" />
+              <label for="tel">電話番号</label>
+            </div>
+          </div>
           <div class="row">
             <div class="input-field col s12">
               <input
