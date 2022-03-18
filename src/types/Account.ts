@@ -12,7 +12,7 @@ export class Account {
     //メールアドレス
     private _mailaddless: string,
     //電話番号
-    private _telephone: number,
+    private _telephone: string,
     //パスワード
     private _password: string,
     //お気に入りのチャンネル一覧
@@ -53,11 +53,11 @@ export class Account {
     this._mailaddless = mailaddless;
   }
 
-  public get telephone(): number {
+  public get telephone(): string {
     return this._telephone;
   }
 
-  public set telephone(telephone: number) {
+  public set telephone(telephone: string) {
     this._telephone = telephone;
   }
 
