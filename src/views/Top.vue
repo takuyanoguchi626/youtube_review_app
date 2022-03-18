@@ -17,7 +17,7 @@
             allowfullscreen
           ></iframe>
           <div>{{ video.title }}</div>
-          <div>{{ video.publishedAt }}</div>
+          <div>投稿日：{{ video.publishedAt }}</div>
         </div>
       </div>
     </div>
@@ -29,6 +29,7 @@
       <div class="account">c</div>
       <div class="account">d</div>
     </div>
+
     <!-- <div class="name">人気Youtuber</div>
     <div class="popular-youtubers">
       <img src="/img/まあたそ.jpeg" />
