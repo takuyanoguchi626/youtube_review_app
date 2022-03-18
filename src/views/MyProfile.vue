@@ -38,6 +38,10 @@ export default class XXXComponent extends Vue {
     [new Channels("id", "ddd", "ddd", "sss", "sss", 1, 1, 1)],
     [new Review(1, 1, 1, "eee", 1)]
   );
+
+  created(): void {
+    console.log(this.$route.params.id);
+  }
 }
 </script>
 
