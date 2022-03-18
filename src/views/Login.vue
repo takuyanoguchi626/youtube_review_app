@@ -1,9 +1,9 @@
 <template>
-
   <div>
     <div class="container">
       <div class="row login-page">
         <div class="col s12 z-depth-6 card-panel">
+          <div class="pageTitle">ログイン</div>
           <div class="error">エラーメッセージ</div>
           <form class="login-form" action="employeeList.html">
             <div class="row"></div>
@@ -44,7 +44,6 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script lang="ts">
