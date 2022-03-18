@@ -6,7 +6,7 @@ export class Review {
     private _reviewId: number,
     //アカウントID
     private _accountId: number,
-    //動画ID
+    //動画
     private _videos: Videos,
     //レビュー
     private _review: string,
