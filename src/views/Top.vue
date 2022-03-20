@@ -47,8 +47,13 @@ import { Component, Vue } from "vue-property-decorator";
 import { Videos } from "@/types/Videos";
 @Component
 export default class XXXComponent extends Vue {
+  // 急上昇動画
   private soaringVideos: Array<Videos> = [];
 
+  /**
+   *Vuexストアのアクション経由非同期でWebAPIから急上昇動画Top5を取得する.
+   *@returns Promiseオブジェクト
+   */
   async created(): Promise<void> {
     console.log("発生");
     await this.$store.dispatch("getSoaringVideos");

@@ -7,9 +7,14 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    // 急上昇動画
     soaringVideos: Array<Videos>(),
   },
   actions: {
+    /**
+     * 急上昇動画をWebAPIから取得してmutationを呼び出す.
+     * @param context コンテキスト
+     */
     async getSoaringVideos(context) {
       const responce = await axios.get(
         "https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&regionCode=JP&key=AIzaSyChyFfGpQSYRhWTBuyeXTflkqTd4Sgc1HU"
@@ -21,6 +26,11 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    /**
+     * 急上昇動画を表示する.
+     * @param state - ステート
+     * @param payload - ペイロード
+     */
     showSoaringVideos(state, payload) {
       state.soaringVideos = new Array<Videos>();
       for (const soaringVideo of payload) {
@@ -41,6 +51,11 @@ export default new Vuex.Store({
   },
   modules: {},
   getters: {
+    /**
+     * 急上昇動画を返す.
+     * @param state - ステート
+     * @returns 急上昇動画
+     */
     getSoaringVideosInfo(state) {
       return state.soaringVideos;
     },
