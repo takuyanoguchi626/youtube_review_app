@@ -50,15 +50,15 @@ export default class XXXComponent extends Vue {
   // 急上昇動画
   private soaringVideos: Array<Videos> = [];
 
-  /**
-   *Vuexストアのアクション経由非同期でWebAPIから急上昇動画Top5を取得する.
-   *@returns Promiseオブジェクト
-   */
   async created(): Promise<void> {
-    console.log("発生");
+    /**
+     *Vuexストアのアクション経由非同期でWebAPIから急上昇動画Top5を取得する.
+     *@returns Promiseオブジェクト
+     */
     await this.$store.dispatch("getSoaringVideos");
     this.soaringVideos = this.$store.getters.getSoaringVideosInfo;
-    console.log(this.soaringVideos);
+
+    await this.$store.dispatch("getYoutubersInfo");
   }
 }
 </script>
