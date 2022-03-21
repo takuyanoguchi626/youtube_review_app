@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
+import { Account } from "@/types/Account";
 import { Videos } from "@/types/Videos";
 import { Channels } from "@/types/Channels";
 
@@ -8,6 +9,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    accountList: new Array<Account>(),
     // 急上昇動画
     soaringVideos: Array<Videos>(),
     // Youtuber情報
@@ -145,6 +147,9 @@ export default new Vuex.Store({
      */
     getSoaringVideosInfo(state) {
       return state.soaringVideos;
+    },
+    getAccountList(state) {
+      return state.accountList;
     },
   },
 });
