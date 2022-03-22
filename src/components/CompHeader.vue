@@ -28,7 +28,6 @@
             <div class="row text">
               <form class="col s12 searchForm">
                 <div class="row">
-                  {{ searchText }}
                   <span class="input-field col s12">
                     <textarea
                       id="searchBox"
@@ -72,6 +71,7 @@
 </template>
 
 <script lang="ts">
+import axios from "axios";
 import { Component, Vue } from "vue-property-decorator";
 @Component
 export default class XXXComponent extends Vue {
@@ -80,7 +80,13 @@ export default class XXXComponent extends Vue {
   async search(searchText: string): Promise<void> {
     console.log(searchText);
 
-    this.$store.dispatch("searchDate", searchText);
+    const response = await axios.get(
+      // ビデオの検索API
+      `https://www.googleapis.com/youtube/v3/search?key=AIzaSyAjmyhCg__LtgHseTa_w2NzZGdD_YLoVZY&type=video&part=snippet&q=${searchText}`
+    );
+    console.dir(response.data);
+    const payload = response.data;
+    this.$store.commit("addSearchData", payload);
     this.$router.push("/searchedList");
   }
 }

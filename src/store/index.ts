@@ -36,6 +36,7 @@ export default new Vuex.Store({
       new Array<Channels>(),
       new Array<Review>()
     ),
+    searchData: [],
   },
   actions: {
     async getSoaringVideos(context) {
@@ -48,6 +49,7 @@ export default new Vuex.Store({
       context.commit("showSoaringVideos", payload);
     },
   },
+
   mutations: {
     addUser(state, payload) {
       state.accountList.push(payload);
@@ -72,6 +74,9 @@ export default new Vuex.Store({
     addCurrentUser(state, payload) {
       state.currentUser = payload;
     },
+    addSearchData(state, payload) {
+      state.searchData = payload;
+    },
   },
   modules: {},
   getters: {
@@ -81,8 +86,8 @@ export default new Vuex.Store({
     getAccountList(state) {
       return state.accountList;
     },
-    getCurrentUser(state){
-      return state.currentUser
-    }
+    getCurrentUser(state) {
+      return state.currentUser;
+    },
   },
 });
