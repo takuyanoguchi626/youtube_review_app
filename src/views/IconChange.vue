@@ -2,7 +2,7 @@
   <div>
     <img :src="image" alt="" />
     <input type="file" ref="newImage" v-on:change="iconChange" />
-    <button>変更</button>
+    <button @click="iconChangeButton">変更</button>
   </div>
 </template>
 
@@ -10,7 +10,7 @@
 export default {
   data() {
     return {
-      image: "/img/pagu.jpg",
+      image: "/img/",
     };
   },
   methods: {
@@ -18,6 +18,13 @@ export default {
       const image = this.$refs.newImage.files[0];
       this.image = URL.createObjectURL(image);
     },
+    // iconChangeButton() {},
+  },
+  mounted() {
+    const id = this.$route.params.id;
+    console.log(id);
+    const account = this.$store.getters.getAccountById(id);
+    this.image += account.img;
   },
 };
 </script>

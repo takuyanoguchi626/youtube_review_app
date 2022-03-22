@@ -1,7 +1,9 @@
 <template>
   <div>
     <div>名前：{{ currentAccount.name }}</div>
-    <img :src="currentAccount.img" />
+    <router-link :to="'/iconChange/' + currentAccount.id">
+      <img :src="currentAccount.img" />
+    </router-link>
     <div>
       {{ currentAccount.introduction }}
     </div>

@@ -8,7 +8,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    accountList: new Array<Account>(),
+    accountList: Array<Account>(),
+    loginAccount: Account,
     soaringVideos: Array<Videos>(),
   },
   actions: {
@@ -48,6 +49,13 @@ export default new Vuex.Store({
     },
     getAccountList(state) {
       return state.accountList;
+    },
+    getAccountById(state) {
+      return (id: number) => {
+        return state.accountList.filter((account) => {
+          account.id === id;
+        })[0];
+      };
     },
   },
 });
