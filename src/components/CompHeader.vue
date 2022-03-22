@@ -28,6 +28,7 @@
             <div class="row text">
               <form class="col s12 searchForm">
                 <div class="row">
+                  {{ searchText }}
                   <span class="input-field col s12">
                     <textarea
                       id="searchBox"
@@ -35,10 +36,11 @@
                       value="searchText"
                       v-model="searchText"
                     ></textarea>
-                    {{ searchText }}
                   </span>
                 </div>
-                <button type="button" v-on:click="search">検索</button>
+                <button type="button" v-on:click="search(searchText)">
+                  検索
+                </button>
               </form>
             </div>
             <ul
@@ -74,6 +76,13 @@ import { Component, Vue } from "vue-property-decorator";
 @Component
 export default class XXXComponent extends Vue {
   private searchText = "";
+
+  async search(searchText: string): Promise<void> {
+    console.log(searchText);
+
+    this.$store.dispatch("searchDate", searchText);
+    this.$router.push("/searchedList");
+  }
 }
 </script>
 
