@@ -3,7 +3,7 @@
     <header class="no-padding">
       <div class="navbar-fixed">
         <nav class="navfeature grey darken-3">
-          <div class="container nav-wrapper">
+          <div class="headerContainer nav-wrapper">
             <a
               href="https://www.android-kiosk.com"
               class="header-logo waves-effect waves-light"
@@ -25,34 +25,43 @@
                 >Youtube Reviewer</span
               >
             </a>
+            <div class="row text">
+              <form class="col s12 searchForm">
+                <div class="row">
+                  <span class="input-field col s12">
+                    <textarea
+                      id="searchBox"
+                      class="materialize-textarea"
+                      value="searchText"
+                      v-model="searchText"
+                    ></textarea>
+                    {{ searchText }}
+                  </span>
+                </div>
+                <button type="button" v-on:click="search">検索</button>
+              </form>
+            </div>
             <ul
               id="nav-mobile"
               class="hide-on-med-and-down right menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-5 current_page_item menu-item-24"
             >
-              <li class="row">
-                <form class="col s12">
-                  <div class="row">
-                    <span class="input-field col s12">
-                      <textarea
-                        id="textarea1"
-                        class="materialize-textarea"
-                      ></textarea>
-                    </span>
-                  </div>
-                </form>
+              <li
+                id="menu-item-24"
+                class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-5 current_page_item menu-item-24"
+              >
+                <router-link to="/login" aria-current="page"
+                  >ログイン</router-link
+                >
               </li>
               <li
                 id="menu-item-24"
                 class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-5 current_page_item menu-item-24"
               >
-                <a href="https://www.android-kiosk.com/" aria-current="page"
-                  >リンクボタン</a
+                <router-link to="/registerUser" aria-current="page"
+                  >会員登録</router-link
                 >
               </li>
             </ul>
-            <a href="#" data-activates="slide-out" class="button-collapse"
-              ><i class="mdi mdi-menu"></i
-            ></a>
           </div>
         </nav>
       </div>
@@ -63,11 +72,24 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 @Component
-export default class XXXComponent extends Vue {}
+export default class XXXComponent extends Vue {
+  private searchText = "";
+}
 </script>
 
 <style scoped>
 .header-logo {
   display: flexbox;
+}
+.headerContainer {
+  margin: 0 auto;
+  max-width: 1280px;
+  display: flex;
+}
+.searchForm {
+  display: flex;
+}
+textarea {
+  width: 350px;
 }
 </style>
