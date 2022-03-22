@@ -40,7 +40,7 @@ const routes: Array<RouteConfig> = [
     component: () => import("../views/Top.vue"),
   },
   {
-    path: "/myProfile",
+    path: "/myProfile/:id",
     name: "",
     component: () => import("../views/MyProfile.vue"),
   },
