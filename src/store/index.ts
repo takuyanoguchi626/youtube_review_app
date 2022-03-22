@@ -4,14 +4,39 @@ import Vuex from "vuex";
 import axios from "axios";
 import { Account } from "@/types/Account";
 import { Videos } from "@/types/Videos";
+import { Channels } from "@/types/Channels";
+import { Review } from "@/types/Review";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    accountList: new Array<Account>(),
-    loginAccount: Account,
+
+    accountList: [
+      new Account(
+        0,
+        "鈴木太郎",
+        "aaaa",
+        "ssssss",
+        "aaaa",
+        "ssss",
+        "aaaaa",
+        new Array<Channels>(),
+        new Array<Review>()
+      ),
+    ],
     soaringVideos: Array<Videos>(),
+    currentUser: new Account(
+      0,
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      new Array<Channels>(),
+      new Array<Review>()
+    ),
   },
   actions: {
     async getSoaringVideos(context) {
@@ -45,6 +70,9 @@ export default new Vuex.Store({
       }
       console.log(state.soaringVideos);
     },
+    addCurrentUser(state, payload) {
+      state.currentUser = payload;
+    },
   },
   modules: {},
   getters: {
@@ -54,8 +82,11 @@ export default new Vuex.Store({
     getAccountList(state) {
       return state.accountList;
     },
+    getCurrentUser(state){
+      return state.currentUser
+    },
     getLoginAccount(state) {
-      return state.loginAccount;
+      return state.loginAccount
     },
   },
 });

@@ -4,13 +4,18 @@
       <div class="row login-page">
         <div class="col s12 z-depth-6 card-panel">
           <div class="pageTitle">ログイン</div>
-          <div class="error">エラーメッセージ</div>
+          <div class="error">{{ loginError }}</div>
           <form class="login-form" action="employeeList.html">
             <div class="row"></div>
             <div class="row">
               <div class="input-field col s12">
                 <i class="material-icons prefix">mail_outline</i>
-                <input class="validate" id="mailAddress" type="email" />
+                <input
+                  class="validate"
+                  id="mailAddress"
+                  type="email"
+                  v-model="email"
+                />
                 <label for="mailAddress" data-error="wrong" data-success="right"
                   >メールアドレス</label
                 >
@@ -19,23 +24,19 @@
             <div class="row">
               <div class="input-field col s12">
                 <i class="material-icons prefix">lock_outline</i>
-                <input id="password" type="password" />
+                <input id="password" type="password" v-model="password" />
                 <label for="password">パスワード</label>
               </div>
             </div>
             <div class="row login-btn">
-              <button
-                class="btn"
-                type="button"
-                onclick="location.href='item_list.html'"
-              >
+              <button class="btn" type="button" v-on:click="login()">
                 <span>ログイン</span>
               </button>
             </div>
             <div class="row">
               <div class="input-field col s6 m6 l6">
                 <p class="margin medium-small">
-                  <a href="register_admin.html">ユーザー登録はこちら</a>
+                  <router-link to="/registerUser">会員登録はこちら</router-link>
                 </p>
               </div>
             </div>
@@ -48,8 +49,41 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import { Account } from "@/types/Account";
 @Component
-export default class XXXComponent extends Vue {}
+export default class XXXComponent extends Vue {
+  private email = "";
+  private password = "";
+  private loginError = "";
+
+  public login(): void {
+    const accountList = this.$store.getters.getAccountList;
+    for (const account of accountList) {
+      if (
+        account.mailaddress === this.email ||
+        account.password === this.password
+      ) {
+        const currentAccount = new Account(
+          account.id,
+          account.name,
+          account.introduction,
+          account.img,
+          account.mailaddress,
+          account.telephone,
+          account.password,
+          account.favoriteChannelList,
+          account.reviewList
+        );
+        console.log(currentAccount);
+
+        this.$store.commit("addCurrentUser", currentAccount);
+        console.dir(JSON.stringify(this.$store.state.currentUser));
+        this.$router.push("/top");
+      }
+    }
+    this.loginError = "メールアドレスまたはパスワードが誤っています";
+  }
+}
 </script>
 
 <style scoped></style>
