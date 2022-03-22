@@ -37,7 +37,7 @@ export default class XXXComponent extends Vue {
     1,
     "aaa",
     "wwwwww",
-    "/img/pagu.jpg",
+    "",
     "aaa.com",
     "09011112222",
     "pass",
@@ -74,25 +74,22 @@ export default class XXXComponent extends Vue {
     ]
   );
 
-  async created(): Promise<void> {
+  created(): void {
     // console.log(this.$route.params.id);
-    const accountId = this.$route.params.id;
-    const accountList = this.$store.getters.getAccountList;
-    for (const account of accountList) {
-      if (account.id === accountId) {
-        this.currentAccount = new Account(
-          account.id,
-          account.name,
-          account.introduction,
-          account.img,
-          account.mailaddless,
-          account.telephone,
-          account.password,
-          account.favoriteChannelList,
-          account.reviewList
-        );
-      }
-    }
+    // const accountId = this.$route.params.id;
+    const accountId = 3;
+    const account = this.$store.getters.getAccountById(accountId);
+    this.currentAccount = new Account(
+      account.id,
+      account.name,
+      account.introduction,
+      account.img,
+      account.mailaddless,
+      account.telephone,
+      account.password,
+      account.favoriteChannelList,
+      account.reviewList
+    );
   }
 }
 </script>

@@ -13,10 +13,10 @@ export default new Vuex.Store({
   state: {
     accountList: [
       new Account(
-        0,
+        3,
         "鈴木太郎",
         "aaaa",
-        "ssssss",
+        "/img/pagu.jpg",
         "aaaa",
         "ssss",
         "aaaaa",
@@ -72,6 +72,29 @@ export default new Vuex.Store({
     addCurrentUser(state, payload) {
       state.currentUser = payload;
     },
+    changeAccountIcon(state, payload) {
+      const account = state.accountList.find(
+        (account) => account.id === payload.id
+      );
+      for (let i = 0; i < state.accountList.length; i++) {
+        if (state.accountList[i].id === payload.id) {
+          state.accountList.splice(i, 1);
+        }
+      }
+      if (account !== undefined) {
+        account.img = payload.img;
+        state.accountList.push(account);
+      }
+
+      // const account = accountList.find((account) => {
+      //   account.id === payload.id;
+      // });
+      // if (account !== undefined) {
+      //   account.img = payload.img;
+      // }
+      // state.accountList = accountList;
+      // console.log(state.accountList);
+    },
   },
   modules: {},
   getters: {
@@ -83,9 +106,7 @@ export default new Vuex.Store({
     },
     getAccountById(state) {
       return (id: number) => {
-        return state.accountList.filter((account) => {
-          account.id === id;
-        })[0];
+        return state.accountList.filter((account) => account.id === id)[0];
       };
     },
     getCurrentUser(state) {
