@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <!-- <Header /> -->
+    <CompHeader />
     <div id="nav">
       <router-link to="/iconChange">IconChange</router-link> |
       <router-link to="/registerUser">RegisterUser</router-link> |
@@ -16,16 +16,18 @@
       <router-link to="/showReview">showReview</router-link>|
     </div>
     <router-view />
-    <Footer />
+    <CompFooter />
   </div>
 </template>
 
 <script>
 import { Component, Vue } from "vue-property-decorator";
-import Footer from "./components/Footer.vue";
+import CompHeader from "./components/CompHeader.vue";
+import CompFooter from "./components/CompFooter.vue";
 @Component({
   components: {
-    Footer,
+    CompHeader,
+    CompFooter,
   },
 })
 export default class App extends Vue {}
