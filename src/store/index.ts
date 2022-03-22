@@ -9,6 +9,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     accountList: new Array<Account>(),
+    loginAccount: Account,
     soaringVideos: Array<Videos>(),
   },
   actions: {
@@ -48,6 +49,9 @@ export default new Vuex.Store({
     },
     getAccountList(state) {
       return state.accountList;
+    },
+    getLoginAccount(state) {
+      return state.loginAccount;
     },
   },
 });
