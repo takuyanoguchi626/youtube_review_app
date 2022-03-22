@@ -11,6 +11,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+
     accountList: [
       new Account(
         0,
@@ -83,6 +84,9 @@ export default new Vuex.Store({
     },
     getCurrentUser(state){
       return state.currentUser
-    }
+    },
+    getLoginAccount(state) {
+      return state.loginAccount
+    },
   },
 });
