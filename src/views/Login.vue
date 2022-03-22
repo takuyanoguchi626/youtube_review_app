@@ -49,6 +49,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import { Account } from "@/types/Account";
 @Component
 export default class XXXComponent extends Vue {
   private email = "";
@@ -62,8 +63,21 @@ export default class XXXComponent extends Vue {
         account.mailaddress === this.email ||
         account.password === this.password
       ) {
-        console.log(account);
-        this.$store.commit("addCurrentUser", account);
+        const currentAccount = new Account(
+          account.id,
+          account.name,
+          account.introduction,
+          account.img,
+          account.mailaddress,
+          account.telephone,
+          account.password,
+          account.favoriteChannelList,
+          account.reviewList
+        );
+        console.log(currentAccount);
+
+        this.$store.commit("addCurrentUser", currentAccount);
+        console.dir(JSON.stringify(this.$store.state.currentUser));
         this.$router.push("/top");
       }
     }

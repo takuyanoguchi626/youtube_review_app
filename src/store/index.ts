@@ -25,6 +25,17 @@ export default new Vuex.Store({
       ),
     ],
     soaringVideos: Array<Videos>(),
+    currentUser: new Account(
+      0,
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      new Array<Channels>(),
+      new Array<Review>()
+    ),
   },
   actions: {
     async getSoaringVideos(context) {
@@ -58,6 +69,9 @@ export default new Vuex.Store({
       }
       console.log(state.soaringVideos);
     },
+    addCurrentUser(state, payload) {
+      state.currentUser = payload;
+    },
   },
   modules: {},
   getters: {
@@ -67,5 +81,8 @@ export default new Vuex.Store({
     getAccountList(state) {
       return state.accountList;
     },
+    getCurrentUser(state){
+      return state.currentUser
+    }
   },
 });
