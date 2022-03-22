@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+
 import axios from "axios";
 import { Account } from "@/types/Account";
 import { Videos } from "@/types/Videos";
@@ -24,6 +25,9 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    addUser(state, payload) {
+      state.accountList.push(payload);
+    },
     showSoaringVideos(state, payload) {
       state.soaringVideos = new Array<Videos>();
       for (const soaringVideo of payload) {
