@@ -45,7 +45,7 @@ const routes: Array<RouteConfig> = [
     component: () => import("../views/MyProfile.vue"),
   },
   {
-    path: "/selfIntroductionChange",
+    path: "/selfIntroductionChange/:id",
     name: "",
     component: () => import("../views/SelfIntroductionChange.vue"),
   },

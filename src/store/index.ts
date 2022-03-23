@@ -20,8 +20,37 @@ export default new Vuex.Store({
         "aaaa",
         "ssss",
         "aaaaa",
-        new Array<Channels>(),
-        new Array<Review>()
+        [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
+        [
+          new Review(
+            1,
+            1,
+            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+            "レビューのプレビュー",
+            1
+          ),
+          new Review(
+            1,
+            1,
+            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+            "レビューのプレビュー",
+            1
+          ),
+          new Review(
+            1,
+            1,
+            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+            "レビューのプレビュー",
+            1
+          ),
+          new Review(
+            1,
+            1,
+            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+            "レビューのプレビュー",
+            1
+          ),
+        ]
       ),
     ],
     soaringVideos: Array<Videos>(),
@@ -85,15 +114,22 @@ export default new Vuex.Store({
         account.img = payload.img;
         state.accountList.push(account);
       }
+    },
 
-      // const account = accountList.find((account) => {
-      //   account.id === payload.id;
-      // });
-      // if (account !== undefined) {
-      //   account.img = payload.img;
-      // }
-      // state.accountList = accountList;
-      // console.log(state.accountList);
+    changeSelfIntroduction(state, payload) {
+      const account = state.accountList.find(
+        (account) => account.id === payload.id
+      );
+      for (let i = 0; i < state.accountList.length; i++) {
+        if (state.accountList[i].id === payload.id) {
+          state.accountList.splice(i, 1);
+        }
+      }
+      if (account !== undefined) {
+        account.name = payload.name;
+        account.introduction = payload.introduction;
+        state.accountList.push(account);
+      }
     },
   },
   modules: {},
