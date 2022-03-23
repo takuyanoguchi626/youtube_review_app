@@ -67,6 +67,7 @@ export default new Vuex.Store({
       new Array<Channels>(),
       new Array<Review>()
     ),
+    searchData: [],
   },
   actions: {
     /**
@@ -76,7 +77,9 @@ export default new Vuex.Store({
     async getSoaringVideos(context) {
       const key = "AIzaSyD1hsARhNyLS07rUwz6fqrVp2pWnGvkWTQ";
       const responce = await axios.get(
+
         `https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&regionCode=JP&key=${key}`
+
       );
       const payload = responce.data.items;
       context.commit("showSoaringVideos", payload);
@@ -163,6 +166,7 @@ export default new Vuex.Store({
     //   context.commit("showYoutubersInfo", youtubeArray);
     // },
   },
+
   mutations: {
     /**
      * 急上昇動画を表示する.
@@ -212,6 +216,11 @@ export default new Vuex.Store({
     // },
     addCurrentUser(state, payload) {
       state.currentUser = payload;
+    },
+
+    addSearchData(state, payload) {
+      state.searchData = payload;
+      console.dir(JSON.stringify(state.searchData));
     },
     changeAccountIcon(state, payload) {
       const account = state.accountList.find(
@@ -269,11 +278,13 @@ export default new Vuex.Store({
     getAccountList(state) {
       return state.accountList;
     },
+
     getAccountById(state) {
       return (id: number) => {
         return state.accountList.filter((account) => account.id === id)[0];
       };
     },
+
     getCurrentUser(state) {
       return state.currentUser;
     },
