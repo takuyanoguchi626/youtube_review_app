@@ -30,25 +30,23 @@
       <div class="account">d</div>
     </div>
 
-    <!-- <div class="name">人気Youtuber</div>
-    <div class="popular-youtubers">
-      <img src="/img/まあたそ.jpeg" />
-      <img src="/img/hikakin.jpeg" />
-      <router-link to="/youtuberDetail"
-        ><img class="tokai" src="/img/tokaionair.jpeg"
-      /></router-link>
-      <img src="/img/george.jpeg" />
-    </div> -->
+    <div class="name">人気Youtuber</div>
+    <div v-for="youtuberInfo of youtubersInfo" :key="youtuberInfo.id">
+      <div>{{ youtuberInfo.title }}</div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { Videos } from "@/types/Videos";
+import { Channels } from "@/types/Channels";
 @Component
 export default class XXXComponent extends Vue {
   // 急上昇動画
   private soaringVideos: Array<Videos> = [];
+  // Youtuber情報
+  private youtubersInfo: Array<Channels> = [];
 
   async created(): Promise<void> {
     /**
@@ -58,7 +56,12 @@ export default class XXXComponent extends Vue {
     await this.$store.dispatch("getSoaringVideos");
     this.soaringVideos = this.$store.getters.getSoaringVideosInfo;
 
+    /**
+     *Vuexストアのアクション経由非同期でWebAPIから絞り込んだYoutuber情報を取得する.
+     *@returns Promiseオブジェクト
+     */
     await this.$store.dispatch("getYoutubersInfo");
+    this.youtubersInfo = this.$store.getters.getYoutubersInfo;
   }
 }
 </script>
