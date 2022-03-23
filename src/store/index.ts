@@ -13,15 +13,44 @@ export default new Vuex.Store({
   state: {
     accountList: [
       new Account(
-        0,
+        3,
         "鈴木太郎",
         "aaaa",
-        "ssssss",
+        "/img/pagu.jpg",
         "aaaa",
         "ssss",
         "aaaaa",
-        new Array<Channels>(),
-        new Array<Review>()
+        [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
+        [
+          new Review(
+            1,
+            1,
+            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+            "レビューのプレビュー",
+            1
+          ),
+          new Review(
+            1,
+            1,
+            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+            "レビューのプレビュー",
+            1
+          ),
+          new Review(
+            1,
+            1,
+            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+            "レビューのプレビュー",
+            1
+          ),
+          new Review(
+            1,
+            1,
+            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+            "レビューのプレビュー",
+            1
+          ),
+        ]
       ),
     ],
     soaringVideos: Array<Videos>(),
@@ -74,9 +103,40 @@ export default new Vuex.Store({
     addCurrentUser(state, payload) {
       state.currentUser = payload;
     },
+
     addSearchData(state, payload) {
       state.searchData = payload;
       console.dir(JSON.stringify(state.searchData));
+    },
+    changeAccountIcon(state, payload) {
+      const account = state.accountList.find(
+        (account) => account.id === payload.id
+      );
+      for (let i = 0; i < state.accountList.length; i++) {
+        if (state.accountList[i].id === payload.id) {
+          state.accountList.splice(i, 1);
+        }
+      }
+      if (account !== undefined) {
+        account.img = payload.img;
+        state.accountList.push(account);
+      }
+    },
+
+    changeSelfIntroduction(state, payload) {
+      const account = state.accountList.find(
+        (account) => account.id === payload.id
+      );
+      for (let i = 0; i < state.accountList.length; i++) {
+        if (state.accountList[i].id === payload.id) {
+          state.accountList.splice(i, 1);
+        }
+      }
+      if (account !== undefined) {
+        account.name = payload.name;
+        account.introduction = payload.introduction;
+        state.accountList.push(account);
+      }
     },
   },
   modules: {},
@@ -87,6 +147,13 @@ export default new Vuex.Store({
     getAccountList(state) {
       return state.accountList;
     },
+
+    getAccountById(state) {
+      return (id: number) => {
+        return state.accountList.filter((account) => account.id === id)[0];
+      };
+    },
+
     getCurrentUser(state) {
       return state.currentUser;
     },

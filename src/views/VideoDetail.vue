@@ -19,6 +19,7 @@
     </div>
 
     <div class="review">
+      <add-review></add-review>
       <div class="row">
         <div class="col s12">
           <div class="card content">
@@ -61,7 +62,10 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-@Component
+import AddReview from "@/components/AddReview.vue";
+@Component({
+  components: { AddReview },
+})
 export default class XXXComponent extends Vue {}
 </script>
 
