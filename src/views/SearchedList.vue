@@ -33,59 +33,61 @@
             <span class="title"></span>動画本数<br />
           </div>
         </div>
-        <p>動画</p>
-        <div class="movie">
-          <br />
-          <span class="item">
-            <div class="item-icon">
-              <iframe
-                width="560"
-                height="315"
-                src="https://www.youtube.com/embed/BOrdMrh4uKg"
-                title="YouTube video player"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-              ></iframe>
-            </div>
-            <a href="item_detail.html">ビデオタイトル</a><br />
-            <span class="title"></span>再生回数<br />
-            <span class="title"></span>ユーチューバー名<br />
-          </span>
+        <div class="items">
+          <p>動画</p>
+          <div class="movie">
+            <br />
+            <span class="item">
+              <div class="item-icon">
+                <iframe
+                  width="560"
+                  height="315"
+                  src="https://www.youtube.com/embed/BOrdMrh4uKg"
+                  title="YouTube video player"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                ></iframe>
+              </div>
+              <a href="item_detail.html">ビデオタイトル</a><br />
+              <span class="title"></span>再生回数<br />
+              <span class="title"></span>ユーチューバー名<br />
+            </span>
 
-          <span class="item">
-            <div class="item-icon">
-              <iframe
-                width="560"
-                height="315"
-                src="https://www.youtube.com/embed/ony539T074w"
-                title="YouTube video player"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-              ></iframe>
-            </div>
-            <a href="item_detail.html">ビデオタイトル</a><br />
-            <span class="title"></span>再生回数<br />
-            <span class="title"></span>ユーチューバー名<br />
-          </span>
+            <span class="item">
+              <div class="item-icon">
+                <iframe
+                  width="560"
+                  height="315"
+                  src="https://www.youtube.com/embed/ony539T074w"
+                  title="YouTube video player"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                ></iframe>
+              </div>
+              <a href="item_detail.html">ビデオタイトル</a><br />
+              <span class="title"></span>再生回数<br />
+              <span class="title"></span>ユーチューバー名<br />
+            </span>
 
-          <span class="item">
-            <div class="item-icon">
-              <iframe
-                width="560"
-                height="315"
-                src="https://www.youtube.com/embed/M6gcoDN9jBc"
-                title="YouTube video player"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-              ></iframe>
-            </div>
-            <a href="item_detail.html">ビデオタイトル</a><br />
-            <span class="title"></span>再生回数<br />
-            <span class="title"></span>ユーチューバー名<br />
-          </span>
+            <span class="item">
+              <div class="item-icon">
+                <iframe
+                  width="560"
+                  height="315"
+                  src="https://www.youtube.com/embed/M6gcoDN9jBc"
+                  title="YouTube video player"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                ></iframe>
+              </div>
+              <a href="item_detail.html">ビデオタイトル</a><br />
+              <span class="title"></span>再生回数<br />
+              <span class="title"></span>ユーチューバー名<br />
+            </span>
+          </div>
         </div>
       </div>
     </div>

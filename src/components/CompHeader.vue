@@ -4,10 +4,7 @@
       <div class="navbar-fixed">
         <nav class="navfeature grey darken-3">
           <div class="headerContainer nav-wrapper">
-            <a
-              href="https://www.android-kiosk.com"
-              class="header-logo waves-effect waves-light"
-            >
+            <router-link to="/top">
               <span class="hide-on-small-only"
                 ><img
                   src="/img/youtubeLogo.png"
@@ -24,7 +21,7 @@
                 style="font-weight: 300; font-size: 1.3rem"
                 >Youtube Reviewer</span
               >
-            </a>
+            </router-link>
             <div class="row text">
               <form class="col s12 searchForm">
                 <div class="row">
@@ -73,6 +70,7 @@
 <script lang="ts">
 import axios from "axios";
 import { Component, Vue } from "vue-property-decorator";
+import { Videos } from "@/types/Videos";
 @Component
 export default class XXXComponent extends Vue {
   private searchText = "";
@@ -80,13 +78,35 @@ export default class XXXComponent extends Vue {
   async search(searchText: string): Promise<void> {
     console.log(searchText);
 
-    const response = await axios.get(
+    const response1 = await axios.get(
       // ビデオの検索API
-      `https://www.googleapis.com/youtube/v3/search?key=AIzaSyAjmyhCg__LtgHseTa_w2NzZGdD_YLoVZY&type=video&part=snippet&q=${searchText}`
+      `https://www.googleapis.com/youtube/v3/search?key=AIzaSyByE-aaIhWOBWxX0MdlUN6szX6qMe7kX5s&type=video&part=snippet&q=${searchText}`
     );
-    console.dir(response.data);
-    const payload = response.data;
+    console.dir("レスポンスデータ" + response1.data);
+    const payload1 = response1.data;
+    this.$store.commit("addSearchData", payload1);
+    const response2 = await axios.get(
+      // チャンネルの検索API
+      `https://www.googleapis.com/youtube/v3/search?key=AIzaSyByE-aaIhWOBWxX0MdlUN6szX6qMe7kX5s&type=channnels&part=snippet&q=${searchText}`
+    );
+    console.dir("レスポンスデータ" + response2.data);
+    const payload2 = response2.data;
+
+    const channelItems = payload2.items;
+    console.dir(JSON.stringify(channelItems));
+    for (let channel of channelItems) {
+      const channelId = channel.id.channelId;
+      console.dir(JSON.stringify(channelId));
+      const response3 = await axios.get(
+        // チャンネル検索で取得できなかった登録者数などの情報を取得するAPI
+        `https://www.googleapis.com/youtube/v3/channels?key=AIzaSyByE-aaIhWOBWxX0MdlUN6szX6qMe7kX5s&part=snippet,contentDetails,statistics,status&id=${channelId}`
+      );
+      console.dir(JSON.stringify(response3));
+    }
+
+    const payload = payload1 + payload2;
     this.$store.commit("addSearchData", payload);
+
     this.$router.push("/searchedList");
   }
 }

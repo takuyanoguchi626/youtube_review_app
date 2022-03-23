@@ -41,7 +41,7 @@ export default new Vuex.Store({
   actions: {
     async getSoaringVideos(context) {
       const responce = await axios.get(
-        "https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&regionCode=JP&key=AIzaSyChyFfGpQSYRhWTBuyeXTflkqTd4Sgc1HU"
+        "https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&regionCode=JP&key=AIzaSyDGH0fCaERPGyogO0o-rhlir2nnzISDRjM"
       );
       console.dir("responce:" + JSON.stringify(responce));
       const payload = responce.data.items;
@@ -76,6 +76,7 @@ export default new Vuex.Store({
     },
     addSearchData(state, payload) {
       state.searchData = payload;
+      console.dir(JSON.stringify(state.searchData));
     },
   },
   modules: {},
