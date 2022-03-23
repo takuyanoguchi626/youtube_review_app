@@ -19,7 +19,7 @@ const routes: Array<RouteConfig> = [
       import(/* webpackChunkName: "about" */ "../views/Login.vue"),
   },
   {
-    path: "/iconChange",
+    path: "/iconChange/:id",
     name: "",
     component: () => import("../views/IconChange.vue"),
   },
@@ -45,7 +45,7 @@ const routes: Array<RouteConfig> = [
     component: () => import("../views/MyProfile.vue"),
   },
   {
-    path: "/selfIntroductionChange",
+    path: "/selfIntroductionChange/:id",
     name: "",
     component: () => import("../views/SelfIntroductionChange.vue"),
   },
