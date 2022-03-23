@@ -7,6 +7,9 @@
     <div>
       {{ currentAccount.introduction }}
     </div>
+    <div>
+      <button @click="selfIntroductionChange()">編集</button>
+    </div>
     <div
       v-for="favoriteChannel of currentAccount.favoriteChannelList"
       :key="favoriteChannel.id"
@@ -90,6 +93,10 @@ export default class XXXComponent extends Vue {
       account.favoriteChannelList,
       account.reviewList
     );
+  }
+
+  selfIntroductionChange() {
+    this.$router.push(`/selfIntroductionChange/${this.currentAccount.id}`);
   }
 }
 </script>
