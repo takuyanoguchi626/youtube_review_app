@@ -1,13 +1,14 @@
 <template>
   <div>
-    <router-link :to="'/iconChange/' + currentAccount.id">
+    <router-link :to="'/iconChange/' + currentAccount.id" v-if="myAccountFlag">
       <img :src="currentAccount.img" />
     </router-link>
+    <img :src="currentAccount.img" v-else />
     <div>名前：{{ currentAccount.name }}</div>
     <div>
       {{ currentAccount.introduction }}
     </div>
-    <div>
+    <div v-if="myAccountFlag">
       <button @click="selfIntroductionChange()">編集</button>
     </div>
     <div
@@ -84,6 +85,7 @@ export default class XXXComponent extends Vue {
       ),
     ]
   );
+  private myAccountFlag = false;
 
   created(): void {
     // console.log(this.$route.params.id);
@@ -101,6 +103,7 @@ export default class XXXComponent extends Vue {
       account.favoriteChannelList,
       account.reviewList
     );
+    this.myAccountFlag = this.$store.getters.getMyAccountFlag(account);
   }
 
   selfIntroductionChange(): void {
