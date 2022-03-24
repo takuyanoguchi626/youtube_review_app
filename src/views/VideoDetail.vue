@@ -4,22 +4,19 @@
       <iframe
         width="560"
         height="315"
-        src="https://www.youtube.com/embed/9e-UfE6V1Dw"
+        :src="'https://www.youtube.com/embed/' + videoDetail.id"
         title="YouTube video player"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen
       ></iframe>
-      <div>
-        【女子待望】延々と彼氏にプレゼントを贈りつづけたら何にたどり着くの？
-      </div>
-      <span>165万回視聴・2日前</span>
-      <div>東海オンエア</div>
-      <img src="/img/tokaionair.jpeg" />
+      <div>{{ videoDetail.title }}</div>
+      <span>{{ videoDetail.publishedAt }}</span>
+      <div>{{ videoDetail.channelTitle }}</div>
     </div>
 
     <div class="review">
-      <add-review :video="video"></add-review>
+      <add-review :videoDetail="videoDetail"></add-review>
       <div class="row">
         <div class="col s12">
           <div class="card content">
@@ -63,12 +60,31 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import AddReview from "@/components/AddReview.vue";
+import axios from "axios";
 import { Videos } from "@/types/Videos";
 @Component({
   components: { AddReview },
 })
 export default class XXXComponent extends Vue {
-  private video = new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss");
+  private videoDetail = new Videos(0, "", "", ",", ",", "", "");
+
+  async created(): Promise<void> {
+    const videoId = this.$route.params.id;
+    const key = "AIzaSyChyFfGpQSYRhWTBuyeXTflkqTd4Sgc1HU";
+    const response = await axios.get(
+      `https://www.googleapis.com/youtube/v3/videos?part=snippet&key=${key}&id=${videoId}`
+    );
+    const responceVideo = response.data.items[0];
+    this.videoDetail = new Videos(
+      responceVideo.id,
+      responceVideo.snippet.publishedAt,
+      responceVideo.snippet.title,
+      responceVideo.snippet.description,
+      responceVideo.snippet.thumbnails.medium.url,
+      responceVideo.snippet.channelTitle,
+      responceVideo.tags
+    );
+  }
 }
 </script>
 

@@ -27,21 +27,23 @@
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowfullscreen
             ></iframe>
-            <div>{{ video.title }}</div>
+            <router-link :to="'/videoDetail/' + video.id">
+              <div class="video-title">{{ video.title }}</div>
+            </router-link>
             <div>投稿日：{{ video.publishedAt }}</div>
           </div>
         </div>
       </div>
 
-      <div class="subtitle">人気のアカウント</div>
+      <h4 class="subtitle">人気のアカウント</h4>
       <div class="popular-accounts">
-        <div class="account">a</div>
-        <div class="account">b</div>
-        <div class="account">c</div>
-        <div class="account">d</div>
+        <div v-for="(account, index) of recommendationAccountList" :key="index">
+          <div class="account">{{ account.name }}</div>
+          <img :src="account.img" />
+        </div>
       </div>
 
-      <div class="subtitle">おすすめYoutuber</div>
+      <h4 class="subtitle">おすすめYoutuber</h4>
       <div class="popular-youtubers">
         <div
           v-for="(youtuber, index) of recommendationYoutuberList"
@@ -59,6 +61,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import { Videos } from "@/types/Videos";
 import { Channels } from "@/types/Channels";
+import { Account } from "@/types/Account";
 
 @Component
 export default class XXXComponent extends Vue {
@@ -70,6 +73,7 @@ export default class XXXComponent extends Vue {
   private youtubersInfo: Array<Channels> = [];
   // おすすめYoutuberの一覧
   private recommendationYoutuberList = Array<Channels>();
+  private recommendationAccountList = Array<Account>();
   // フラッグ
   private flag = true;
 
@@ -107,6 +111,8 @@ export default class XXXComponent extends Vue {
         }
       }
     }
+    this.$store.commit("sortByReviewCount");
+    this.recommendationAccountList = this.$store.getters.getAccountList;
   }
   moveToRegister(): void {
     this.$router.push("/registerUser");
@@ -162,14 +168,19 @@ iframe {
   justify-content: space-between;
   padding-left: 10px;
 }
+.video-title {
+  margin-top: 5px;
+  font-size: 15px;
+  font-weight: bold;
+}
 .soaring-videos {
   display: flex;
   overflow-x: auto;
 }
 .popular-accounts,
 .popular-youtubers {
-  justify-content: center;
   display: flex;
+  justify-content: center;
 }
 .account {
   font-size: 20px;
@@ -178,7 +189,7 @@ iframe {
   margin-right: 30px;
 }
 .subtitle {
-  margin-top: 10px;
+  margin-top: 20px;
   font-weight: bold;
 }
 </style>
