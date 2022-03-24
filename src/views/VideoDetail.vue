@@ -19,7 +19,7 @@
     </div>
 
     <div class="review">
-      <add-review></add-review>
+      <add-review :video="video"></add-review>
       <div class="row">
         <div class="col s12">
           <div class="card content">
@@ -63,10 +63,13 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import AddReview from "@/components/AddReview.vue";
+import { Videos } from "@/types/Videos";
 @Component({
   components: { AddReview },
 })
-export default class XXXComponent extends Vue {}
+export default class XXXComponent extends Vue {
+  private video = new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss");
+}
 </script>
 
 <style scoped>
