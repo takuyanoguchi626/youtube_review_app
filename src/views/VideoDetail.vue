@@ -16,7 +16,7 @@
     </div>
 
     <div class="review">
-      <add-review></add-review>
+      <add-review :video="video"></add-review>
       <div class="row">
         <div class="col s12">
           <div class="card content">
@@ -67,6 +67,7 @@ import { Videos } from "@/types/Videos";
 })
 export default class XXXComponent extends Vue {
   private videoDetail: Array<Videos> = [];
+  private video = new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss");
 
   async created(): Promise<void> {
     const videoId = this.$route.params.id;
