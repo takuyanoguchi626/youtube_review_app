@@ -32,7 +32,7 @@ const routes: Array<RouteConfig> = [
     component: () => import("../views/ChannelDetail.vue"),
   },
   {
-    path: "/videoDetail",
+    path: "/videoDetail/",
     component: () => import("../views/VideoDetail.vue"),
   },
   {
@@ -60,7 +60,7 @@ const routes: Array<RouteConfig> = [
     component: () => import("../views/ShowReview.vue"),
   },
   {
-    path: "/searchedList",
+    path: "/searchedList/:searchText",
     name: "",
     component: () => import("../views/SearchedList.vue"),
   },
