@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container">
-      <p>検索結果:検索ワード</p>
+      <p>検索結果:{{ this.searchText }}</p>
       <div class="contents blue-grey lighten-5">
         <div class="items">
           <h5>ユーチューバー</h5>
@@ -9,34 +9,27 @@
           <div class="item-area">
             <div class="youtuber-items">
               <br />
-              <div class="item col s12 m6 card white">
-                <div class="item-icon">
-                  <img src="/img/東海オンエア.jpeg" />
+              <div
+                v-for="searchedChannel of searchedChannels"
+                :key="searchedChannel.id"
+              >
+                <div class="item col card white">
+                  <div class="item-icon">
+                    <img v-bind:src="searchedChannel.thumbnailsUrl" />
+                  </div>
+                  <router-link :to="'channelDetail/' + searchedChannel.id">{{
+                    searchedChannel.title
+                  }}</router-link
+                  ><br />
+                  <span class="title"></span>登録者数{{
+                    searchedChannel.subscriberCount
+                  }}<br />
+                  <span class="title"></span>総動画数{{
+                    searchedChannel.videoCount
+                  }}<br />
+                  <span class="title"></span>説明{{ searchedChannel.description
+                  }}<br />
                 </div>
-                <a href="item_detail.html">ユーチューバー名</a><br />
-                <span class="title"></span>登録者数<br />
-                <span class="title"></span>動画本数<br />
-                <span class="title"></span>説明<br />
-              </div>
-
-              <div class="item col s12 m6 card white">
-                <div class="item-icon">
-                  <img src="/img/東海オンエア.jpeg" />
-                </div>
-                <a href="item_detail.html">ユーチューバー名</a><br />
-                <span class="title"></span>登録者数<br />
-                <span class="title"></span>動画本数<br />
-                <span class="title"></span>説明<br />
-              </div>
-
-              <div class="item col s12 m6 card">
-                <div class="item-icon">
-                  <img src="/img/東海オンエア.jpeg" />
-                </div>
-                <a href="item_detail.html">ユーチューバー名</a><br />
-                <span class="title"></span>登録者数<br />
-                <span class="title"></span>動画本数<br />
-                <span class="title"></span>説明<br />
               </div>
             </div>
           </div>
@@ -65,7 +58,9 @@
                           allowfullscreen
                         ></iframe>
                       </div>
-                      <a href="item_detail.html">{{ searchedVideo.title }}</a
+                      <router-link
+                        v-bind:to="'/channelDetail/' + searchedVideo.id"
+                        >{{ searchedVideo.title }}</router-link
                       ><br />
                       <span class="title"></span>{{ searchedVideo.publishedAt
                       }}<br />
@@ -93,14 +88,17 @@ import { Channels } from "@/types/Channels";
 @Component
 export default class XXXComponent extends Vue {
   private searchedVideos: Array<Videos> = [];
-  private searchedYouTubers = new Array<Channels>();
+  private searchedChannels = new Array<Channels>();
+  private channelIdList = new Array<string>();
+  private key = "AIzaSyDGH0fCaERPGyogO0o-rhlir2nnzISDRjM";
+  private searchText = "";
 
   async created(): Promise<void> {
-    const searchText = this.$route.params.searchText;
-    console.log(searchText);
+    this.searchText = this.$route.params.searchText;
+    console.log(this.searchText);
     const response1 = await axios.get(
       // ビデオの検索API
-      `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&maxResults=10&regionCode=JP&key=AIzaSyAgRYbghnEpgHX9f980fKCzlTP6vESPkwo&q=${searchText}`
+      `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&maxResults=10&regionCode=JP&key=${this.key}&q=${this.searchText}`
     );
     const payload1 = response1.data.items;
     console.dir("レスポンスデータ" + payload1);
@@ -119,17 +117,42 @@ export default class XXXComponent extends Vue {
       );
       console.log(this.searchedVideos);
     }
-    // const response2 = await axios.get(
-    //   // チャンネルの検索API
-    //   `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=channel&maxResults=10&regionCode=JP&key=AIzaSyAgRYbghnEpgHX9f980fKCzlTP6vESPkwo&q=${searchText}`
-    // );
-    // const payload2 = response2.data;
-    // console.dir("レスポンスデータ" + payload2);
-    // // const channelItems = payload2.items;
-    // // console.dir(JSON.stringify(channelItems));
-    // // for (let channel of channels) {
-    // //   console.dir(JSON.stringify(responseData2));
-    // // }
+    const response2 = await axios.get(
+      // チャンネルの検索API
+      `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=channel&maxResults=10&regionCode=JP&key=${this.key}&q=${this.searchText}`
+    );
+    const channel1Items = response2.data.items;
+    console.log(channel1Items);
+
+    for (const item of channel1Items) {
+      console.dir("item" + JSON.stringify(item));
+      console.log("ChannelId" + item.snippet.channelId);
+
+      this.channelIdList.push(item.snippet.channelId);
+    }
+    console.log("channelIdList" + this.channelIdList);
+
+    for (let channelId of this.channelIdList) {
+      const response3 = await axios.get(
+        `https://www.googleapis.com/youtube/v3/channels?key=${this.key}&maxResults=10&part=snippet,contentDetails,statistics,status&id=${channelId}`
+      );
+      const channel2Items = response3.data.items;
+      for (let channel2Item of channel2Items) {
+        this.searchedChannels.push(
+          new Channels(
+            channel2Item.id,
+            channel2Item.snippet.title,
+            channel2Item.snippet.description,
+            channel2Item.snippet.publishedAt,
+            channel2Item.snippet.thumbnails.default.url,
+            channel2Item.statistics.viewCount,
+            channel2Item.statistics.subscriberCount,
+            channel2Item.statistics.videoCount
+          )
+        );
+      }
+    }
+    console.log(this.searchedChannels);
   }
 }
 </script>
@@ -148,6 +171,11 @@ export default class XXXComponent extends Vue {
 }
 .contents {
   padding: 5px;
+}
+
+.card {
+  height: 500px;
+  overflow-y: hidden;
 }
 
 .youtuber-items {
