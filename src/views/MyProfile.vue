@@ -47,6 +47,7 @@ export default class XXXComponent extends Vue {
     [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
     [
       new Review(
+        "",
         1,
         1,
         new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
@@ -54,6 +55,7 @@ export default class XXXComponent extends Vue {
         1
       ),
       new Review(
+        "",
         1,
         1,
         new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
@@ -61,6 +63,7 @@ export default class XXXComponent extends Vue {
         1
       ),
       new Review(
+        "",
         1,
         1,
         new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
@@ -68,6 +71,7 @@ export default class XXXComponent extends Vue {
         1
       ),
       new Review(
+        "",
         1,
         1,
         new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
@@ -95,7 +99,7 @@ export default class XXXComponent extends Vue {
     );
   }
 
-  selfIntroductionChange() {
+  selfIntroductionChange(): void {
     this.$router.push(`/selfIntroductionChange/${this.currentAccount.id}`);
   }
 }

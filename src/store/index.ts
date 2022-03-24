@@ -11,6 +11,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    //最後のレビューID
+    lastReviewId: 0,
     // Youtuber情報
     youtubersInfo: Array<Channels>(),
     accountList: [
@@ -25,6 +27,7 @@ export default new Vuex.Store({
         [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
         [
           new Review(
+            "",
             1,
             1,
             new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
@@ -32,6 +35,7 @@ export default new Vuex.Store({
             1
           ),
           new Review(
+            "",
             1,
             1,
             new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
@@ -39,6 +43,7 @@ export default new Vuex.Store({
             1
           ),
           new Review(
+            "",
             1,
             1,
             new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
@@ -46,6 +51,7 @@ export default new Vuex.Store({
             1
           ),
           new Review(
+            "",
             1,
             1,
             new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
@@ -65,6 +71,7 @@ export default new Vuex.Store({
         [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
         [
           new Review(
+            "",
             1,
             1,
             new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
@@ -72,6 +79,7 @@ export default new Vuex.Store({
             1
           ),
           new Review(
+            "",
             1,
             1,
             new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
@@ -91,6 +99,7 @@ export default new Vuex.Store({
         [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
         [
           new Review(
+            "",
             1,
             1,
             new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
@@ -102,15 +111,48 @@ export default new Vuex.Store({
     ],
     soaringVideos: Array<Videos>(),
     currentUser: new Account(
-      0,
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      new Array<Channels>(),
-      new Array<Review>()
+      3,
+      "鈴木太郎",
+      "aaaa",
+      "/img/pagu.jpg",
+      "aaaa",
+      "ssss",
+      "aaaaa",
+      [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
+      [
+        new Review(
+          "",
+          1,
+          1,
+          new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+          "レビューのプレビュー",
+          1
+        ),
+        new Review(
+          "",
+          1,
+          1,
+          new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+          "レビューのプレビュー",
+          1
+        ),
+        new Review(
+          "",
+          1,
+          1,
+          new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+          "レビューのプレビュー",
+          1
+        ),
+        new Review(
+          "",
+          1,
+          1,
+          new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+          "レビューのプレビュー",
+          1
+        ),
+      ]
     ),
     searchData: [],
   },
@@ -231,6 +273,33 @@ export default new Vuex.Store({
         // a と b が等しい場合
         return 0;
       });
+    },
+    postReview(state, payload) {
+      const account = state.accountList.find(
+        (account) => account.id === state.currentUser.id
+      );
+      for (let i = 0; i < state.accountList.length; i++) {
+        if (state.accountList[i].id === state.currentUser.id) {
+          state.accountList.splice(i, 1);
+        }
+      }
+      if (account !== undefined) {
+        account.reviewList.push(
+          new Review(
+            payload.date,
+            state.lastReviewId,
+            account.id,
+            payload.video,
+            payload.review,
+            0
+          )
+        );
+        state.lastReviewId++;
+        console.log(account);
+
+        state.accountList.push(account);
+        console.log("sss");
+      }
     },
   },
   modules: {},

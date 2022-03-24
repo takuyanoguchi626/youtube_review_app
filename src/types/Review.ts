@@ -2,6 +2,8 @@ import { Videos } from "./Videos";
 
 export class Review {
   constructor(
+    //レビュー投稿日
+    private _reviewDate: string,
     //レビューID
     private _reviewId: number,
     //アカウントID
@@ -13,6 +15,14 @@ export class Review {
     //いいね数
     private _favoriteCount: number
   ) {}
+
+  public get reviewDate(): string {
+    return this._reviewDate;
+  }
+
+  public set reviewDate(reviewDate: string) {
+    this._reviewDate = reviewDate;
+  }
 
   public get reviewId(): number {
     return this._reviewId;
