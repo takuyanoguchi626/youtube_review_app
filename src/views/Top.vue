@@ -1,40 +1,55 @@
 <template>
   <div class="contain">
-    <div class="count">総レビュー数：0</div>
-    <div><button>ユーザー登録はこちらから</button></div>
-    <h4 class="name">急上昇動画</h4>
+    <div v-if="flag">
+      <img
+        class="gif"
+        src="/img/18905401_MotionElements_transition-10_converted_481357-640x360-3s-q2.gif"
+      />
+    </div>
 
-    <div class="sample">
-      <div class="soaring-videos">
-        <div v-for="video of top5Videos" :key="video.id">
-          <iframe
-            width="560"
-            height="315"
-            v-bind:src="'https://www.youtube.com/embed/' + video.id"
-            title="YouTube video player"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-          ></iframe>
-          <div>{{ video.title }}</div>
-          <div>投稿日：{{ video.publishedAt }}</div>
+    <div v-if="!flag">
+      <div class="top">
+        <img class="top-image" src="/img/topImage.png" />
+        <p>ユーザー登録はこちらから</p>
+        <button type="button" v-on:click="moveToRegister">今すぐ登録！</button>
+      </div>
+      <div class="count">総レビュー数：0</div>
+      <h4 class="subtitle">急上昇動画</h4>
+      <div class="sample">
+        <div class="soaring-videos">
+          <div v-for="video of top5Videos" :key="video.id">
+            <iframe
+              width="560"
+              height="315"
+              v-bind:src="'https://www.youtube.com/embed/' + video.id"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+            <div>{{ video.title }}</div>
+            <div>投稿日：{{ video.publishedAt }}</div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="name">人気のアカウント</div>
-    <div class="popular-accounts">
-      <div class="account">a</div>
-      <div class="account">b</div>
-      <div class="account">c</div>
-      <div class="account">d</div>
-    </div>
+      <div class="subtitle">人気のアカウント</div>
+      <div class="popular-accounts">
+        <div class="account">a</div>
+        <div class="account">b</div>
+        <div class="account">c</div>
+        <div class="account">d</div>
+      </div>
 
-    <div class="name">人気Youtuber</div>
-    <div class="popular-youtubers">
-      <div v-for="(youtuber, index) of youtubersInfo" :key="index">
-        <div><img :src="youtuber.thumbnailsUrl" /></div>
-        <div>{{ youtuber.title }}</div>
+      <div class="subtitle">おすすめYoutuber</div>
+      <div class="popular-youtubers">
+        <div
+          v-for="(youtuber, index) of recommendationYoutuberList"
+          :key="index"
+        >
+          <div><img :src="youtuber.thumbnailsUrl" /></div>
+          <div>{{ youtuber.title }}</div>
+        </div>
       </div>
     </div>
   </div>
@@ -53,27 +68,87 @@ export default class XXXComponent extends Vue {
   private top5Videos: Array<Videos> = [];
   // 急上昇動画50件分のチャンネル情報
   private youtubersInfo: Array<Channels> = [];
+  // おすすめYoutuberの一覧
+  private recommendationYoutuberList = Array<Channels>();
+  // フラッグ
+  private flag = true;
 
   async created(): Promise<void> {
     /**
      *Vuexストアのアクション経由非同期でWebAPIから急上昇動画Top5を取得する.
      *@returns Promiseオブジェクト
      */
-    await this.$store.dispatch("getSoaringVideos");
-    this.soaringVideos = this.$store.getters.getSoaringVideosInfo;
-    this.top5Videos.push(
-      this.soaringVideos[0],
-      this.soaringVideos[1],
-      this.soaringVideos[2],
-      this.soaringVideos[3],
-      this.soaringVideos[4]
-    );
-    this.youtubersInfo = this.$store.getters.getYoutubersInfo;
+    if (await this.$store.dispatch("getSoaringVideos")) {
+      this.flag = true;
+    } else {
+      this.flag = false;
+      this.soaringVideos = this.$store.getters.getSoaringVideosInfo;
+      this.top5Videos.push(
+        this.soaringVideos[0],
+        this.soaringVideos[1],
+        this.soaringVideos[2],
+        this.soaringVideos[3],
+        this.soaringVideos[4]
+      );
+      this.youtubersInfo = this.$store.getters.getYoutubersInfo;
+
+      // おすすめYoutuberを５人ランダム表示させる
+      for (let i = 1; this.recommendationYoutuberList.length < 5; i++) {
+        let pushYoutuber =
+          this.youtubersInfo[
+            Math.floor(Math.random() * this.youtubersInfo.length)
+          ];
+        if (
+          this.recommendationYoutuberList.find(
+            (youtuber) => youtuber.id === pushYoutuber.id
+          ) === undefined
+        ) {
+          this.recommendationYoutuberList.push(pushYoutuber);
+        }
+      }
+    }
+  }
+  moveToRegister(): void {
+    this.$router.push("/registerUser");
   }
 }
 </script>
 
 <style scoped>
+.top {
+  position: relative;
+}
+.top p {
+  position: absolute;
+  top: 50%;
+  left: 80%;
+  -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  margin: 0;
+  padding: 0;
+  color: black; /*文字は白に*/
+  font-weight: bold; /*太字に*/
+  font-size: 20px;
+}
+.top button {
+  position: absolute;
+  top: 55%;
+  left: 80%;
+  -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.top-image {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+}
+.gif {
+  width: 90%;
+  height: 500px;
+  object-fit: cover;
+}
 .contain {
   width: 100vw;
 }
@@ -83,20 +158,16 @@ export default class XXXComponent extends Vue {
   max-width: 100%;
 }
 iframe {
-  padding-left: 10px;
-}
-iframe {
   display: flex;
   justify-content: space-between;
+  padding-left: 10px;
 }
 .soaring-videos {
   display: flex;
   overflow-x: auto;
 }
+.popular-accounts,
 .popular-youtubers {
-  display: flex;
-}
-.popular-accounts {
   justify-content: center;
   display: flex;
 }
@@ -106,19 +177,8 @@ iframe {
   padding: 50px;
   margin-right: 30px;
 }
-.name {
+.subtitle {
   margin-top: 10px;
   font-weight: bold;
-}
-/* .popular-youtubers {
-  width: 250px;
-  height: 250px;
-  画像の縦横比を維持したまま表示ができるプロパティ
-  object-fit: cover;
-} */
-.tokai {
-  width: 350px;
-  height: 250px;
-  object-fit: cover;
 }
 </style>
