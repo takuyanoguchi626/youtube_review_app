@@ -27,20 +27,23 @@
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowfullscreen
             ></iframe>
-            <div>{{ video.title }}</div>
+            <router-link :to="'/videoDetail/' + video.id">
+              <div class="video-title">{{ video.title }}</div>
+            </router-link>
             <div>投稿日：{{ video.publishedAt }}</div>
           </div>
         </div>
       </div>
 
-      <div class="subtitle">人気のアカウント</div>
+      <h4 class="subtitle">人気のアカウント</h4>
       <div class="popular-accounts">
         <div v-for="(account, index) of recommendationAccountList" :key="index">
           <div class="account">{{ account.name }}</div>
+          <img :src="account.img" />
         </div>
       </div>
 
-      <div class="subtitle">おすすめYoutuber</div>
+      <h4 class="subtitle">おすすめYoutuber</h4>
       <div class="popular-youtubers">
         <div
           v-for="(youtuber, index) of recommendationYoutuberList"
@@ -165,6 +168,11 @@ iframe {
   justify-content: space-between;
   padding-left: 10px;
 }
+.video-title {
+  margin-top: 5px;
+  font-size: 15px;
+  font-weight: bold;
+}
 .soaring-videos {
   display: flex;
   overflow-x: auto;
@@ -181,7 +189,7 @@ iframe {
   margin-right: 30px;
 }
 .subtitle {
-  margin-top: 10px;
+  margin-top: 20px;
   font-weight: bold;
 }
 </style>

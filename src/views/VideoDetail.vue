@@ -1,21 +1,18 @@
 <template>
   <div class="container">
-    <div class="video">
+    <div class="video" v-for="video of videoDetail" :key="video.id">
       <iframe
         width="560"
         height="315"
-        src="https://www.youtube.com/embed/9e-UfE6V1Dw"
+        :src="'https://www.youtube.com/embed/' + video.id"
         title="YouTube video player"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen
       ></iframe>
-      <div>
-        【女子待望】延々と彼氏にプレゼントを贈りつづけたら何にたどり着くの？
-      </div>
-      <span>165万回視聴・2日前</span>
-      <div>東海オンエア</div>
-      <img src="/img/tokaionair.jpeg" />
+      <div>{{ video.title }}</div>
+      <span>{{ video.publishedAt }}</span>
+      <div>{{ video.channelTitle }}</div>
     </div>
 
     <div class="review">
@@ -63,10 +60,35 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import AddReview from "@/components/AddReview.vue";
+import axios from "axios";
+import { Videos } from "@/types/Videos";
 @Component({
   components: { AddReview },
 })
-export default class XXXComponent extends Vue {}
+export default class XXXComponent extends Vue {
+  private videoDetail: Array<Videos> = [];
+
+  async created(): Promise<void> {
+    const videoId = this.$route.params.id;
+    const key = "AIzaSyChyFfGpQSYRhWTBuyeXTflkqTd4Sgc1HU";
+    const response = await axios.get(
+      `https://www.googleapis.com/youtube/v3/videos?part=snippet&key=${key}&id=${videoId}`
+    );
+    const responceVideo = response.data.items[0];
+    console.log(responceVideo);
+    this.videoDetail.push(
+      new Videos(
+        responceVideo.id,
+        responceVideo.snippet.publishedAt,
+        responceVideo.snippet.title,
+        responceVideo.snippet.description,
+        responceVideo.snippet.thumbnails.medium.url,
+        responceVideo.channelTitle,
+        responceVideo.tags
+      )
+    );
+  }
+}
 </script>
 
 <style scoped>

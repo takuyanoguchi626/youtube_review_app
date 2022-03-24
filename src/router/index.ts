@@ -32,7 +32,7 @@ const routes: Array<RouteConfig> = [
     component: () => import("../views/ChannelDetail.vue"),
   },
   {
-    path: "/videoDetail",
+    path: "/videoDetail/:id",
     component: () => import("../views/VideoDetail.vue"),
   },
   {
