@@ -114,28 +114,31 @@ import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
 @Component
 export default class XXXComponent extends Vue {
-  // async created(): Promise<void>{
-  //   // const response1 = await axios.get(
-  //   //   // ビデオの検索API
-  //   //   `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&maxResults=50&regionCode=JP&key=AIzaSyDGH0fCaERPGyogO0o-rhlir2nnzISDRjM&q=${searchText}`
-  //   // );
-  //   // const payload1 = response1.data;
-  //   // console.dir("レスポンスデータ" + payload1);
-  //   // for (let video of videos) {
-  //   //   console.dir(JSON.stringify(responseData1));
-  //   // }
-  //   const response2 = await axios.get(
-  //   //   // チャンネルの検索API
-  //   //   `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=channel&maxResults=50&regionCode=JP&key=AIzaSyDGH0fCaERPGyogO0o-rhlir2nnzISDRjM&q=${searchText}`
-  //   // );
-  //   // const payload2 = response2.data;
-  //   // console.dir("レスポンスデータ" + payload2);
-  //   // const channelItems = payload2.items;
-  //   // console.dir(JSON.stringify(channelItems));
-  //   // for (let channel of channels) {
-  //   //   console.dir(JSON.stringify(responseData2));
-  //   // }
-  // }
+  async created(): Promise<void> {
+    const searchText = this.$route.params.searchText;
+
+    console.log(searchText);
+    const response1 = await axios.get(
+      // ビデオの検索API
+      `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&maxResults=50&regionCode=JP&key=AIzaSyDGH0fCaERPGyogO0o-rhlir2nnzISDRjM&q=`
+    );
+    const payload1 = response1.data;
+    console.dir("レスポンスデータ" + payload1);
+    // for (let video of videos) {
+    //   console.dir(JSON.stringify(responseData1));
+    // }
+    const response2 = await axios.get(
+      // チャンネルの検索API
+      `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=channel&maxResults=50&regionCode=JP&key=AIzaSyDGH0fCaERPGyogO0o-rhlir2nnzISDRjM&q=`
+    );
+    const payload2 = response2.data;
+    console.dir("レスポンスデータ" + payload2);
+    // const channelItems = payload2.items;
+    // console.dir(JSON.stringify(channelItems));
+    // for (let channel of channels) {
+    //   console.dir(JSON.stringify(responseData2));
+    // }
+  }
 }
 </script>
 
