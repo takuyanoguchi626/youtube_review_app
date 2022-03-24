@@ -80,34 +80,34 @@ export default class XXXComponent extends Vue {
 
     const response1 = await axios.get(
       // ビデオの検索API
-      `https://www.googleapis.com/youtube/v3/search?key=AIzaSyByE-aaIhWOBWxX0MdlUN6szX6qMe7kX5s&type=video&part=snippet&q=${searchText}`
+      `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&maxResults=50&regionCode=JP&key=AIzaSyDGH0fCaERPGyogO0o-rhlir2nnzISDRjM&q=${searchText}`
     );
-    console.dir("レスポンスデータ" + response1.data);
     const payload1 = response1.data;
-    this.$store.commit("addSearchData", payload1);
+    console.dir("レスポンスデータ" + payload1);
+    // for (let video of videos) {
+    //   console.dir(JSON.stringify(responseData1));
+    // }
+
     const response2 = await axios.get(
       // チャンネルの検索API
-      `https://www.googleapis.com/youtube/v3/search?key=AIzaSyByE-aaIhWOBWxX0MdlUN6szX6qMe7kX5s&type=channnels&part=snippet&q=${searchText}`
+      `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=channel&maxResults=50&regionCode=JP&key=AIzaSyDGH0fCaERPGyogO0o-rhlir2nnzISDRjM&q=${searchText}`
     );
-    console.dir("レスポンスデータ" + response2.data);
     const payload2 = response2.data;
+    console.dir("レスポンスデータ" + payload2);
 
-    const channelItems = payload2.items;
-    console.dir(JSON.stringify(channelItems));
-    for (let channel of channelItems) {
-      const channelId = channel.id.channelId;
-      console.dir(JSON.stringify(channelId));
-      const response3 = await axios.get(
-        // チャンネル検索で取得できなかった登録者数などの情報を取得するAPI
-        `https://www.googleapis.com/youtube/v3/channels?key=AIzaSyByE-aaIhWOBWxX0MdlUN6szX6qMe7kX5s&part=snippet,contentDetails,statistics,status&id=${channelId}`
-      );
-      console.dir(JSON.stringify(response3));
+    // const channelItems = payload2.items;
+    // console.dir(JSON.stringify(channelItems));
+    // for (let channel of channels) {
+    //   console.dir(JSON.stringify(responseData2));
+    // }
+
+    // 現在のパスを検出
+    let path = location.pathname;
+    console.log(path);
+    if (path !== `/searchedList/${searchText}`) {
+      // ドメイン以下のパス名が /searchedList/${searchText} の場合に実行する処理
+      this.$router.push(`/searchedList/${searchText}`);
     }
-
-    const payload = payload1 + payload2;
-    this.$store.commit("addSearchData", payload);
-
-    this.$router.push("/searchedList");
   }
 }
 </script>
