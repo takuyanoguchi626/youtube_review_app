@@ -35,10 +35,9 @@
 
       <div class="subtitle">人気のアカウント</div>
       <div class="popular-accounts">
-        <div class="account">a</div>
-        <div class="account">b</div>
-        <div class="account">c</div>
-        <div class="account">d</div>
+        <div v-for="(account, index) of recommendationAccountList" :key="index">
+          <div class="account">{{ account.name }}</div>
+        </div>
       </div>
 
       <div class="subtitle">おすすめYoutuber</div>
@@ -59,6 +58,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import { Videos } from "@/types/Videos";
 import { Channels } from "@/types/Channels";
+import { Account } from "@/types/Account";
 
 @Component
 export default class XXXComponent extends Vue {
@@ -70,6 +70,7 @@ export default class XXXComponent extends Vue {
   private youtubersInfo: Array<Channels> = [];
   // おすすめYoutuberの一覧
   private recommendationYoutuberList = Array<Channels>();
+  private recommendationAccountList = Array<Account>();
   // フラッグ
   private flag = true;
 
@@ -107,6 +108,8 @@ export default class XXXComponent extends Vue {
         }
       }
     }
+    this.$store.commit("sortByReviewCount");
+    this.recommendationAccountList = this.$store.getters.getAccountList;
   }
   moveToRegister(): void {
     this.$router.push("/registerUser");
@@ -168,8 +171,8 @@ iframe {
 }
 .popular-accounts,
 .popular-youtubers {
-  justify-content: center;
   display: flex;
+  justify-content: center;
 }
 .account {
   font-size: 20px;

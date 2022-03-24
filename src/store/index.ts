@@ -54,6 +54,51 @@ export default new Vuex.Store({
           ),
         ]
       ),
+      new Account(
+        3,
+        "山田花子",
+        "aaaa",
+        "/img/pagu.jpg",
+        "aaaa",
+        "ssss",
+        "aaaaa",
+        [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
+        [
+          new Review(
+            1,
+            1,
+            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+            "レビューのプレビュー",
+            1
+          ),
+          new Review(
+            1,
+            1,
+            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+            "レビューのプレビュー",
+            1
+          ),
+        ]
+      ),
+      new Account(
+        3,
+        "佐藤次郎",
+        "aaaa",
+        "/img/pagu.jpg",
+        "aaaa",
+        "ssss",
+        "aaaaa",
+        [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
+        [
+          new Review(
+            1,
+            1,
+            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+            "レビューのプレビュー",
+            1
+          ),
+        ]
+      ),
     ],
     soaringVideos: Array<Videos>(),
     currentUser: new Account(
@@ -171,6 +216,21 @@ export default new Vuex.Store({
         account.introduction = payload.introduction;
         state.accountList.push(account);
       }
+    },
+
+    sortByReviewCount(state) {
+      state.accountList.sort(function (before: Account, after: Account) {
+        //ある順序の基準において a が b より小
+        if (after.reviewList.length < before.reviewList.length) {
+          return -1;
+        }
+        //その順序の基準において a が b より大
+        if (after.reviewList.length > before.reviewList.length) {
+          return 1;
+        }
+        // a と b が等しい場合
+        return 0;
+      });
     },
   },
   modules: {},
