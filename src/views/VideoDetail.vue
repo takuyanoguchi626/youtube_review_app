@@ -1,22 +1,22 @@
 <template>
   <div class="container">
-    <div class="video" v-for="video of videoDetail" :key="video.id">
+    <div class="video">
       <iframe
         width="560"
         height="315"
-        :src="'https://www.youtube.com/embed/' + video.id"
+        :src="'https://www.youtube.com/embed/' + videoDetail.id"
         title="YouTube video player"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen
       ></iframe>
-      <div>{{ video.title }}</div>
-      <span>{{ video.publishedAt }}</span>
-      <div>{{ video.channelTitle }}</div>
+      <div>{{ videoDetail.title }}</div>
+      <span>{{ videoDetail.publishedAt }}</span>
+      <div>{{ videoDetail.channelTitle }}</div>
     </div>
 
     <div class="review">
-      <add-review></add-review>
+      <add-review :videoDetail="videoDetail"></add-review>
       <div class="row">
         <div class="col s12">
           <div class="card content">
@@ -66,7 +66,7 @@ import { Videos } from "@/types/Videos";
   components: { AddReview },
 })
 export default class XXXComponent extends Vue {
-  private videoDetail: Array<Videos> = [];
+  private videoDetail = new Videos(0, "", "", ",", ",", "", "");
 
   async created(): Promise<void> {
     const videoId = this.$route.params.id;
@@ -75,17 +75,14 @@ export default class XXXComponent extends Vue {
       `https://www.googleapis.com/youtube/v3/videos?part=snippet&key=${key}&id=${videoId}`
     );
     const responceVideo = response.data.items[0];
-    console.log(responceVideo);
-    this.videoDetail.push(
-      new Videos(
-        responceVideo.id,
-        responceVideo.snippet.publishedAt,
-        responceVideo.snippet.title,
-        responceVideo.snippet.description,
-        responceVideo.snippet.thumbnails.medium.url,
-        responceVideo.channelTitle,
-        responceVideo.tags
-      )
+    this.videoDetail = new Videos(
+      responceVideo.id,
+      responceVideo.snippet.publishedAt,
+      responceVideo.snippet.title,
+      responceVideo.snippet.description,
+      responceVideo.snippet.thumbnails.medium.url,
+      responceVideo.snippet.channelTitle,
+      responceVideo.tags
     );
   }
 }
