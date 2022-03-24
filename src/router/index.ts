@@ -33,6 +33,7 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: "/videoDetail/:id",
+
     component: () => import("../views/VideoDetail.vue"),
   },
   {
@@ -60,7 +61,7 @@ const routes: Array<RouteConfig> = [
     component: () => import("../views/ShowReview.vue"),
   },
   {
-    path: "/searchedList",
+    path: "/searchedList/:searchText",
     name: "",
     component: () => import("../views/SearchedList.vue"),
   },
