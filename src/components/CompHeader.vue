@@ -74,14 +74,15 @@ import { Component, Vue } from "vue-property-decorator";
 @Component
 export default class XXXComponent extends Vue {
   private searchText = "";
-  private path = location.pathname;
+  private path = "";
 
   search(searchText: string): void {
     console.log(searchText);
 
     // 現在のパスを検出
     const path = this.$route.params.searchText;
-    console.log(path);
+    console.log("path:" + path);
+
     if (path !== searchText) {
       // ドメイン以下のパス名が /searchedList/${searchText} の場合に実行する処理
       this.$router.push(`/searchedList/${searchText}`);

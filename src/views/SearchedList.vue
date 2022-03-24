@@ -46,59 +46,35 @@
               <div class="video-items">
                 <div class="movie">
                   <br />
-                  <span class="item col card white">
-                    <div class="item-icon">
-                      <iframe
-                        width="500"
-                        height="280"
-                        src="https://www.youtube.com/embed/BOrdMrh5uKg"
-                        title="YouTube video player"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen
-                      ></iframe>
-                    </div>
-                    <a href="item_detail.html">ビデオタイトル</a><br />
-                    <span class="title"></span>再生回数<br />
-                    <span class="title"></span>ユーチューバー名<br />
-                    <span class="title"></span>説明<br />
-                  </span>
 
-                  <span class="item col s12 m6 card white">
-                    <div class="item-icon">
-                      <iframe
-                        width="500"
-                        height="280"
-                        src="https://www.youtube.com/embed/ony539T074w"
-                        title="YouTube video player"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen
-                      ></iframe>
+                  <div
+                    v-for="searchedVideo of searchedVideos"
+                    :key="searchedVideo.id"
+                  >
+                    <div class="item col card white">
+                      <div class="item-icon">
+                        <iframe
+                          width="500"
+                          height="280"
+                          v-bind:src="
+                            'https://www.youtube.com/embed/' + searchedVideo.id
+                          "
+                          title="YouTube video player"
+                          frameborder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowfullscreen
+                        ></iframe>
+                      </div>
+                      <a href="item_detail.html">{{ searchedVideo.title }}</a
+                      ><br />
+                      <span class="title"></span>{{ searchedVideo.publishedAt
+                      }}<br />
+                      <span class="title"></span>{{ searchedVideo.channelTitle
+                      }}<br />
+                      <span class="title"></span>{{ searchedVideo.description
+                      }}<br />
                     </div>
-                    <a href="item_detail.html">ビデオタイトル</a><br />
-                    <span class="title"></span>再生回数<br />
-                    <span class="title"></span>ユーチューバー名<br />
-                    <span class="title"></span>説明<br />
-                  </span>
-
-                  <span class="item col s12 m6 card white">
-                    <div class="item-icon">
-                      <iframe
-                        width="500"
-                        height="280"
-                        src="https://www.youtube.com/embed/M6gcoDN9jBc"
-                        title="YouTube video player"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen
-                      ></iframe>
-                    </div>
-                    <a href="item_detail.html">ビデオタイトル</a><br />
-                    <span class="title"></span>再生回数<br />
-                    <span class="title"></span>ユーチューバー名<br />
-                    <span class="title"></span>説明<br />
-                  </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -112,32 +88,48 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
+import { Videos } from "@/types/Videos";
+import { Channels } from "@/types/Channels";
 @Component
 export default class XXXComponent extends Vue {
+  private searchedVideos: Array<Videos> = [];
+  private searchedYouTubers = new Array<Channels>();
+
   async created(): Promise<void> {
     const searchText = this.$route.params.searchText;
-
     console.log(searchText);
     const response1 = await axios.get(
       // ビデオの検索API
-      `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&maxResults=50&regionCode=JP&key=AIzaSyDGH0fCaERPGyogO0o-rhlir2nnzISDRjM&q=`
+      `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&maxResults=10&regionCode=JP&key=AIzaSyAgRYbghnEpgHX9f980fKCzlTP6vESPkwo&q=${searchText}`
     );
-    const payload1 = response1.data;
+    const payload1 = response1.data.items;
     console.dir("レスポンスデータ" + payload1);
-    // for (let video of videos) {
-    //   console.dir(JSON.stringify(responseData1));
-    // }
-    const response2 = await axios.get(
-      // チャンネルの検索API
-      `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=channel&maxResults=50&regionCode=JP&key=AIzaSyDGH0fCaERPGyogO0o-rhlir2nnzISDRjM&q=`
-    );
-    const payload2 = response2.data;
-    console.dir("レスポンスデータ" + payload2);
-    // const channelItems = payload2.items;
-    // console.dir(JSON.stringify(channelItems));
-    // for (let channel of channels) {
-    //   console.dir(JSON.stringify(responseData2));
-    // }
+
+    for (let video of payload1) {
+      this.searchedVideos.push(
+        new Videos(
+          video.id.videoId,
+          video.snippet.publishedAt,
+          video.snippet.title,
+          video.snippet.description,
+          video.snippet.thumbnails.default.url,
+          video.snippet.channelTitle,
+          video.snippet.tags
+        )
+      );
+      console.log(this.searchedVideos);
+    }
+    // const response2 = await axios.get(
+    //   // チャンネルの検索API
+    //   `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=channel&maxResults=10&regionCode=JP&key=AIzaSyAgRYbghnEpgHX9f980fKCzlTP6vESPkwo&q=${searchText}`
+    // );
+    // const payload2 = response2.data;
+    // console.dir("レスポンスデータ" + payload2);
+    // // const channelItems = payload2.items;
+    // // console.dir(JSON.stringify(channelItems));
+    // // for (let channel of channels) {
+    // //   console.dir(JSON.stringify(responseData2));
+    // // }
   }
 }
 </script>
