@@ -1,92 +1,78 @@
 <template>
   <div>
     <div class="container">
-      <p>検索結果:検索ワード</p>
-      <div class="items">
-        <p>ユーチューバー</p>
-        <div class="youtuber">
-          <br />
-          <div class="item">
-            <div class="item-icon">
-              <img src="/img/東海オンエア.jpeg" />
-            </div>
-            <a href="item_detail.html">ユーチューバー名</a><br />
-            <span class="title"></span>登録者数<br />
-            <span class="title"></span>動画本数<br />
-          </div>
-
-          <div class="item">
-            <div class="item-icon">
-              <img src="/img/東海オンエア.jpeg" />
-            </div>
-            <a href="item_detail.html">ユーチューバー名</a><br />
-            <span class="title"></span>登録者数<br />
-            <span class="title"></span>動画本数<br />
-          </div>
-
-          <div class="item">
-            <div class="item-icon">
-              <img src="/img/東海オンエア.jpeg" />
-            </div>
-            <a href="item_detail.html">ユーチューバー名</a><br />
-            <span class="title"></span>登録者数<br />
-            <span class="title"></span>動画本数<br />
-          </div>
-        </div>
+      <p>検索結果:{{ this.searchText }}</p>
+      <div class="contents blue-grey lighten-5">
         <div class="items">
-          <p>動画</p>
-          <div class="movie">
-            <br />
-            <span class="item">
-              <div class="item-icon">
-                <iframe
-                  width="560"
-                  height="315"
-                  src="https://www.youtube.com/embed/BOrdMrh4uKg"
-                  title="YouTube video player"
-                  frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen
-                ></iframe>
-              </div>
-              <a href="item_detail.html">ビデオタイトル</a><br />
-              <span class="title"></span>再生回数<br />
-              <span class="title"></span>ユーチューバー名<br />
-            </span>
+          <h5>ユーチューバー</h5>
 
-            <span class="item">
-              <div class="item-icon">
-                <iframe
-                  width="560"
-                  height="315"
-                  src="https://www.youtube.com/embed/ony539T074w"
-                  title="YouTube video player"
-                  frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen
-                ></iframe>
+          <div class="item-area">
+            <div class="youtuber-items">
+              <br />
+              <div
+                v-for="searchedChannel of searchedChannels"
+                :key="searchedChannel.id"
+              >
+                <div class="item col card white">
+                  <div class="item-icon">
+                    <img v-bind:src="searchedChannel.thumbnailsUrl" />
+                  </div>
+                  <router-link :to="'channelDetail/' + searchedChannel.id">{{
+                    searchedChannel.title
+                  }}</router-link
+                  ><br />
+                  <span class="title"></span>登録者数{{
+                    searchedChannel.subscriberCount
+                  }}<br />
+                  <span class="title"></span>総動画数{{
+                    searchedChannel.videoCount
+                  }}<br />
+                  <span class="title"></span>説明{{ searchedChannel.description
+                  }}<br />
+                </div>
               </div>
-              <a href="item_detail.html">ビデオタイトル</a><br />
-              <span class="title"></span>再生回数<br />
-              <span class="title"></span>ユーチューバー名<br />
-            </span>
+            </div>
+          </div>
+          <div class="items">
+            <h5>動画</h5>
+            <div class="item-area">
+              <div class="video-items">
+                <div class="movie">
+                  <br />
 
-            <span class="item">
-              <div class="item-icon">
-                <iframe
-                  width="560"
-                  height="315"
-                  src="https://www.youtube.com/embed/M6gcoDN9jBc"
-                  title="YouTube video player"
-                  frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen
-                ></iframe>
+                  <div
+                    v-for="searchedVideo of searchedVideos"
+                    :key="searchedVideo.id"
+                  >
+                    <div class="item col card white">
+                      <div class="item-icon">
+                        <iframe
+                          width="500"
+                          height="280"
+                          v-bind:src="
+                            'https://www.youtube.com/embed/' + searchedVideo.id
+                          "
+                          title="YouTube video player"
+                          frameborder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowfullscreen
+                        ></iframe>
+                      </div>
+                      <router-link
+                        v-bind:to="'/channelDetail/' + searchedVideo.id"
+                        >{{ searchedVideo.title }}</router-link
+                      ><br />
+                      <span class="title"></span>{{ searchedVideo.publishedAt
+                      }}<br />
+                      <span class="title"></span>{{ searchedVideo.channelTitle
+                      }}<br />
+                      <span class="title"></span>{{ searchedVideo.description
+                      }}<br />
+                    </div>
+                  </div>
+                </div>
               </div>
-              <a href="item_detail.html">ビデオタイトル</a><br />
-              <span class="title"></span>再生回数<br />
-              <span class="title"></span>ユーチューバー名<br />
-            </span>
+            </div>
           </div>
         </div>
       </div>
@@ -96,8 +82,79 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import axios from "axios";
+import { Videos } from "@/types/Videos";
+import { Channels } from "@/types/Channels";
 @Component
-export default class XXXComponent extends Vue {}
+export default class XXXComponent extends Vue {
+  private searchedVideos: Array<Videos> = [];
+  private searchedChannels = new Array<Channels>();
+  private channelIdList = new Array<string>();
+  private key = "AIzaSyDGH0fCaERPGyogO0o-rhlir2nnzISDRjM";
+  private searchText = "";
+
+  async created(): Promise<void> {
+    this.searchText = this.$route.params.searchText;
+    console.log(this.searchText);
+    const response1 = await axios.get(
+      // ビデオの検索API
+      `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&maxResults=10&regionCode=JP&key=${this.key}&q=${this.searchText}`
+    );
+    const payload1 = response1.data.items;
+    console.dir("レスポンスデータ" + payload1);
+
+    for (let video of payload1) {
+      this.searchedVideos.push(
+        new Videos(
+          video.id.videoId,
+          video.snippet.publishedAt,
+          video.snippet.title,
+          video.snippet.description,
+          video.snippet.thumbnails.default.url,
+          video.snippet.channelTitle,
+          video.snippet.tags
+        )
+      );
+      console.log(this.searchedVideos);
+    }
+    const response2 = await axios.get(
+      // チャンネルの検索API
+      `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=channel&maxResults=10&regionCode=JP&key=${this.key}&q=${this.searchText}`
+    );
+    const channel1Items = response2.data.items;
+    console.log(channel1Items);
+
+    for (const item of channel1Items) {
+      console.dir("item" + JSON.stringify(item));
+      console.log("ChannelId" + item.snippet.channelId);
+
+      this.channelIdList.push(item.snippet.channelId);
+    }
+    console.log("channelIdList" + this.channelIdList);
+
+    for (let channelId of this.channelIdList) {
+      const response3 = await axios.get(
+        `https://www.googleapis.com/youtube/v3/channels?key=${this.key}&maxResults=10&part=snippet,contentDetails,statistics,status&id=${channelId}`
+      );
+      const channel2Items = response3.data.items;
+      for (let channel2Item of channel2Items) {
+        this.searchedChannels.push(
+          new Channels(
+            channel2Item.id,
+            channel2Item.snippet.title,
+            channel2Item.snippet.description,
+            channel2Item.snippet.publishedAt,
+            channel2Item.snippet.thumbnails.default.url,
+            channel2Item.statistics.viewCount,
+            channel2Item.statistics.subscriberCount,
+            channel2Item.statistics.videoCount
+          )
+        );
+      }
+    }
+    console.log(this.searchedChannels);
+  }
+}
 </script>
 
 <style scoped>
@@ -105,16 +162,34 @@ export default class XXXComponent extends Vue {}
   display: flex;
   justify-content: center;
 }
-.youtuber {
+.item-area {
   display: flex;
   justify-content: center;
 }
-.items {
-  flex-wrap: wrap; /* 表示内容が多かった時に自動的に複数行に分割される */
+.container {
+  width: 100vw;
+}
+.contents {
+  padding: 5px;
+}
+
+.card {
+  height: 500px;
+  overflow-y: hidden;
+}
+
+.youtuber-items {
+  display: flex;
+  overflow-x: auto;
+}
+.video-items {
+  display: flex;
+  overflow-x: auto;
 }
 
 .item {
-  flex: 0 0 320px; /* paddingやborder含むitem全体の横幅を320pxにする */
+  /* flex: 0 0 320px; paddingやborder含むitem全体の横幅を320pxにする */
   padding: 20px;
+  margin: 10px;
 }
 </style>

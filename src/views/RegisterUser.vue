@@ -7,7 +7,7 @@
 
           <div class="row">
             <div class="input-field col s6">
-              <div class="error">{{ this.lastNameError }}</div>
+              <div class="error">{{ lastNameError }}</div>
               <input
                 id="last_name"
                 type="text"
@@ -18,7 +18,7 @@
               <label for="last_name">姓</label>
             </div>
             <div class="input-field col s6">
-              <div class="error">{{ this.firstNameError }}</div>
+              <div class="error">{{ firstNameError }}</div>
               <input
                 id="first_name"
                 type="text"
@@ -31,7 +31,7 @@
           </div>
           <div class="row">
             <div class="input-field col s12">
-              <div class="error">{{ this.emailError }}</div>
+              <div class="error">{{ emailError }}</div>
               <input
                 id="email"
                 type="email"
@@ -43,15 +43,15 @@
             </div>
           </div>
           <div class="row">
-            <div class="error">{{ errorTelephone }}</div>
+            <div class="error">{{ telError }}</div>
             <div class="input-field col s12">
-              <input id="tel" type="tel" maxlength="14" v-model="telephone" />
+              <input id="tel" type="tel" maxlength="14" v-model="tel" />
               <label for="tel">電話番号</label>
             </div>
           </div>
           <div class="row">
             <div class="input-field col s12">
-              <div class="error">{{ this.passwordError }}</div>
+              <div class="error">{{ passwordError }}</div>
               <input
                 id="password"
                 type="password"
@@ -65,7 +65,7 @@
           </div>
           <div class="row">
             <div class="input-field col s12">
-              <div class="error">{{ this.passwordConfirmError }}</div>
+              <div class="error">{{ passwordConfirmError }}</div>
 
               <input
                 id="confirmation_password"
@@ -163,7 +163,7 @@ export default class XXXComponent extends Vue {
         new Array<Channels>(),
         new Array<Review>()
       );
-      this.$store.commit("addNewAccount", newAccount);
+      this.$store.commit("addUser", newAccount);
     } else {
       const newAccount = new Account(
         accountList[accountList.length - 1].id + 1,
@@ -176,8 +176,9 @@ export default class XXXComponent extends Vue {
         new Array<Channels>(),
         new Array<Review>()
       );
-      this.$store.commit("addNewAccount", newAccount);
+      this.$store.commit("addUser", newAccount);
     }
+    console.log(accountList);
   }
 }
 </script>
