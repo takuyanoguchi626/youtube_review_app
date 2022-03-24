@@ -28,7 +28,7 @@ const routes: Array<RouteConfig> = [
     component: () => import("../views/RegisterUser.vue"),
   },
   {
-    path: "/channelDetail",
+    path: "/channelDetail/:id",
     component: () => import("../views/ChannelDetail.vue"),
   },
   {
@@ -55,7 +55,7 @@ const routes: Array<RouteConfig> = [
     component: () => import("../components/AddReview.vue"),
   },
   {
-    path: "/showReview",
+    path: "/showReview/:id",
     name: "",
     component: () => import("../views/ShowReview.vue"),
   },
