@@ -6,7 +6,7 @@
 
     <div class="sample">
       <div class="soaring-videos">
-        <div v-for="video of soaringVideos" :key="video.id">
+        <div v-for="video of top5Videos" :key="video.id">
           <iframe
             width="560"
             height="315"
@@ -31,8 +31,11 @@
     </div>
 
     <div class="name">人気Youtuber</div>
-    <div v-for="youtuberInfo of youtubersInfo" :key="youtuberInfo.id">
-      <div>{{ youtuberInfo.title }}</div>
+    <div class="popular-youtubers">
+      <div v-for="(youtuber, index) of youtubersInfo" :key="index">
+        <div><img :src="youtuber.thumbnailsUrl" /></div>
+        <div>{{ youtuber.title }}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -41,11 +44,14 @@
 import { Component, Vue } from "vue-property-decorator";
 import { Videos } from "@/types/Videos";
 import { Channels } from "@/types/Channels";
+
 @Component
 export default class XXXComponent extends Vue {
-  // 急上昇動画
+  // 急上昇動画50件分
   private soaringVideos: Array<Videos> = [];
-  // Youtuber情報
+  // 急上昇動画TOP5
+  private top5Videos: Array<Videos> = [];
+  // 急上昇動画50件分のチャンネル情報
   private youtubersInfo: Array<Channels> = [];
 
   async created(): Promise<void> {
@@ -55,12 +61,13 @@ export default class XXXComponent extends Vue {
      */
     await this.$store.dispatch("getSoaringVideos");
     this.soaringVideos = this.$store.getters.getSoaringVideosInfo;
-
-    /**
-     *Vuexストアのアクション経由非同期でWebAPIから絞り込んだYoutuber情報を取得する.
-     *@returns Promiseオブジェクト
-     */
-    await this.$store.dispatch("getYoutubersInfo");
+    this.top5Videos.push(
+      this.soaringVideos[0],
+      this.soaringVideos[1],
+      this.soaringVideos[2],
+      this.soaringVideos[3],
+      this.soaringVideos[4]
+    );
     this.youtubersInfo = this.$store.getters.getYoutubersInfo;
   }
 }
