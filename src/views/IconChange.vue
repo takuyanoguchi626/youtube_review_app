@@ -30,6 +30,10 @@ export default {
   mounted() {
     const id = Number(this.$route.params.id);
     const account = this.$store.getters.getAccountById(id);
+    const curentUser = this.$store.getters.getCurentUser;
+    if (account === undefined || account.id !== curentUser.id) {
+      this.$router.push("/404");
+    }
     this.image = account.img;
   },
 };
