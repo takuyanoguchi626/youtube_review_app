@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div>名前：{{ currentAccount.name }}</div>
     <router-link :to="'/iconChange/' + currentAccount.id">
       <img :src="currentAccount.img" />
     </router-link>
+    <div>名前：{{ currentAccount.name }}</div>
     <div>
       {{ currentAccount.introduction }}
     </div>
@@ -14,16 +14,20 @@
       v-for="favoriteChannel of currentAccount.favoriteChannelList"
       :key="favoriteChannel.id"
     >
-      <img class="image" :src="favoriteChannel.thumbnailsUrl" />
+      <router-link :to="'/channelDetail/' + favoriteChannel.id">
+        <img class="image" :src="favoriteChannel.thumbnailsUrl" />
+      </router-link>
     </div>
     <div v-for="review of currentAccount.reviewList" :key="review.id">
-      <div>
-        <img class="image2" :src="review.videos.thumbnailsUrl" />
-        {{ review.videos.title }}
-        {{ review.videos.publishedAt }}
-        {{ review.videos.channelTitle }}
-        {{ review.review }}
-      </div>
+      <router-link :to="'/showReview/' + review.reviewId">
+        <div>
+          <img class="image2" :src="review.videos.thumbnailsUrl" />
+          {{ review.videos.title }}
+          {{ review.videos.publishedAt }}
+          {{ review.videos.channelTitle }}
+          {{ review.review }}
+        </div>
+      </router-link>
     </div>
   </div>
 </template>
