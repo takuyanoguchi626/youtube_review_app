@@ -105,7 +105,9 @@ export default class XXXComponent extends Vue {
 
       // ドメイン以下のパス名が /searchedList/${searchText} の場合に実行する処理
       this.$router.push(`/searchedList/${searchText}`);
+      return;
     }
+    this.$router.push(`/searchedList/${searchText}`);
     return;
   }
 }
