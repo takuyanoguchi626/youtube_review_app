@@ -21,7 +21,7 @@ export class Videos {
   get formatPublishedAt(): string {
     const publishedAt = format(
       new Date(this._publishedAt),
-      "yyyy年MM月dd日hh時mm分ss秒"
+      "yyyy年MM月dd日hh時mm分"
     );
     return publishedAt;
   }
