@@ -94,13 +94,18 @@ export default class XXXComponent extends Vue {
   search(searchText: string): void {
     console.log(searchText);
     // 現在のパスを検出
-    const path = this.$route.params.searchText;
-    console.log("path:" + path);
-    if (path !== searchText) {
-      this.$router.push(`/searchedList/`);
+    console.log("path:" + location.pathname);
+    if (location.pathname.startsWith("/searchedList")) {
+      console.log("2" + location.pathname);
       // ドメイン以下のパス名が /searchedList/${searchText} の場合に実行する処理
+      this.$router.push(`/2searchedList/${searchText}`);
+      return;
+    } else if (location.pathname.startsWith("/2searchedList")) {
+      console.log("1" + location.pathname);
+
+      // ドメイン以下のパス名が /searchedList/${searchText} の場合に実行する処理
+      this.$router.push(`/searchedList/${searchText}`);
     }
-    this.$router.push(`/searchedList/${searchText}`);
     return;
   }
 }
