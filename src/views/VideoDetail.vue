@@ -17,7 +17,9 @@
         }}回
       </div>
       <br />
-      <img :src="channelDetail.thumbnailsUrl" />
+      <router-link :to="'/channelDetail/' + channelDetail.id">
+        <img :src="channelDetail.thumbnailsUrl" />
+      </router-link>
       <div>{{ videoDetail.channelTitle }}</div>
       <div>チャンネル設立日：{{ channelDetail.formatPublishedAt }}</div>
       <div>{{ channelDetail.description }}</div>

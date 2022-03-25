@@ -3,16 +3,10 @@
     <CompHeader />
     <div id="nav">
       <router-link to="/iconChange">IconChange</router-link> |
-      <router-link to="/registerUser">RegisterUser</router-link> |
-      <router-link to="/login">Login</router-link> |
-      <router-link to="/top">Top</router-link> |
-      <router-link to="/videoDetail">VideoDetail</router-link> |
-      <router-link to="/channelDetail">ChannelDetail</router-link>|
       <router-link :to="'/myProfile/' + 3">MyProfile</router-link>|
       <router-link to="/selfIntroductionChange"
         >SelfIntroductionChange</router-link
-      >| <router-link to="/addReview">AddReview</router-link>|
-      <router-link to="/searchedList">SearchedList</router-link>|
+      >
       <router-link to="/showReview">showReview</router-link>|
     </div>
     <router-view />
