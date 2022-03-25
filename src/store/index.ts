@@ -323,6 +323,9 @@ export default new Vuex.Store({
     getAccountList(state) {
       return state.accountList;
     },
+    getCurrentUser(state) {
+      return state.currentUser;
+    },
 
     getAccountById(state) {
       return (id: number) => {
@@ -330,9 +333,6 @@ export default new Vuex.Store({
       };
     },
 
-    getCurrentUser(state) {
-      return state.currentUser;
-    },
     getMyAccountFlag(state) {
       return (account: Account) => {
         return state.currentUser.id === account.id;
