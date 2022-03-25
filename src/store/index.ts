@@ -154,7 +154,6 @@ export default new Vuex.Store({
         ),
       ]
     ),
-    searchData: [],
   },
   actions: {
     /**
@@ -226,10 +225,6 @@ export default new Vuex.Store({
       state.currentUser = payload;
     },
 
-    addSearchData(state, payload) {
-      state.searchData = payload;
-      console.dir(JSON.stringify(state.searchData));
-    },
     changeAccountIcon(state, payload) {
       const account = state.accountList.find(
         (account) => account.id === payload.id
