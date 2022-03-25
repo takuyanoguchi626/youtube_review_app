@@ -30,7 +30,7 @@
             <router-link :to="'/videoDetail/' + video.id">
               <div class="video-title">{{ video.title }}</div>
             </router-link>
-            <div>投稿日：{{ video.publishedAt }}</div>
+            <div>投稿日：{{ video.formatPublishedAt }}</div>
           </div>
         </div>
       </div>
@@ -97,7 +97,6 @@ export default class XXXComponent extends Vue {
         this.soaringVideos[4]
       );
       this.youtubersInfo = this.$store.getters.getYoutubersInfo;
-
       // おすすめYoutuberを５人ランダム表示させる
       for (let i = 1; this.recommendationYoutuberList.length < 5; i++) {
         let pushYoutuber =
@@ -116,6 +115,9 @@ export default class XXXComponent extends Vue {
     this.$store.commit("sortByReviewCount");
     this.recommendationAccountList = this.$store.getters.getAccountList;
   }
+  /**
+   *ユーザー登録画面に遷移する.
+   */
   moveToRegister(): void {
     this.$router.push("/registerUser");
   }
@@ -133,7 +135,8 @@ export default class XXXComponent extends Vue {
   cursor: pointer;
   transition-duration: 0.3s;
 }
-.img_wrap:hover {
+.img_wrap:hover,
+.video-title:hover {
   opacity: 0.6;
   transition-duration: 0.3s;
 }

@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 export class Channels {
   constructor(
     //チャンネルID
@@ -17,6 +19,14 @@ export class Channels {
     //総動画数
     private _videoCount: number
   ) {}
+
+  get formatPublishedAt(): string {
+    const publishedAt = format(
+      new Date(this._publishedAt),
+      "yyyy年MM月dd日hh時mm分ss秒"
+    );
+    return publishedAt;
+  }
 
   public get id(): string {
     return this._id;
