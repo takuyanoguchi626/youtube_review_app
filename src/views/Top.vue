@@ -27,10 +27,10 @@
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowfullscreen
             ></iframe>
+            <div>{{ video.channelTitle }}</div>
             <router-link :to="'/videoDetail/' + video.id">
               <div class="video-title">{{ video.title }}</div>
             </router-link>
-            <div>投稿日：{{ video.publishedAt }}</div>
           </div>
         </div>
       </div>
@@ -73,6 +73,7 @@ export default class XXXComponent extends Vue {
   private youtubersInfo: Array<Channels> = [];
   // おすすめYoutuberの一覧
   private recommendationYoutuberList = Array<Channels>();
+  // 人気アカウントの一覧
   private recommendationAccountList = Array<Account>();
   // フラッグ
   private flag = true;

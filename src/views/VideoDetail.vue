@@ -11,8 +11,19 @@
         allowfullscreen
       ></iframe>
       <div>{{ videoDetail.title }}</div>
-      <span>{{ videoDetail.publishedAt }}</span>
+      <div>
+        動画投稿日：{{ videoPublishedAt }} / 再生回数：{{
+          videoDetail.viewCount
+        }}回
+      </div>
+      <br />
+      <img :src="channelDetail.thumbnailsUrl" />
       <div>{{ videoDetail.channelTitle }}</div>
+      <div>チャンネル設立日：{{ channelPublishedAt }}</div>
+      <div>{{ channelDetail.description }}</div>
+      <div>総再生回数：{{ channelDetail.viewCount }}回</div>
+      <div>チャンネル登録者数：{{ channelDetail.subscriberCount }}万人</div>
+      <div>総動画数：{{ channelDetail.videoCount }}個</div>
     </div>
 
     <div class="review">
@@ -62,17 +73,29 @@ import { Component, Vue } from "vue-property-decorator";
 import AddReview from "@/components/AddReview.vue";
 import axios from "axios";
 import { Videos } from "@/types/Videos";
+import { Channels } from "@/types/Channels";
+import { format } from "date-fns";
+
 @Component({
   components: { AddReview },
 })
 export default class XXXComponent extends Vue {
-  private videoDetail = new Videos(0, "", "", ",", ",", "", "");
+  // 動画詳細
+  private videoDetail = new Videos(0, "", "", ",", ",", "", "", "");
+  // チャンネル詳細
+  private channelDetail = new Channels("", "", "", "", "", 0, 0, 0);
+  // 動画投稿日
+  private videoPublishedAt = "";
+  // チャンネル開設日
+  private channelPublishedAt = "";
+  // チャンネル登録者数
+  private subscriberCount = 0;
 
   async created(): Promise<void> {
     const videoId = this.$route.params.id;
-    const key = "AIzaSyChyFfGpQSYRhWTBuyeXTflkqTd4Sgc1HU";
+    const key = "AIzaSyD1hsARhNyLS07rUwz6fqrVp2pWnGvkWTQ";
     const response = await axios.get(
-      `https://www.googleapis.com/youtube/v3/videos?part=snippet&key=${key}&id=${videoId}`
+      `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&key=${key}&id=${videoId}`
     );
     const responceVideo = response.data.items[0];
     this.videoDetail = new Videos(
@@ -82,8 +105,32 @@ export default class XXXComponent extends Vue {
       responceVideo.snippet.description,
       responceVideo.snippet.thumbnails.medium.url,
       responceVideo.snippet.channelTitle,
-      responceVideo.tags
+      responceVideo.tags,
+      responceVideo.statistics.viewCount
     );
+    this.videoPublishedAt = format(
+      new Date(this.videoDetail.publishedAt),
+      "yyyy年MM月dd日"
+    );
+    const responce2 = await axios.get(
+      `https://www.googleapis.com/youtube/v3/channels?key=${key}&part=snippet,contentDetails,statistics,status&id=${responceVideo.snippet.channelId}`
+    );
+    const responceChannel = responce2.data.items[0];
+    this.channelDetail = new Channels(
+      responceChannel.id,
+      responceChannel.snippet.title,
+      responceChannel.snippet.description,
+      responceChannel.snippet.publishedAt,
+      responceChannel.snippet.thumbnails.medium.url,
+      responceChannel.statistics.viewCount,
+      responceChannel.statistics.subscriberCount,
+      responceChannel.statistics.videoCount
+    );
+    this.channelPublishedAt = format(
+      new Date(this.channelDetail.publishedAt),
+      "yyyy年MM月dd日"
+    );
+    this.subscriberCount = this.channelDetail.subscriberCount / 10000;
   }
 }
 </script>
