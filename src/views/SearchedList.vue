@@ -64,10 +64,10 @@
                       </div>
                       <router-link
                         v-bind:to="'/videoDetail/' + searchedVideo.id"
-                        >{{ searchedVideo.title }}</router-link
+                        >タイトル：{{ searchedVideo.title }}</router-link
                       ><br />
-                      <span class="title"></span>タイトル：{{
-                        searchedVideo.publishedAt
+                      <span class="title"></span>投稿日：{{
+                        searchedVideo.formatPublishedAt
                       }}<br />
                       <span class="title"></span>チャンネル名：{{
                         searchedVideo.channelTitle
