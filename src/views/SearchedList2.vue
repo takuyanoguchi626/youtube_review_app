@@ -119,7 +119,8 @@ export default class XXXComponent extends Vue {
           video.snippet.description,
           video.snippet.thumbnails.default.url,
           video.snippet.channelTitle,
-          video.snippet.tags
+          video.snippet.tags,
+          video.snippet.viewCount,
         )
       );
       console.log(this.searchedVideos);

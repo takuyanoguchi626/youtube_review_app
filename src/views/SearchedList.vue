@@ -13,21 +13,25 @@
                 v-for="searchedChannel of searchedChannels"
                 :key="searchedChannel.id"
               >
-                <div class="item col card white">
-                  <div class="item-icon">
-                    <img v-bind:src="searchedChannel.thumbnailsUrl" />
+                <div class="c-item col card white">
+                  <div>
+                    <img
+                      class="item-icon"
+                      v-bind:src="searchedChannel.thumbnailsUrl"
+                    />
                   </div>
                   <router-link :to="'/channelDetail/' + searchedChannel.id">{{
                     searchedChannel.title
                   }}</router-link
                   ><br />
-                  <span class="title"></span>登録者数{{
+                  <span class="title"></span>登録者数：{{
                     searchedChannel.subscriberCount
                   }}<br />
-                  <span class="title"></span>総動画数{{
+                  <span class="title"></span>総動画数：{{
                     searchedChannel.videoCount
                   }}<br />
-                  <span class="title"></span>説明{{ searchedChannel.description
+                  <span class="title"></span>説明：{{
+                    searchedChannel.description
                   }}<br />
                 </div>
               </div>
@@ -44,8 +48,8 @@
                     v-for="searchedVideo of searchedVideos"
                     :key="searchedVideo.id"
                   >
-                    <div class="item col card white">
-                      <div class="item-icon">
+                    <div class="v-item col card white">
+                      <div class="video-icon">
                         <iframe
                           width="500"
                           height="280"
@@ -62,11 +66,14 @@
                         v-bind:to="'/videoDetail/' + searchedVideo.id"
                         >{{ searchedVideo.title }}</router-link
                       ><br />
-                      <span class="title"></span>{{ searchedVideo.publishedAt
+                      <span class="title"></span>タイトル：{{
+                        searchedVideo.publishedAt
                       }}<br />
-                      <span class="title"></span>{{ searchedVideo.channelTitle
+                      <span class="title"></span>チャンネル名：{{
+                        searchedVideo.channelTitle
                       }}<br />
-                      <span class="title"></span>{{ searchedVideo.description
+                      <span class="title"></span>説明：{{
+                        searchedVideo.description
                       }}<br />
                     </div>
                   </div>
@@ -83,7 +90,6 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
-
 import { Videos } from "@/types/Videos";
 import { Channels } from "@/types/Channels";
 @Component
@@ -91,7 +97,7 @@ export default class XXXComponent extends Vue {
   private searchedVideos: Array<Videos> = [];
   private searchedChannels = new Array<Channels>();
   private channelIdList = new Array<string>();
-  private key = "AIzaSyBOMUoWdabc9lzK4XQFop3x0dYtUeI6agU";
+  private key = "AIzaSyAzfoPPbpueXEcQypbLRLXXNCz5JQFDtlc";
   private searchText = "";
 
   async created(): Promise<void> {
@@ -113,7 +119,8 @@ export default class XXXComponent extends Vue {
           video.snippet.description,
           video.snippet.thumbnails.default.url,
           video.snippet.channelTitle,
-          video.snippet.tags
+          video.snippet.tags,
+          video.snippet.viewCount
         )
       );
       console.log(this.searchedVideos);
@@ -187,8 +194,18 @@ export default class XXXComponent extends Vue {
   display: flex;
   overflow-x: auto;
 }
+.item-icon {
+  width: 200px;
+  height: 200px;
+}
 
-.item {
+.c-item {
+  /* flex: 0 0 320px; paddingやborder含むitem全体の横幅を320pxにする */
+  padding: 20px;
+  margin: 10px;
+  width: 300px;
+}
+.v-item {
   /* flex: 0 0 320px; paddingやborder含むitem全体の横幅を320pxにする */
   padding: 20px;
   margin: 10px;
