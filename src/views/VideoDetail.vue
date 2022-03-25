@@ -12,14 +12,14 @@
       ></iframe>
       <div>{{ videoDetail.title }}</div>
       <div>
-        動画投稿日：{{ videoPublishedAt }} / 再生回数：{{
+        動画投稿日：{{ videoDetail.formatPublishedAt }} / 再生回数：{{
           videoDetail.viewCount
         }}回
       </div>
       <br />
       <img :src="channelDetail.thumbnailsUrl" />
       <div>{{ videoDetail.channelTitle }}</div>
-      <div>チャンネル設立日：{{ channelPublishedAt }}</div>
+      <div>チャンネル設立日：{{ channelDetail.formatPublishedAt }}</div>
       <div>{{ channelDetail.description }}</div>
       <div>総再生回数：{{ channelDetail.viewCount }}回</div>
       <div>チャンネル登録者数：{{ channelDetail.subscriberCount }}人</div>
@@ -74,7 +74,6 @@ import AddReview from "@/components/AddReview.vue";
 import axios from "axios";
 import { Videos } from "@/types/Videos";
 import { Channels } from "@/types/Channels";
-import { format } from "date-fns";
 
 @Component({
   components: { AddReview },
@@ -84,10 +83,6 @@ export default class XXXComponent extends Vue {
   private videoDetail = new Videos(0, "", "", ",", ",", "", "", "");
   // チャンネル詳細
   private channelDetail = new Channels("", "", "", "", "", 0, 0, 0);
-  // 動画投稿日
-  private videoPublishedAt = "";
-  // チャンネル開設日
-  private channelPublishedAt = "";
 
   async created(): Promise<void> {
     const videoId = this.$route.params.id;
@@ -106,10 +101,6 @@ export default class XXXComponent extends Vue {
       responceVideo.tags,
       responceVideo.statistics.viewCount
     );
-    this.videoPublishedAt = format(
-      new Date(this.videoDetail.publishedAt),
-      "yyyy年MM月dd日"
-    );
     const responce2 = await axios.get(
       `https://www.googleapis.com/youtube/v3/channels?key=${key}&part=snippet,contentDetails,statistics,status&id=${responceVideo.snippet.channelId}`
     );
@@ -123,10 +114,6 @@ export default class XXXComponent extends Vue {
       responceChannel.statistics.viewCount,
       responceChannel.statistics.subscriberCount,
       responceChannel.statistics.videoCount
-    );
-    this.channelPublishedAt = format(
-      new Date(this.channelDetail.publishedAt),
-      "yyyy年MM月dd日"
     );
   }
 }
