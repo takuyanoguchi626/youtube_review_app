@@ -49,7 +49,9 @@
           v-for="(youtuber, index) of recommendationYoutuberList"
           :key="index"
         >
-          <div><img :src="youtuber.thumbnailsUrl" /></div>
+          <router-link :to="'/channelDetail/' + youtuber.id"
+            ><div><img :src="youtuber.thumbnailsUrl" /></div
+          ></router-link>
           <div>{{ youtuber.title }}</div>
         </div>
       </div>
