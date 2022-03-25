@@ -17,7 +17,7 @@
                   <div class="item-icon">
                     <img v-bind:src="searchedChannel.thumbnailsUrl" />
                   </div>
-                  <router-link :to="'channelDetail/' + searchedChannel.id">{{
+                  <router-link :to="'/channelDetail/' + searchedChannel.id">{{
                     searchedChannel.title
                   }}</router-link
                   ><br />
@@ -59,7 +59,7 @@
                         ></iframe>
                       </div>
                       <router-link
-                        v-bind:to="'/channelDetail/' + searchedVideo.id"
+                        v-bind:to="'/videoDetail/' + searchedVideo.id"
                         >{{ searchedVideo.title }}</router-link
                       ><br />
                       <span class="title"></span>{{ searchedVideo.publishedAt
@@ -83,6 +83,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
+import { format } from "date-fns";
 import { Videos } from "@/types/Videos";
 import { Channels } from "@/types/Channels";
 @Component
@@ -90,7 +91,7 @@ export default class XXXComponent extends Vue {
   private searchedVideos: Array<Videos> = [];
   private searchedChannels = new Array<Channels>();
   private channelIdList = new Array<string>();
-  private key = "AIzaSyDGH0fCaERPGyogO0o-rhlir2nnzISDRjM";
+  private key = "AIzaSyDH4tzh3tFM5Ok8Q5jSpPHxpcQZMnK4U9M";
   private searchText = "";
 
   async created(): Promise<void> {
@@ -107,7 +108,7 @@ export default class XXXComponent extends Vue {
       this.searchedVideos.push(
         new Videos(
           video.id.videoId,
-          video.snippet.publishedAt,
+          format(new Date(video.snippet.publishedAt), "yyyy年MM月dd日"),
           video.snippet.title,
           video.snippet.description,
           video.snippet.thumbnails.default.url,
@@ -143,7 +144,10 @@ export default class XXXComponent extends Vue {
             channel2Item.id,
             channel2Item.snippet.title,
             channel2Item.snippet.description,
-            channel2Item.snippet.publishedAt,
+            format(
+              new Date(channel2Item.snippet.publishedAt),
+              "yyyy年MM月dd日"
+            ),
             channel2Item.snippet.thumbnails.default.url,
             channel2Item.statistics.viewCount,
             channel2Item.statistics.subscriberCount,

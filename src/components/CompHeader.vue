@@ -31,6 +31,21 @@
                       class="materialize-textarea"
                       value="searchText"
                       v-model="searchText"
+                      v-if="path === undefined"
+                    ></textarea>
+                    <textarea
+                      id="searchBox"
+                      class="materialize-textarea"
+                      value="searchText"
+                      v-model="searchText"
+                      v-else-if="path !== searchText"
+                    ></textarea>
+                    <textarea
+                      id="searchBox"
+                      class="materialize-textarea"
+                      value="searchText"
+                      v-model="searchText"
+                      v-else
                     ></textarea>
                   </span>
                 </div>
