@@ -15,14 +15,20 @@ export default class XXXComponent extends Vue {
   private name = "";
   private introduction = "";
 
-  created() {
+  created(): void {
     const id = Number(this.$route.params.id);
+    // console.log(id);
+
     const account = this.$store.getters.getAccountById(id);
+    const currentUser = this.$store.getters.getCurrentUser;
+    if (account === undefined || account.id !== currentUser.id) {
+      this.$router.push("/404");
+    }
     this.name = account.name;
     this.introduction = account.introduction;
     console.log(this.name);
   }
-  selfIntroductionChange() {
+  selfIntroductionChange(): void {
     const id = Number(this.$route.params.id);
     this.$store.commit("changeSelfIntroduction", {
       id: id,

@@ -61,7 +61,7 @@ export default new Vuex.Store({
         ]
       ),
       new Account(
-        3,
+        2,
         "山田花子",
         "aaaa",
         "/img/pagu.jpg",
@@ -89,7 +89,7 @@ export default new Vuex.Store({
         ]
       ),
       new Account(
-        3,
+        1,
         "佐藤次郎",
         "aaaa",
         "/img/pagu.jpg",
@@ -332,6 +332,11 @@ export default new Vuex.Store({
 
     getCurrentUser(state) {
       return state.currentUser;
+    },
+    getMyAccountFlag(state) {
+      return (account: Account) => {
+        return state.currentUser.id === account.id;
+      };
     },
   },
 });
