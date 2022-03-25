@@ -1,41 +1,92 @@
 <template>
   <div class="container">
     <div class="youtuber">
-      <div>東海オンエア</div>
-      <img src="/img/tokaionair.jpeg" />
+      <div>{{ currentChannel.title }}</div>
+      <img :src="currentChannel.thumbnailsUrl" />
       <p>
-        どうも、東海オンエアです。\nぜひチャンネル登録お願いします！\n\nサブチャンネル【東海オンエアの控え室】もぜひチャンネル登録してね！！！\nhttps://www.youtube.com/channel/UCynIYcsBwTrwBIecconPN2A\n\n有料メンバーシップの登録はこちらから！\nhttps://www.youtube.com/channel/UCutJqz56653xV2wwSvut_hQ/join\n\nお仕事の依頼はこちらから\nhttps://www.uuum.co.jp/inquiry_promotion\n\nファンレターはこちらへ\n〒107-6228\n東京都港区赤坂9-7-1ミッドタウン・タワー
-        28階\nUUUM株式会社 東海オンエア宛
+        {{ currentChannel.description }}
       </p>
-      <span>総再生回数：100億回 /</span
-      ><span> チャンネル登録者数：635万人</span>
+      <span>総再生回数：{{ currentChannel.videoCount }} /</span
+      ><span> チャンネル登録者数：{{ currentChannel.subscriberCount }}人</span>
     </div>
+    <!-- <iframe
+      width="560"
+      height="315"
+      v-bind:src="'https://www.youtube.com/embed/' + video.id"
+      title="YouTube video player"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+    ></iframe> -->
     <div class="videos">
-      <router-link to="/videoDetail"
-        ><img src="/img/tokai1.jpeg"
-      /></router-link>
-      <div>
-        【女子待望】延々と彼氏にプレゼントを贈りつづけたら何にたどり着くの？
+      <div v-for="videoDetail of videoArr" :key="videoDetail.id">
+        <router-link :to="'/videoDetail/' + videoDetail.id"
+          ><img :src="videoDetail.thumbnailsUrl"
+        /></router-link>
+        <div>
+          {{ videoDetail.title }}
+        </div>
+        <span>{{ videoDetail.publishedAt }}</span>
+        <span>{{ videoDetail.description }}</span>
+        <span>{{ videoDetail.channelTitle }}</span>
+        <span>{{ videoDetail.tags }}</span>
       </div>
-      <span>165万回視聴・2日前</span>
-      <img src="/img/tokai2.jpeg" />
-      <div>
-        【千円台は注文禁止】1万円企画と大食い企画を融合させた、新しい「成功するまで終われない」を思いついたのでやってみたら・・・
-      </div>
-      <span>262万回視聴・5日前</span>
-      <img src="/img/tokai3.jpeg" />
-      <div>
-        【文理対決】超簡単な常識問題にチーム全員１０問連続正解するまで終わらないぜ！
-      </div>
-      <span>381万回視聴・1ヶ月前</span>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import { Channels } from "@/types/Channels";
+import { Videos } from "@/types/Videos";
+import axios from "axios";
 import { Component, Vue } from "vue-property-decorator";
 @Component
-export default class XXXComponent extends Vue {}
+export default class XXXComponent extends Vue {
+  private currentChannel = new Channels("", "", "", "", "", 1, 1, 1);
+  private videoArr = new Array<Videos>();
+
+  async created(): Promise<void> {
+    const channelId = this.$route.params.id;
+    const response = await axios.get(
+      `https://www.googleapis.com/youtube/v3/channels?id=${channelId}&key=AIzaSyD1hsARhNyLS07rUwz6fqrVp2pWnGvkWTQ&part=snippet,contentDetails,statistics,status`
+    );
+    const items = response.data.items[0];
+    this.currentChannel = new Channels(
+      items.id,
+      items.snippet.title,
+      items.snippet.description,
+      items.snippet.publishedAt,
+      items.snippet.thumbnails.medium.url,
+      items.statistics.viewCount,
+      items.statistics.subscriberCount,
+      items.statistics.videoCount
+    );
+    console.log(this.currentChannel);
+    const responseVideo = await axios.get(
+      `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&channelId=${this.currentChannel.id}&maxResults=10&regionCode=JP&key=AIzaSyD1hsARhNyLS07rUwz6fqrVp2pWnGvkWTQ&order=date`
+    );
+    console.dir(JSON.stringify(responseVideo));
+    const videoItems = responseVideo.data.items;
+    for (const videoitem of videoItems) {
+      const responceVideoDetail = await axios.get(
+        `https://www.googleapis.com/youtube/v3/videos?id=${videoitem.id.videoId}&part=snippet,statistics&regionCode=JP&key=AIzaSyD1hsARhNyLS07rUwz6fqrVp2pWnGvkWTQ`
+      );
+      const videoDetailItems = responceVideoDetail.data.items[0];
+      this.videoArr.push(
+        new Videos(
+          videoDetailItems.id,
+          videoDetailItems.snippet.publishedAt,
+          videoDetailItems.snippet.title,
+          videoDetailItems.snippet.description,
+          videoDetailItems.snippet.thumbnails.medium.url,
+          videoDetailItems.snippet.channelTitle,
+          videoDetailItems.snippet.tags
+          // videoDetailItems.statistics.videoCount,
+        )
+      );
+    }
+  }
+}
 </script>
 
 <style scoped>
