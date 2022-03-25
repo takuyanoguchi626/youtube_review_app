@@ -22,7 +22,7 @@
       <div>チャンネル設立日：{{ channelPublishedAt }}</div>
       <div>{{ channelDetail.description }}</div>
       <div>総再生回数：{{ channelDetail.viewCount }}回</div>
-      <div>チャンネル登録者数：{{ channelDetail.subscriberCount }}万人</div>
+      <div>チャンネル登録者数：{{ channelDetail.subscriberCount }}人</div>
       <div>総動画数：{{ channelDetail.videoCount }}個</div>
     </div>
 
@@ -88,8 +88,6 @@ export default class XXXComponent extends Vue {
   private videoPublishedAt = "";
   // チャンネル開設日
   private channelPublishedAt = "";
-  // チャンネル登録者数
-  private subscriberCount = 0;
 
   async created(): Promise<void> {
     const videoId = this.$route.params.id;
@@ -130,7 +128,6 @@ export default class XXXComponent extends Vue {
       new Date(this.channelDetail.publishedAt),
       "yyyy年MM月dd日"
     );
-    this.subscriberCount = this.channelDetail.subscriberCount / 10000;
   }
 }
 </script>
