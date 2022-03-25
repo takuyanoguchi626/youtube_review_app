@@ -9,15 +9,6 @@
       <span>総再生回数：{{ currentChannel.videoCount }} /</span
       ><span> チャンネル登録者数：{{ currentChannel.subscriberCount }}人</span>
     </div>
-    <!-- <iframe
-      width="560"
-      height="315"
-      v-bind:src="'https://www.youtube.com/embed/' + video.id"
-      title="YouTube video player"
-      frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen
-    ></iframe> -->
     <div class="videos">
       <div v-for="videoDetail of videoArr" :key="videoDetail.id">
         <router-link :to="'/videoDetail/' + videoDetail.id"
@@ -81,8 +72,8 @@ export default class XXXComponent extends Vue {
           videoDetailItems.snippet.description,
           videoDetailItems.snippet.thumbnails.medium.url,
           videoDetailItems.snippet.channelTitle,
-          videoDetailItems.snippet.tags
-          // videoDetailItems.statistics.videoCount,
+          videoDetailItems.snippet.tags,
+          videoDetailItems.statistics.videoCount
         )
       );
     }
