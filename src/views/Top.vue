@@ -9,9 +9,30 @@
 
     <div v-if="!flag">
       <div class="top">
-        <img class="top-image" src="/img/topImage.png" />
-        <p>ユーザー登録はこちらから</p>
-        <button type="button" v-on:click="moveToRegister">今すぐ登録！</button>
+        <img class="top-image" src="/img/topImage.gif" />
+        <div class="register-user">
+          <p class="p1">ユーザー登録はこちらから！</p>
+          <button class="button1" type="button" v-on:click="moveToRegister">
+            <span>今すぐ登録する</span>
+          </button>
+          <p class="p2">外部サービスで登録する</p>
+          <button class="button2 btn" type="button">
+            <img class="button-icon" src="/img/google.png" /><span
+              >&nbsp;Googleで登録</span
+            >
+          </button>
+          <button class="button3 btn" type="button">
+            <img class="button-icon" src="/img/f_logo_RGB-White_58.png" /><span
+              >&nbsp;Facebookで登録</span
+            >
+          </button>
+          <button class="button4 btn" type="button">
+            <img
+              class="button-icon"
+              src="/img/2021 Twitter logo - white.png"
+            /><span>&nbsp;Twitterで登録</span>
+          </button>
+        </div>
       </div>
       <div class="count">総レビュー数：0</div>
       <h4 class="subtitle">急上昇動画</h4>
@@ -127,50 +148,107 @@ export default class XXXComponent extends Vue {
 </script>
 
 <style scoped>
-.img_wrap {
-  border: 1px solid #ddd;
-  margin: 0 auto;
-  overflow: hidden;
-}
-.img_wrap img {
-  width: 100%;
-  cursor: pointer;
-  transition-duration: 0.3s;
-}
-.img_wrap:hover,
-.video-title:hover {
-  opacity: 0.6;
-  transition-duration: 0.3s;
-}
+@import "https://use.fontawesome.com/releases/v5.13.0/css/all.css";
+
+/* TOP上部の画像に当てるCSS（テキスト、ボタン含む） */
 .top {
   position: relative;
 }
-.top p {
+.top .p1 {
   position: absolute;
-  top: 50%;
-  left: 80%;
+  top: 20%;
+  left: 72%;
   -ms-transform: translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   margin: 0;
   padding: 0;
+  color: black;
+  font-weight: bold;
+  font-size: 25px;
+}
+/* button1 */
+.top .button1 {
+  position: absolute;
+  top: 30%;
+  left: 72%;
+  -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: solid 3px black;
+}
+.button1:hover {
+  text-decoration: none;
+  box-shadow: 0 2px 0 #aaaaaa;
+}
+.button1 span {
+  position: relative;
+  display: block;
+  padding: 1.25rem 3rem;
+  color: #000;
+}
+.top .p2 {
+  position: absolute;
+  top: 40%;
+  left: 72%;
+  -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  margin-top: 5px;
+  padding: 0;
   color: black; /*文字は白に*/
   font-weight: bold; /*太字に*/
   font-size: 20px;
 }
-.top button {
+/* button2~4 */
+.top .button2 {
   position: absolute;
-  top: 55%;
-  left: 80%;
+  top: 50%;
+  left: 72%;
   -ms-transform: translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+  background-color: white;
+}
+.top .button3 {
+  position: absolute;
+  top: 60%;
+  left: 72%;
+  -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  background-color: rgb(60, 60, 148);
+  border: none;
+}
+.top .button4 {
+  position: absolute;
+  top: 70%;
+  left: 72%;
+  -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  background-color: cornflowerblue;
+  border: none;
+}
+.button2 span {
+  color: black;
+}
+.button3 span,
+.button4 span {
+  color: white;
+}
+/* icon,image */
+.button-icon {
+  width: 15px;
+  height: 15px;
 }
 .top-image {
   width: 100%;
   height: 500px;
   object-fit: cover;
 }
+/* リロード中のGIF */
 .gif {
   width: 90%;
   height: 500px;
@@ -180,8 +258,6 @@ export default class XXXComponent extends Vue {
   width: 100vw;
 }
 .sample {
-  /* padding-left: 20px; */
-  /* width: 500px; */
   max-width: 100%;
 }
 iframe {
@@ -209,8 +285,25 @@ iframe {
   padding: 50px;
   margin-right: 30px;
 }
+/* サブタイトル */
 .subtitle {
   margin-top: 20px;
   font-weight: bold;
+}
+/* おすすめYoutuberの画像に当てるCSS */
+.img_wrap {
+  border: 1px solid #ddd;
+  margin: 0 auto;
+  overflow: hidden;
+}
+.img_wrap img {
+  width: 100%;
+  cursor: pointer;
+  transition-duration: 0.3s;
+}
+.img_wrap:hover,
+.video-title:hover {
+  opacity: 0.6;
+  transition-duration: 0.3s;
 }
 </style>
