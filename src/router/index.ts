@@ -61,6 +61,11 @@ const routes: Array<RouteConfig> = [
     component: () => import("../views/ShowReview.vue"),
   },
   {
+    path: "/searchedList",
+    name: "",
+    component: () => import("../views/SearchedList.vue"),
+  },
+  {
     path: "/searchedList/:searchText",
     name: "",
     component: () => import("../views/SearchedList.vue"),

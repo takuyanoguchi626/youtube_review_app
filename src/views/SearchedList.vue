@@ -91,7 +91,7 @@ export default class XXXComponent extends Vue {
   private searchedVideos: Array<Videos> = [];
   private searchedChannels = new Array<Channels>();
   private channelIdList = new Array<string>();
-  private key = "AIzaSyDH4tzh3tFM5Ok8Q5jSpPHxpcQZMnK4U9M";
+  private key = "AIzaSyD0gPqZj2y8L2QVei5d4NUMsthKN3ltr1c";
   private searchText = "";
 
   async created(): Promise<void> {
@@ -108,7 +108,7 @@ export default class XXXComponent extends Vue {
       this.searchedVideos.push(
         new Videos(
           video.id.videoId,
-          format(new Date(video.snippet.publishedAt), "yyyy年MM月dd日"),
+          video.snippet.publishedAt,
           video.snippet.title,
           video.snippet.description,
           video.snippet.thumbnails.default.url,
@@ -144,10 +144,7 @@ export default class XXXComponent extends Vue {
             channel2Item.id,
             channel2Item.snippet.title,
             channel2Item.snippet.description,
-            format(
-              new Date(channel2Item.snippet.publishedAt),
-              "yyyy年MM月dd日"
-            ),
+            channel2Item.snippet.publishedAt,
             channel2Item.snippet.thumbnails.default.url,
             channel2Item.statistics.viewCount,
             channel2Item.statistics.subscriberCount,
