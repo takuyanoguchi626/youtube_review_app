@@ -44,11 +44,12 @@ import { Component, Vue } from "vue-property-decorator";
 export default class XXXComponent extends Vue {
   private currentChannel = new Channels("", "", "", "", "", 1, 1, 1);
   private videoArr = new Array<Videos>();
+  private apiKey = "AIzaSyD1hsARhNyLS07rUwz6fqrVp2pWnGvkWTQ";
 
   async created(): Promise<void> {
     const channelId = this.$route.params.id;
     const response = await axios.get(
-      `https://www.googleapis.com/youtube/v3/channels?id=${channelId}&key=AIzaSyD1hsARhNyLS07rUwz6fqrVp2pWnGvkWTQ&part=snippet,contentDetails,statistics,status`
+      `https://www.googleapis.com/youtube/v3/channels?id=${channelId}&key=${this.apiKey}&part=snippet,contentDetails,statistics,status`
     );
     const items = response.data.items[0];
     this.currentChannel = new Channels(
@@ -63,13 +64,13 @@ export default class XXXComponent extends Vue {
     );
     console.log(this.currentChannel);
     const responseVideo = await axios.get(
-      `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&channelId=${this.currentChannel.id}&maxResults=10&regionCode=JP&key=AIzaSyD1hsARhNyLS07rUwz6fqrVp2pWnGvkWTQ&order=date`
+      `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&channelId=${this.currentChannel.id}&maxResults=10&regionCode=JP&key=${this.apiKey}&order=date`
     );
     console.dir(JSON.stringify(responseVideo));
     const videoItems = responseVideo.data.items;
     for (const videoitem of videoItems) {
       const responceVideoDetail = await axios.get(
-        `https://www.googleapis.com/youtube/v3/videos?id=${videoitem.id.videoId}&part=snippet,statistics&regionCode=JP&key=AIzaSyD1hsARhNyLS07rUwz6fqrVp2pWnGvkWTQ`
+        `https://www.googleapis.com/youtube/v3/videos?id=${videoitem.id.videoId}&part=snippet,statistics&regionCode=JP&key=${this.apiKey}`
       );
       const videoDetailItems = responceVideoDetail.data.items[0];
       this.videoArr.push(
