@@ -70,6 +70,11 @@ const routes: Array<RouteConfig> = [
     name: "",
     component: () => import("../views/SearchedList.vue"),
   },
+  {
+    path: "/404",
+    name: "",
+    component: () => import("../views/404.vue"),
+  },
 ];
 
 const router = new VueRouter({

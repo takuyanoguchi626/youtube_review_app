@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 export class Videos {
   constructor(
     //動画ID
@@ -13,8 +15,18 @@ export class Videos {
     //チャンネル名
     private _channelTitle: string,
     //タグ
-    private _tags: string
+    private _tags: string,
+    // 動画再生回数
+    private _viewCount: string
   ) {}
+
+  get formatPublishedAt(): string {
+    const publishedAt = format(
+      new Date(this._publishedAt),
+      "yyyy年MM月dd日hh時mm分"
+    );
+    return publishedAt;
+  }
 
   public get id(): number {
     return this._id;
@@ -70,5 +82,12 @@ export class Videos {
 
   public set tags(tags: string) {
     this._tags = tags;
+  }
+  public get viewCount(): string {
+    return this._viewCount;
+  }
+
+  public set viewCount(viewCount: string) {
+    this._viewCount = viewCount;
   }
 }

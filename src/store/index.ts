@@ -30,7 +30,7 @@ export default new Vuex.Store({
             "",
             1,
             1,
-            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
             "レビューのプレビュー",
             1
           ),
@@ -38,7 +38,7 @@ export default new Vuex.Store({
             "",
             1,
             1,
-            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
             "レビューのプレビュー",
             1
           ),
@@ -46,7 +46,7 @@ export default new Vuex.Store({
             "",
             1,
             1,
-            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
             "レビューのプレビュー",
             1
           ),
@@ -54,14 +54,14 @@ export default new Vuex.Store({
             "",
             1,
             1,
-            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
             "レビューのプレビュー",
             1
           ),
         ]
       ),
       new Account(
-        3,
+        2,
         "山田花子",
         "aaaa",
         "/img/pagu.jpg",
@@ -74,7 +74,7 @@ export default new Vuex.Store({
             "",
             1,
             1,
-            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
             "レビューのプレビュー",
             1
           ),
@@ -82,14 +82,14 @@ export default new Vuex.Store({
             "",
             1,
             1,
-            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
             "レビューのプレビュー",
             1
           ),
         ]
       ),
       new Account(
-        3,
+        1,
         "佐藤次郎",
         "aaaa",
         "/img/pagu.jpg",
@@ -102,7 +102,7 @@ export default new Vuex.Store({
             "",
             1,
             1,
-            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
             "レビューのプレビュー",
             1
           ),
@@ -124,7 +124,7 @@ export default new Vuex.Store({
           "",
           1,
           1,
-          new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+          new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
           "レビューのプレビュー",
           1
         ),
@@ -132,7 +132,7 @@ export default new Vuex.Store({
           "",
           1,
           1,
-          new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+          new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
           "レビューのプレビュー",
           1
         ),
@@ -140,7 +140,7 @@ export default new Vuex.Store({
           "",
           1,
           1,
-          new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+          new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
           "レビューのプレビュー",
           1
         ),
@@ -148,7 +148,7 @@ export default new Vuex.Store({
           "",
           1,
           1,
-          new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+          new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
           "レビューのプレビュー",
           1
         ),
@@ -162,9 +162,9 @@ export default new Vuex.Store({
      * @param context コンテキスト
      */
     async getSoaringVideos(context) {
-      const key = "AIzaSyChyFfGpQSYRhWTBuyeXTflkqTd4Sgc1HU";
+      const key = "AIzaSyBaI5sqV11bUD-EzLC_lRmHBQztOctDwOc";
       const responce = await axios.get(
-        `https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&regionCode=JP&maxResults=50&key=${key}`
+        `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&chart=mostPopular&regionCode=JP&maxResults=50&key=${key}`
       );
       const payload = responce.data.items;
       const youtuberArray = [];
@@ -199,7 +199,8 @@ export default new Vuex.Store({
             soaringVideo.snippet.description,
             soaringVideo.snippet.thumbnails.medium.url,
             soaringVideo.snippet.channelTitle,
-            soaringVideo.snippet.tags
+            soaringVideo.snippet.tags,
+            soaringVideo.statistics.viewCount
           )
         );
       }
@@ -323,6 +324,9 @@ export default new Vuex.Store({
     getAccountList(state) {
       return state.accountList;
     },
+    getCurrentUser(state) {
+      return state.currentUser;
+    },
 
     getAccountById(state) {
       return (id: number) => {
@@ -330,8 +334,10 @@ export default new Vuex.Store({
       };
     },
 
-    getCurrentUser(state) {
-      return state.currentUser;
+    getMyAccountFlag(state) {
+      return (account: Account) => {
+        return state.currentUser.id === account.id;
+      };
     },
   },
 });

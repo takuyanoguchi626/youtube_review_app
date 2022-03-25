@@ -72,21 +72,21 @@ export default class XXXComponent extends Vue {
   private evaluation = 0;
   private review = "";
   @Prop()
-  private video!: Videos;
+  private videoDetail!: Videos;
 
   getDate(): string {
     return format("yyyy年MM月dd日", this.date);
   }
 
   postReview(): void {
-    console.log(this.video);
+    console.log(this.videoDetail);
 
     // console.log(this.review);
     this.$store.commit("postReview", {
       date: this.getDate,
       evaluation: this.evaluation,
       review: this.review,
-      video: this.video,
+      video: this.videoDetail,
     });
   }
 }
