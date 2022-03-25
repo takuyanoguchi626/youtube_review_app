@@ -13,7 +13,7 @@
         <div class="register-user">
           <p class="p1">ユーザー登録はこちらから！</p>
           <button class="button1" type="button" v-on:click="moveToRegister">
-            <span>今すぐ登録する</span>
+            <span>今すぐ登録する&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;>></span>
           </button>
           <p class="p2">外部サービスで登録する</p>
           <button class="button2 btn" type="button">
@@ -34,47 +34,58 @@
           </button>
         </div>
       </div>
+
       <div class="count">総レビュー数：0</div>
-      <h4 class="subtitle">急上昇動画</h4>
-      <div class="sample">
-        <div class="soaring-videos">
-          <div v-for="video of top5Videos" :key="video.id">
-            <iframe
-              width="560"
-              height="315"
-              v-bind:src="'https://www.youtube.com/embed/' + video.id"
-              title="YouTube video player"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-            ></iframe>
-            <div>{{ video.channelTitle }}</div>
-            <router-link :to="'/videoDetail/' + video.id">
-              <div class="video-title">{{ video.title }}</div>
-            </router-link>
-            <div>投稿日：{{ video.formatPublishedAt }}</div>
+
+      <div class="background">
+        <h4 class="subtitle">急上昇動画</h4>
+        <div class="sample">
+          <div class="soaring-videos">
+            <div v-for="video of top5Videos" :key="video.id">
+              <iframe
+                width="560"
+                height="315"
+                v-bind:src="'https://www.youtube.com/embed/' + video.id"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+              <div class="channel-title1">{{ video.channelTitle }}</div>
+              <router-link :to="'/videoDetail/' + video.id">
+                <div class="video-title">{{ video.title }}</div>
+              </router-link>
+              <div>投稿日：{{ video.formatPublishedAt }}</div>
+            </div>
           </div>
         </div>
       </div>
 
       <h4 class="subtitle">人気のアカウント</h4>
-      <div class="popular-accounts">
-        <div v-for="(account, index) of recommendationAccountList" :key="index">
-          <div class="account">{{ account.name }}</div>
-          <img :src="account.img" />
+      <div class="item-area">
+        <div
+          class="item col card white popular-account"
+          v-for="(account, index) of recommendationAccountList"
+          :key="index"
+        >
+          <div class="account-name">{{ account.name }}</div>
+          <img class="account-img" :src="account.img" />
         </div>
       </div>
 
-      <h4 class="subtitle">おすすめYoutuber</h4>
-      <div class="popular-youtubers">
-        <div
-          v-for="(youtuber, index) of recommendationYoutuberList"
-          :key="index"
-        >
-          <router-link :to="'/channelDetail/' + youtuber.id"
-            ><div><img class="img_wrap" :src="youtuber.thumbnailsUrl" /></div
-          ></router-link>
-          <div>{{ youtuber.title }}</div>
+      <div class="background">
+        <h4 class="subtitle">おすすめYoutuber</h4>
+        <div class="item-area">
+          <div
+            class="popular-youtuber"
+            v-for="(youtuber, index) of recommendationYoutuberList"
+            :key="index"
+          >
+            <router-link :to="'/channelDetail/' + youtuber.id"
+              ><div><img class="img_wrap" :src="youtuber.thumbnailsUrl" /></div
+            ></router-link>
+            <div class="channel-title2">{{ youtuber.title }}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -260,10 +271,16 @@ export default class XXXComponent extends Vue {
 .sample {
   max-width: 100%;
 }
+/* 動画単体 */
 iframe {
   display: flex;
   justify-content: space-between;
   padding-left: 10px;
+}
+/* 急上昇動画 */
+.channel-title1 {
+  font-weight: bold;
+  font-size: 20px;
 }
 .video-title {
   margin-top: 5px;
@@ -274,23 +291,39 @@ iframe {
   display: flex;
   overflow-x: auto;
 }
-.popular-accounts,
-.popular-youtubers {
+.item-area {
   display: flex;
   justify-content: center;
 }
-.account {
+/* 人気アカウント */
+.popular-account {
+  margin-right: 10px;
+  margin-bottom: 30px;
+  padding: 30px;
+}
+.account-name {
   font-size: 20px;
   border: solid 3px black;
-  padding: 50px;
-  margin-right: 30px;
+  padding: 10px;
+}
+.account-img {
+  width: 280px;
+  height: 250px;
+  object-fit: cover;
 }
 /* サブタイトル */
 .subtitle {
   margin-top: 20px;
+  margin-bottom: 20px;
   font-weight: bold;
 }
-/* おすすめYoutuberの画像に当てるCSS */
+/* おすすめYoutuber*/
+.popular-youtuber {
+  margin-right: 10px;
+}
+.channel-title2 {
+  font-weight: bold;
+}
 .img_wrap {
   border: 1px solid #ddd;
   margin: 0 auto;
@@ -301,9 +334,17 @@ iframe {
   cursor: pointer;
   transition-duration: 0.3s;
 }
+/* ホバー関連 */
 .img_wrap:hover,
-.video-title:hover {
+.video-title:hover,
+button:hover {
   opacity: 0.6;
   transition-duration: 0.3s;
+}
+/* 背景色 */
+.background {
+  background-color: #f2f2f2;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 </style>
