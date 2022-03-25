@@ -50,7 +50,7 @@
           :key="index"
         >
           <router-link :to="'/channelDetail/' + youtuber.id"
-            ><div><img :src="youtuber.thumbnailsUrl" /></div
+            ><div><img class="img_wrap" :src="youtuber.thumbnailsUrl" /></div
           ></router-link>
           <div>{{ youtuber.title }}</div>
         </div>
@@ -123,6 +123,20 @@ export default class XXXComponent extends Vue {
 </script>
 
 <style scoped>
+.img_wrap {
+  border: 1px solid #ddd;
+  margin: 0 auto;
+  overflow: hidden;
+}
+.img_wrap img {
+  width: 100%;
+  cursor: pointer;
+  transition-duration: 0.3s;
+}
+.img_wrap:hover {
+  opacity: 0.6;
+  transition-duration: 0.3s;
+}
 .top {
   position: relative;
 }
