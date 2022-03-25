@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 export class Videos {
   constructor(
     //動画ID
@@ -15,6 +17,14 @@ export class Videos {
     //タグ
     private _tags: string
   ) {}
+
+  get formatPublishedAt(): string {
+    const publishedAt = format(
+      new Date(this._publishedAt),
+      "yyyy年MM月dd日hh時mm分"
+    );
+    return publishedAt;
+  }
 
   public get id(): number {
     return this._id;
