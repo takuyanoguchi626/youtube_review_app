@@ -13,7 +13,10 @@
         <div class="register-user">
           <p class="p1">ユーザー登録はこちらから！</p>
           <button class="button1" type="button" v-on:click="moveToRegister">
-            <span>今すぐ登録する&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;>></span>
+            <span>
+              <i class="small material-icons">ondemand_video</i>
+              今すぐ登録する&nbsp;&nbsp;&nbsp;&nbsp;>></span
+            >
           </button>
           <p class="p2">外部サービスで登録する</p>
           <button class="button2 btn" type="button">
@@ -173,7 +176,6 @@ export default class XXXComponent extends Vue {
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   margin: 0;
-  padding: 0;
   color: black;
   font-weight: bold;
   font-size: 25px;
@@ -186,19 +188,42 @@ export default class XXXComponent extends Vue {
   -ms-transform: translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-  background-color: white;
-  border: solid 3px black;
-}
-.button1:hover {
-  text-decoration: none;
-  box-shadow: 0 2px 0 #aaaaaa;
+  padding: 15px;
+  width: 250px;
+  height: 50px;
+  box-sizing: border-box;
+  background: #fff;
+  border: none;
+  margin-top: 5px;
 }
 .button1 span {
-  position: relative;
-  display: block;
-  padding: 1.25rem 3rem;
-  color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  background: #fff;
+  box-sizing: border-box;
+  color: #333;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  box-shadow: 0px 5px 12px #cad4e2, -6px -6px 12px #fff;
+  border-radius: 10px;
+  position: absolute;
+  top: -5px;
+  left: 0;
+  transition-duration: 0.2s;
+  background-color: #fffaf0;
 }
+.button1:hover span {
+  left: 0;
+  top: 0;
+  box-shadow: 0 0 4px #cad4e2, -2px -2px 4px #fff;
+}
+i {
+  margin-right: 10px;
+}
+/* p2 */
 .top .p2 {
   position: absolute;
   top: 40%;
@@ -337,7 +362,9 @@ iframe {
 /* ホバー関連 */
 .img_wrap:hover,
 .video-title:hover,
-button:hover {
+.button2:hover,
+.button3:hover,
+.button4:hover {
   opacity: 0.6;
   transition-duration: 0.3s;
 }
