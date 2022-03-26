@@ -21,7 +21,7 @@ export class Videos {
   ) {}
 
   get formatPublishedAt(): string {
-    return format(new Date(this._publishedAt), "yyyy年MM月dd日hh時mm分");
+    return format(new Date(this._publishedAt), "yyyy年MM月dd日HH時mm分");
   }
 
   public get id(): number {
