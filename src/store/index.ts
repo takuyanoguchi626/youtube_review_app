@@ -30,7 +30,10 @@ export default new Vuex.Store({
             "",
             1,
             1,
+            "",
+            "",
             new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
+            1,
             "レビューのプレビュー",
             1
           ),
@@ -38,7 +41,10 @@ export default new Vuex.Store({
             "",
             1,
             1,
+            "",
+            "",
             new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
+            1,
             "レビューのプレビュー",
             1
           ),
@@ -46,7 +52,10 @@ export default new Vuex.Store({
             "",
             1,
             1,
+            "",
+            "",
             new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
+            1,
             "レビューのプレビュー",
             1
           ),
@@ -54,7 +63,10 @@ export default new Vuex.Store({
             "",
             1,
             1,
+            "",
+            "",
             new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
+            1,
             "レビューのプレビュー",
             1
           ),
@@ -74,7 +86,10 @@ export default new Vuex.Store({
             "",
             1,
             1,
+            "",
+            "",
             new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
+            1,
             "レビューのプレビュー",
             1
           ),
@@ -82,7 +97,10 @@ export default new Vuex.Store({
             "",
             1,
             1,
+            "",
+            "",
             new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
+            1,
             "レビューのプレビュー",
             1
           ),
@@ -102,7 +120,10 @@ export default new Vuex.Store({
             "",
             1,
             1,
+            "",
+            "",
             new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
+            1,
             "レビューのプレビュー",
             1
           ),
@@ -124,7 +145,10 @@ export default new Vuex.Store({
           "",
           1,
           1,
+          "",
+          "",
           new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
+          1,
           "レビューのプレビュー",
           1
         ),
@@ -132,7 +156,10 @@ export default new Vuex.Store({
           "",
           1,
           1,
+          "",
+          "",
           new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
+          1,
           "レビューのプレビュー",
           1
         ),
@@ -140,7 +167,10 @@ export default new Vuex.Store({
           "",
           1,
           1,
+          "",
+          "",
           new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
+          1,
           "レビューのプレビュー",
           1
         ),
@@ -148,7 +178,10 @@ export default new Vuex.Store({
           "",
           1,
           1,
+          "",
+          "",
           new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
+          1,
           "レビューのプレビュー",
           1
         ),
@@ -290,7 +323,10 @@ export default new Vuex.Store({
             payload.date,
             state.lastReviewId,
             account.id,
+            account.name,
+            account.img,
             payload.video,
+            payload.evaluation,
             payload.review,
             0
           )
@@ -337,6 +373,19 @@ export default new Vuex.Store({
     getMyAccountFlag(state) {
       return (account: Account) => {
         return state.currentUser.id === account.id;
+      };
+    },
+    getReviewListByVideoId(state) {
+      return (video: Videos) => {
+        const reviewListByVideoId = new Array<Review>();
+        for (const account of state.accountList) {
+          for (const review of account.reviewList) {
+            if (review.videos.id === video.id) {
+              reviewListByVideoId.push(review);
+            }
+          }
+        }
+        return reviewListByVideoId;
       };
     },
   },
