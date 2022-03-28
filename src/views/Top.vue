@@ -10,6 +10,7 @@
     <div v-if="!flag">
       <div class="top">
         <img class="top-image" src="/img/topImage.gif" />
+        <div class="count">総レビュー数：0</div>
         <div class="register-user">
           <p class="p1">ユーザー登録はこちらから！</p>
           <button class="button1" type="button" v-on:click="moveToRegister">
@@ -38,57 +39,53 @@
         </div>
       </div>
 
-      <div class="count">総レビュー数：0</div>
-
-      <div class="background">
-        <h4 class="subtitle">急上昇動画</h4>
-        <div class="sample">
-          <div class="soaring-videos">
-            <div v-for="video of top5Videos" :key="video.id">
-              <iframe
-                width="560"
-                height="315"
-                v-bind:src="'https://www.youtube.com/embed/' + video.id"
-                title="YouTube video player"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-              ></iframe>
-              <div class="channel-title1">{{ video.channelTitle }}</div>
-              <router-link :to="'/videoDetail/' + video.id">
-                <div class="video-title">{{ video.title }}</div>
-              </router-link>
-              <div>投稿日：{{ video.formatPublishedAt }}</div>
-            </div>
+      <h4 class="subtitle">急上昇動画</h4>
+      <div class="sample">
+        <div class="soaring-videos">
+          <div v-for="video of top5Videos" :key="video.id">
+            <iframe
+              width="560"
+              height="315"
+              v-bind:src="'https://www.youtube.com/embed/' + video.id"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+            <div class="channel-title1">{{ video.channelTitle }}</div>
+            <router-link :to="'/videoDetail/' + video.id">
+              <div class="video-title">{{ video.title }}</div>
+            </router-link>
+            <div>投稿日：{{ video.formatPublishedAt }}</div>
           </div>
         </div>
       </div>
 
-      <h4 class="subtitle">人気のアカウント</h4>
-      <div class="item-area">
-        <div
-          class="item col card white popular-account"
-          v-for="(account, index) of recommendationAccountList"
-          :key="index"
-        >
-          <div class="account-name">{{ account.name }}</div>
-          <img class="account-img" :src="account.img" />
-        </div>
-      </div>
-
       <div class="background">
-        <h4 class="subtitle">おすすめYoutuber</h4>
+        <h4 class="subtitle">人気のアカウント</h4>
         <div class="item-area">
           <div
-            class="popular-youtuber"
-            v-for="(youtuber, index) of recommendationYoutuberList"
+            class="item col card white popular-account"
+            v-for="(account, index) of recommendationAccountList"
             :key="index"
           >
-            <router-link :to="'/channelDetail/' + youtuber.id"
-              ><div><img class="img_wrap" :src="youtuber.thumbnailsUrl" /></div
-            ></router-link>
-            <div class="channel-title2">{{ youtuber.title }}</div>
+            <div class="account-name">{{ account.name }}</div>
+            <img class="account-img" :src="account.img" />
           </div>
+        </div>
+      </div>
+
+      <h4 class="subtitle">おすすめYoutuber</h4>
+      <div class="item-area">
+        <div
+          class="popular-youtuber"
+          v-for="(youtuber, index) of recommendationYoutuberList"
+          :key="index"
+        >
+          <router-link :to="'/channelDetail/' + youtuber.id"
+            ><div><img class="img_wrap" :src="youtuber.thumbnailsUrl" /></div
+          ></router-link>
+          <div class="channel-title2">{{ youtuber.title }}</div>
         </div>
       </div>
     </div>
@@ -200,6 +197,15 @@ export default class XXXComponent extends Vue {
   color: black;
   font-weight: bold;
   font-size: 25px;
+}
+/* count */
+.count {
+  position: absolute;
+  top: 65%;
+  left: 30%;
+  -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 /* button1 */
 .top .button1 {
@@ -369,6 +375,7 @@ iframe {
 }
 .channel-title2 {
   font-weight: bold;
+  margin-bottom: 10px;
 }
 .img_wrap {
   border: 1px solid #ddd;

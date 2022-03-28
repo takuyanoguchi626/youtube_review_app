@@ -46,7 +46,8 @@ export default class XXXComponent extends Vue {}
 
 <style scoped>
 footer {
-  margin-top: 30px;
+  padding-top: 30px;
+  background-color: #f2f2f2;
 }
 img {
   width: 280px;

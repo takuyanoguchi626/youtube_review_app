@@ -156,7 +156,7 @@ export default class XXXComponent extends Vue {
     }
 
     console.log(this.$route.params.id);
-    const accountId = this.$route.params.id;
+    const accountId = Number(this.$route.params.id);
     // const accountId = 3;
     const account = this.$store.getters.getAccountById(accountId);
     this.currentAccount = new Account(
