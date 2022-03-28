@@ -13,7 +13,7 @@
 
         <div class="description">
           <router-link :to="'/myProfile/' + targetAccount.id">
-            <p>アカウント名： {{ targetAccount.name }}</p>
+            <p class="name">アカウント名： {{ targetAccount.name }}</p>
           </router-link>
           <p>登録情報</p>
           <p>自己紹介： {{ targetAccount.introduction }}</p>
@@ -30,7 +30,7 @@
           </router-link>
           <div>
             <router-link :to="'/videoDetail/' + targetReview.videos.id">
-              <p>タイトル：{{ targetReview.videos.title }}</p>
+              <p class="name">タイトル：{{ targetReview.videos.title }}</p>
             </router-link>
             <p>再生回数：{{ targetReview.videos.viewCount }}</p>
             <span class="movieDescription">
@@ -109,6 +109,27 @@ export default class XXXComponent extends Vue {
   private accountList = this.$store.getters.getAccountList;
 
   created(): void {
+    // スクロールトップボタン
+    scrollTop(1); // 遅すぎるとガクガクになるので注意
+
+    function scrollTop(duration: number) {
+      let currentY = window.pageYOffset; // 現在のスクロール位置を取得
+      let step = duration / currentY > 1 ? 10 : 100; // 三項演算子
+      let timeStep = (duration / currentY) * step; // スクロール時間
+      let intervalId = setInterval(scrollUp, timeStep);
+      // timeStepの間隔でscrollUpを繰り返す。
+      // clearItervalのために返り値intervalIdを定義する。
+
+      function scrollUp() {
+        currentY = window.pageYOffset;
+        if (currentY === 0) {
+          clearInterval(intervalId); // ページ最上部に来たら終了
+        } else {
+          scrollBy(0, -step); // step分上へスクロール
+        }
+      }
+    }
+
     const reviewParamsId = this.$route.params.id;
     console.dir(JSON.stringify("reviewParamsId" + reviewParamsId));
     console.log(this.accountList);
@@ -145,6 +166,9 @@ export default class XXXComponent extends Vue {
   width: 50%;
   margin: 10px;
   padding: 5px;
+}
+.name {
+  font-weight: bold;
 }
 .movie {
   width: 300px;
