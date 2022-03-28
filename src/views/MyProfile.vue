@@ -134,9 +134,30 @@ export default class XXXComponent extends Vue {
   private myAccountFlag = false;
 
   created(): void {
-    // console.log(this.$route.params.id);
-    // const accountId = this.$route.params.id;
-    const accountId = 3;
+    // スクロールトップボタン
+    scrollTop(1); // 遅すぎるとガクガクになるので注意
+
+    function scrollTop(duration: number) {
+      let currentY = window.pageYOffset; // 現在のスクロール位置を取得
+      let step = duration / currentY > 1 ? 10 : 100; // 三項演算子
+      let timeStep = (duration / currentY) * step; // スクロール時間
+      let intervalId = setInterval(scrollUp, timeStep);
+      // timeStepの間隔でscrollUpを繰り返す。
+      // clearItervalのために返り値intervalIdを定義する。
+
+      function scrollUp() {
+        currentY = window.pageYOffset;
+        if (currentY === 0) {
+          clearInterval(intervalId); // ページ最上部に来たら終了
+        } else {
+          scrollBy(0, -step); // step分上へスクロール
+        }
+      }
+    }
+
+    console.log(this.$route.params.id);
+    const accountId = this.$route.params.id;
+    // const accountId = 3;
     const account = this.$store.getters.getAccountById(accountId);
     this.currentAccount = new Account(
       account.id,
