@@ -15,6 +15,7 @@ export default new Vuex.Store({
     lastReviewId: 1,
     // Youtuber情報
     youtubersInfo: Array<Channels>(),
+    // ユーザー情報
     accountList: [
       new Account(
         3,
@@ -268,6 +269,13 @@ export default new Vuex.Store({
         );
       }
     },
+
+    /**
+     * ログインしたユーザー情報をstateに保存する.
+     *
+     * @param state - ステート
+     * @param payload - ペイロード
+     */
     addCurrentUser(state, payload) {
       state.currentUser = payload;
     },
@@ -366,6 +374,11 @@ export default new Vuex.Store({
     getYoutubersInfo(state) {
       return state.youtubersInfo;
     },
+    /**
+     * 全てのアカウント情報を返す.
+     * @param state - ステート
+     * @returns - 全てのアカウント情報
+     */
     getAccountList(state) {
       return state.accountList;
     },
