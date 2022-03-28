@@ -84,6 +84,7 @@ import { Channels } from "@/types/Channels";
 import { Component, Vue } from "vue-property-decorator";
 @Component
 export default class XXXComponent extends Vue {
+  // ステートから取得したユーザー情報
   private targetAccount = new Account(
     0,
     "",
@@ -95,6 +96,7 @@ export default class XXXComponent extends Vue {
     new Array<Channels>(),
     new Array<Review>()
   );
+  // ステートから取得したレビュー情報
   private targetReview = new Review(
     "",
     0,
@@ -106,6 +108,7 @@ export default class XXXComponent extends Vue {
     "",
     0
   );
+  // ステートの全ユーザー情報
   private accountList = this.$store.getters.getAccountList;
 
   created(): void {
@@ -130,10 +133,12 @@ export default class XXXComponent extends Vue {
       }
     }
 
+    // URLから取得したid
     const reviewParamsId = this.$route.params.id;
     console.dir(JSON.stringify("reviewParamsId" + reviewParamsId));
     console.log(this.accountList);
 
+    // ステートの情報の中からURLで付与されたものと同一の一意のidのレビューを取得する
     for (const account of this.accountList) {
       console.dir(JSON.stringify("account" + account));
 
