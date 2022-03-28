@@ -88,13 +88,22 @@ import { Component, Vue } from "vue-property-decorator";
 
 @Component
 export default class XXXComponent extends Vue {
+  // 検索ワード
   private searchText = "";
+  // パス
   private path = "";
 
+  /**
+   * ワードを検索のメソッド.
+   *
+   * @param searchText - 検索ワード
+   */
   search(searchText: string): void {
     console.log(searchText);
     // 現在のパスを検出
     console.log("path:" + location.pathname);
+
+    // 検索表示画面でこのメソッドを実行するとcreatedメソッドは動かずリロードされないため、同一のページを行き来するように条件分岐する
     if (location.pathname.startsWith("/searchedList")) {
       console.log("2" + location.pathname);
       // ドメイン以下のパス名が /searchedList/${searchText} の場合に実行する処理
@@ -103,10 +112,11 @@ export default class XXXComponent extends Vue {
     } else if (location.pathname.startsWith("/2searchedList")) {
       console.log("1" + location.pathname);
 
-      // ドメイン以下のパス名が /searchedList/${searchText} の場合に実行する処理
+      // ドメイン以下のパス名が /2searchedList/${searchText} の場合に実行する処理
       this.$router.push(`/searchedList/${searchText}`);
       return;
     }
+    // 通常はこちらのページに遷移
     this.$router.push(`/searchedList/${searchText}`);
     return;
   }
