@@ -195,7 +195,7 @@ export default new Vuex.Store({
      * @param context コンテキスト
      */
     async getSoaringVideos(context) {
-      const key = "AIzaSyBaI5sqV11bUD-EzLC_lRmHBQztOctDwOc";
+      const key = "AIzaSyD2e2JFujvHZWeu7dLwDveF64Nak97Agag";
       const responce = await axios.get(
         `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&chart=mostPopular&regionCode=JP&maxResults=50&key=${key}`
       );
