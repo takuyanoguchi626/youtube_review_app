@@ -64,10 +64,10 @@
                       </div>
                       <router-link
                         v-bind:to="'/videoDetail/' + searchedVideo.id"
-                        >タイトル：{{ searchedVideo.title }}</router-link
+                        >{{ searchedVideo.title }}</router-link
                       ><br />
-                      <span class="title"></span>投稿日：{{
-                        searchedVideo.formatPublishedAt
+                      <span class="title"></span>タイトル：{{
+                        searchedVideo.publishedAt
                       }}<br />
                       <span class="title"></span>チャンネル名：{{
                         searchedVideo.channelTitle
@@ -120,7 +120,7 @@ export default class XXXComponent extends Vue {
           video.snippet.thumbnails.default.url,
           video.snippet.channelTitle,
           video.snippet.tags,
-          video.snippet.viewCount
+          video.snippet.viewCount,
         )
       );
       console.log(this.searchedVideos);
