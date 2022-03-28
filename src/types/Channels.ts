@@ -23,6 +23,12 @@ export class Channels {
   get formatPublishedAt(): string {
     return format(new Date(this._publishedAt), "yyyy年MM月dd日hh時mm分");
   }
+  get formatViewCount(): string {
+    return Number(this._viewCount).toLocaleString();
+  }
+  get formatSubscriberCount(): string {
+    return Number(this._subscriberCount).toLocaleString();
+  }
 
   public get id(): string {
     return this._id;
