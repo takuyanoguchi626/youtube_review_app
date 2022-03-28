@@ -78,7 +78,9 @@
             :key="index"
           >
             <div class="account-name">{{ account.name }}</div>
-            <img class="account-img" :src="account.img" />
+            <router-link :to="'/myProfile/' + account.id"
+              ><img class="account-img" :src="account.img"
+            /></router-link>
           </div>
         </div>
       </div>
@@ -418,7 +420,8 @@ iframe {
 .video-title:hover,
 .button2:hover,
 .button3:hover,
-.button4:hover {
+.button4:hover,
+.account-img:hover {
   opacity: 0.6;
   transition-duration: 0.3s;
 }
