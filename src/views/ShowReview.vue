@@ -32,7 +32,7 @@
             <router-link :to="'/videoDetail/' + targetReview.videos.id">
               <p class="name">タイトル：{{ targetReview.videos.title }}</p>
             </router-link>
-            <p>再生回数：{{ targetReview.videos.viewCount }}</p>
+            <p>再生回数：{{ targetReview.videos.formatViewCount }}</p>
             <span class="movieDescription">
               概要：{{ targetReview.videos.description }}
             </span>

@@ -25,10 +25,10 @@
                   }}</router-link
                   ><br />
                   <span class="title"></span>登録者数：{{
-                    searchedChannel.subscriberCount
+                    searchedChannel.formatSubscriberCount
                   }}<br />
                   <span class="title"></span>総動画数：{{
-                    searchedChannel.videoCount
+                    searchedChannel.formatViewCount
                   }}<br />
                   <span class="title"></span>説明：{{
                     searchedChannel.description
@@ -66,6 +66,9 @@
                         v-bind:to="'/videoDetail/' + searchedVideo.id"
                         >タイトル：{{ searchedVideo.title }}</router-link
                       ><br />
+                      <span class="title"></span>再生回数：{{
+                        searchedVideo.viewCount
+                      }}<br />
                       <span class="title"></span>投稿日：{{
                         searchedVideo.formatPublishedAt
                       }}<br />
@@ -95,6 +98,7 @@ import { Channels } from "@/types/Channels";
 @Component
 export default class XXXComponent extends Vue {
   private searchedVideos: Array<Videos> = [];
+  private videoIdList = new Array<string>();
   private searchedChannels = new Array<Channels>();
   private channelIdList = new Array<string>();
   private key = "AIzaSyAzfoPPbpueXEcQypbLRLXXNCz5JQFDtlc";
@@ -131,21 +135,30 @@ export default class XXXComponent extends Vue {
     const payload1 = response1.data.items;
     console.dir("レスポンスデータ" + payload1);
 
-    for (let video of payload1) {
+    for (let preVideo of payload1) {
+      this.videoIdList.push(preVideo.id.videoId);
+    }
+    for (let videoId of this.videoIdList) {
+      const response3 = await axios.get(
+        `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet,statistics&regionCode=JP&key=${this.key}`
+      );
+      const video = response3.data.items[0];
+      console.dir("video" + JSON.stringify(video));
       this.searchedVideos.push(
         new Videos(
-          video.id.videoId,
+          video.id,
           video.snippet.publishedAt,
           video.snippet.title,
           video.snippet.description,
           video.snippet.thumbnails.high.url,
           video.snippet.channelTitle,
           video.snippet.tags,
-          video.snippet.viewCount
+          video.statistics.viewCount
         )
       );
       console.log(this.searchedVideos);
     }
+
     const response2 = await axios.get(
       // チャンネルの検索API
       `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=channel&maxResults=10&regionCode=JP&key=${this.key}&q=${this.searchText}`

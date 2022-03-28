@@ -43,7 +43,7 @@ import { Component, Vue } from "vue-property-decorator";
 export default class XXXComponent extends Vue {
   private currentChannel = new Channels("", "", "", "", "", 1, 1, 1);
   private videoArr = new Array<Videos>();
-  private apiKey = "AIzaSyD2e2JFujvHZWeu7dLwDveF64Nak97Agag";
+  private apiKey = "AIzaSyAzfoPPbpueXEcQypbLRLXXNCz5JQFDtlc";
 
   async created(): Promise<void> {
     // スクロールトップボタン
