@@ -6,8 +6,8 @@
       <p>
         {{ currentChannel.description }}
       </p>
-      <span>総再生回数：{{ currentChannel.formatViewCount }}回 /</span
-      ><span>
+      <span>総再生回数：{{ currentChannel.formatViewCount }}回</span><br />
+      <span>
         チャンネル登録者数：{{ currentChannel.formatSubscriberCount }}人</span
       >
     </div>
@@ -115,7 +115,6 @@ export default class XXXComponent extends Vue {
 .img1 {
   width: 30vw;
   height: auto;
-
   object-fit: cover;
 }
 .channel-title {
@@ -146,7 +145,10 @@ export default class XXXComponent extends Vue {
   transition-duration: 0.3s;
 }
 .videos {
-  overflow-y: auto;
+  overflow-x: auto;
   height: 700px;
+}
+p {
+  overflow-y: auto;
 }
 </style>
