@@ -11,10 +11,14 @@
       <div class="top">
         <img class="top-image" src="/img/topImage.gif" />
         <div class="count">
-          総レビュー数：<img class="number-box" src="/img/numberBox.png" />{{
-            reviewCounts
-          }}
+          <img class="number-box" src="/img/numberBox.png" />
         </div>
+        <span class="review-counts"
+          >{{ reviewCounts.toLocaleString()
+          }}<span class="span1"
+            >&nbsp;件レビューが投稿されています！</span
+          ></span
+        >
         <div class="register-user">
           <p class="p1">ユーザー登録はこちらから！</p>
           <button class="button1" type="button" v-on:click="moveToRegister">
@@ -209,15 +213,6 @@ export default class XXXComponent extends Vue {
   font-weight: bold;
   font-size: 25px;
 }
-/* count */
-.count {
-  position: absolute;
-  top: 65%;
-  left: 30%;
-  -ms-transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-}
 /* button1 */
 .top .button1 {
   position: absolute;
@@ -323,9 +318,26 @@ i {
   object-fit: cover;
 }
 /* レビューカウント数 */
+.count {
+  position: absolute;
+  top: 68%;
+  left: 24.5%;
+  -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
 .number-box {
   width: 2vw;
-  height: 6vh;
+  height: 5vh;
+}
+.review-counts {
+  position: absolute;
+  top: 63%;
+  left: 24%;
+  font-size: 35px;
+}
+.span1 {
+  font-size: 17px;
 }
 /* リロード中のGIF */
 .gif {
@@ -396,8 +408,6 @@ iframe {
 .img_wrap {
   border: 1px solid #ddd;
   margin: 0 auto;
-}
-.img_wrap {
   width: 250px;
   height: 250px;
   cursor: pointer;
