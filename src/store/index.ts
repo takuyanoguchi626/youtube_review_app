@@ -244,6 +244,13 @@ export default new Vuex.Store({
         }
       }
     },
+    addChannelData(state, payload) {
+      for (const account of state.accountList) {
+        if (account.id === state.currentUser.id) {
+          account.favoriteChannelList = payload;
+        }
+      }
+    },
     showSoaringVideos(state, payload) {
       state.soaringVideos = new Array<Videos>();
       for (const soaringVideo of payload) {

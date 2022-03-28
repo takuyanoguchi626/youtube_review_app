@@ -3,6 +3,9 @@
     <div class="youtuber item col card white">
       <img class="img1" :src="currentChannel.thumbnailsUrl" />
       <div class="channel-title">{{ currentChannel.title }}</div>
+      <a class="waves-effect waves-light btn" v-on:click="favoriteChannel()"
+        ><i class="material-icons left">star_border</i>お気に入り</a
+      >
       <p>
         {{ currentChannel.description }}
       </p>
@@ -104,6 +107,9 @@ export default class XXXComponent extends Vue {
         )
       );
     }
+  }
+  favoriteChannel(): void {
+    this.$store.commit("addChannelData", this.currentChannel);
   }
 }
 </script>
