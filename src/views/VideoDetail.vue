@@ -13,7 +13,7 @@
       <div>{{ videoDetail.title }}</div>
       <div>
         動画投稿日：{{ videoDetail.formatPublishedAt }} / 再生回数：{{
-          videoDetail.viewCount
+          videoDetail.formatViewCount
         }}回
       </div>
       <br />
