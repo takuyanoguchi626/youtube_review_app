@@ -184,6 +184,7 @@ export default class XXXComponent extends Vue {
         new Array<Review>()
       );
       this.$store.commit("addUser", newAccount);
+      this.$router.push("/top");
     } else {
       const newAccount = new Account(
         accountList[accountList.length - 1].id + 1,
@@ -197,6 +198,7 @@ export default class XXXComponent extends Vue {
         new Array<Review>()
       );
       this.$store.commit("addUser", newAccount);
+      this.$router.push("/top");
     }
     console.log(accountList);
   }
