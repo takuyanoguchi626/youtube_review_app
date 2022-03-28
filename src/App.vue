@@ -3,7 +3,7 @@
     <CompHeader />
     <div id="nav">
       <router-link to="/iconChange">IconChange</router-link> |
-      <router-link :to="'/myProfile/' + 3">MyProfile</router-link>|
+      <router-link :to="'/myProfile/' + 0">MyProfile</router-link>|
       <router-link to="/selfIntroductionChange"
         >SelfIntroductionChange</router-link
       >
