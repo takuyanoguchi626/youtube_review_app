@@ -52,10 +52,16 @@ import { Component, Vue } from "vue-property-decorator";
 import { Account } from "@/types/Account";
 @Component
 export default class XXXComponent extends Vue {
+  // メールアドレス
   private email = "";
+  // パスワード
   private password = "";
+  // エラー文
   private loginError = "";
 
+  /**
+   * ログイン.
+   */
   public login(): void {
     const accountList = this.$store.getters.getAccountList;
     for (const account of accountList) {
