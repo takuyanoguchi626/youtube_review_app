@@ -31,21 +31,6 @@
                       class="materialize-textarea"
                       value="searchText"
                       v-model="searchText"
-                      v-if="path === undefined"
-                    ></textarea>
-                    <textarea
-                      id="searchBox"
-                      class="materialize-textarea"
-                      value="searchText"
-                      v-model="searchText"
-                      v-else-if="path !== searchText"
-                    ></textarea>
-                    <textarea
-                      id="searchBox"
-                      class="materialize-textarea"
-                      value="searchText"
-                      v-model="searchText"
-                      v-else
                     ></textarea>
                   </span>
                 </div>
@@ -112,11 +97,10 @@ export default class XXXComponent extends Vue {
     } else if (location.pathname.startsWith("/2searchedList")) {
       console.log("1" + location.pathname);
 
-      // ドメイン以下のパス名が /2searchedList/${searchText} の場合に実行する処理
+      // ドメイン以下のパス名が /searchedList/${searchText} の場合に実行する処理
       this.$router.push(`/searchedList/${searchText}`);
       return;
     }
-    // 通常はこちらのページに遷移
     this.$router.push(`/searchedList/${searchText}`);
     return;
   }
@@ -137,5 +121,8 @@ export default class XXXComponent extends Vue {
 }
 textarea {
   width: 350px;
+}
+.searchForm {
+  margin: 5px;
 }
 </style>
