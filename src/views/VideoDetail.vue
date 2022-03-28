@@ -64,7 +64,7 @@ import { Review } from "@/types/Review";
 })
 export default class XXXComponent extends Vue {
   // 動画詳細
-  private videoDetail = new Videos(0, "", "", ",", ",", "", "", "");
+  private videoDetail = new Videos(0, "", "", "", "", "", "", "");
   // チャンネル詳細
   private channelDetail = new Channels("", "", "", "", "", 0, 0, 0);
   private reviewList = new Array<Review>();
@@ -72,11 +72,12 @@ export default class XXXComponent extends Vue {
   async created(): Promise<void> {
     const videoId = this.$route.params.id;
     const key = "AIzaSyD1hsARhNyLS07rUwz6fqrVp2pWnGvkWTQ";
-    console.log("test1");
-    const response = await axios.get(
+    const responce = await axios.get(
       `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&key=${key}&id=${videoId}`
     );
-    const responceVideo = response.data.items[0];
+    console.log("call2");
+    console.log(responce);
+    const responceVideo = responce.data.items[0];
     this.videoDetail = new Videos(
       responceVideo.id,
       responceVideo.snippet.publishedAt,
@@ -87,11 +88,11 @@ export default class XXXComponent extends Vue {
       responceVideo.tags,
       responceVideo.statistics.viewCount
     );
-    console.log(typeof responceVideo.snippet.publishedAt);
 
     const responce2 = await axios.get(
       `https://www.googleapis.com/youtube/v3/channels?key=${key}&part=snippet,contentDetails,statistics,status&id=${responceVideo.snippet.channelId}`
     );
+    console.log("call4");
     const responceChannel = responce2.data.items[0];
     this.channelDetail = new Channels(
       responceChannel.id,
