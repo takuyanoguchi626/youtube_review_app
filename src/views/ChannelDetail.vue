@@ -35,7 +35,7 @@ import { Component, Vue } from "vue-property-decorator";
 export default class XXXComponent extends Vue {
   private currentChannel = new Channels("", "", "", "", "", 1, 1, 1);
   private videoArr = new Array<Videos>();
-  private apiKey = "AIzaSyD1hsARhNyLS07rUwz6fqrVp2pWnGvkWTQ";
+  private apiKey = "AIzaSyAzfoPPbpueXEcQypbLRLXXNCz5JQFDtlc";
 
   async created(): Promise<void> {
     const channelId = this.$route.params.id;

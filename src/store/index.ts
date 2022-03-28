@@ -24,13 +24,27 @@ export default new Vuex.Store({
         "aaaa",
         "ssss",
         "aaaaa",
-        [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
+        [
+          new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1),
+          new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1),
+          new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1),
+          new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1),
+        ],
         [
           new Review(
             "",
             1,
             1,
-            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
+            new Videos(
+              1,
+              "2020/01/01",
+              "タイトル",
+              "概要欄",
+              "/img/pagu.jpg",
+              "ss",
+              "ss",
+              "ss"
+            ),
             "レビューのプレビュー",
             1
           ),

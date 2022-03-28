@@ -1,34 +1,67 @@
 <template>
   <div>
-    <router-link :to="'/iconChange/' + currentAccount.id" v-if="myAccountFlag">
-      <img :src="currentAccount.img" />
-    </router-link>
-    <img :src="currentAccount.img" v-else />
-    <div>名前：{{ currentAccount.name }}</div>
-    <div>
-      {{ currentAccount.introduction }}
-    </div>
-    <div v-if="myAccountFlag">
-      <button @click="selfIntroductionChange()">編集</button>
-    </div>
-    <div
-      v-for="favoriteChannel of currentAccount.favoriteChannelList"
-      :key="favoriteChannel.id"
-    >
-      <router-link :to="'/channelDetail/' + favoriteChannel.id">
-        <img class="image" :src="favoriteChannel.thumbnailsUrl" />
-      </router-link>
-    </div>
-    <div v-for="review of currentAccount.reviewList" :key="review.id">
-      <router-link :to="'/showReview/' + review.reviewId">
-        <div>
-          <img class="image2" :src="review.videos.thumbnailsUrl" />
-          {{ review.videos.title }}
-          {{ review.videos.publishedAt }}
-          {{ review.videos.channelTitle }}
-          {{ review.review }}
+    <div class="introduction">
+      <div>
+        <router-link
+          :to="'/iconChange/' + currentAccount.id"
+          v-if="myAccountFlag"
+        >
+          <img class="circle responsive-img image2" :src="currentAccount.img" />
+        </router-link>
+        <img :src="currentAccount.img" v-else />
+      </div>
+      <div>
+        <div class="subtitle">
+          {{ currentAccount.name }}
         </div>
-      </router-link>
+        <div>
+          {{ currentAccount.introduction }}
+        </div>
+      </div>
+      <div v-if="myAccountFlag" class="selfIntroductionChange">
+        <button class="btn" @click="selfIntroductionChange()">編集</button>
+      </div>
+    </div>
+    <hr />
+    <h4 class="subtitle">お気に入りのCHANNEL</h4>
+    <div class="channelList">
+      <div
+        v-for="favoriteChannel of currentAccount.favoriteChannelList"
+        :key="favoriteChannel.id"
+      >
+        <router-link :to="'/channelDetail/' + favoriteChannel.id">
+          <img
+            class="circle responsive-img image3"
+            :src="favoriteChannel.thumbnailsUrl"
+          />
+        </router-link>
+      </div>
+    </div>
+    <hr />
+    <div class="reviewList">
+      <div v-for="review of currentAccount.reviewList" :key="review.id">
+        <router-link :to="'/showReview/' + review.reviewId">
+          <div class="review">
+            <div>
+              <div class="subtitle">
+                {{ review.videos.title }}
+              </div>
+              <div>
+                {{ review.videos.publishedAt }}
+              </div>
+              <div>
+                {{ review.videos.channelTitle }}
+              </div>
+              <div>
+                {{ review.review }}
+              </div>
+            </div>
+            <div>
+              <img class="image" :src="review.videos.thumbnailsUrl" />
+            </div>
+          </div>
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -55,7 +88,7 @@ export default class XXXComponent extends Vue {
         "",
         1,
         1,
-        new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+        new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "a"),
         "レビューのプレビュー",
         1
       ),
@@ -63,7 +96,7 @@ export default class XXXComponent extends Vue {
         "",
         1,
         1,
-        new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+        new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "a"),
         "レビューのプレビュー",
         1
       ),
@@ -71,7 +104,7 @@ export default class XXXComponent extends Vue {
         "",
         1,
         1,
-        new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+        new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "a"),
         "レビューのプレビュー",
         1
       ),
@@ -79,7 +112,7 @@ export default class XXXComponent extends Vue {
         "",
         1,
         1,
-        new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
+        new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "a"),
         "レビューのプレビュー",
         1
       ),
@@ -114,11 +147,51 @@ export default class XXXComponent extends Vue {
 
 <style scoped>
 .image {
-  width: 300px;
-  height: 300px;
+  width: 250px;
+  height: 250px;
 }
 .image2 {
   width: 100px;
   height: 100px;
+}
+.image3 {
+  width: 150px;
+  height: 150px;
+}
+
+.introduction {
+  display: flex;
+  justify-content: left;
+  width: 60%;
+  margin: 0 auto;
+}
+
+.subtitle {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.channelList {
+  display: flex;
+  justify-content: center;
+}
+
+.selfIntroductionChange {
+  margin-top: 68px;
+  margin-left: 600px;
+}
+
+.reviewList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 60%;
+  margin: 0 auto;
+}
+.review {
+  display: flex;
+  justify-content: center;
+  margin-left: 30px;
 }
 </style>
