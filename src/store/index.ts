@@ -12,7 +12,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     //最後のレビューID
-    lastReviewId: 0,
+    lastReviewId: 1,
     // Youtuber情報
     youtubersInfo: Array<Channels>(),
     accountList: [
@@ -33,7 +33,7 @@ export default new Vuex.Store({
         [
           new Review(
             "",
-            1,
+            11,
             1,
             "",
             "",
@@ -64,7 +64,7 @@ export default new Vuex.Store({
           ),
           new Review(
             "",
-            1,
+            2,
             1,
             "",
             "",
@@ -75,7 +75,7 @@ export default new Vuex.Store({
           ),
           new Review(
             "",
-            1,
+            3,
             1,
             "",
             "",
@@ -98,7 +98,7 @@ export default new Vuex.Store({
         [
           new Review(
             "",
-            1,
+            4,
             1,
             "",
             "",
@@ -109,7 +109,7 @@ export default new Vuex.Store({
           ),
           new Review(
             "",
-            1,
+            5,
             1,
             "",
             "",
@@ -132,7 +132,7 @@ export default new Vuex.Store({
         [
           new Review(
             "",
-            1,
+            6,
             1,
             "",
             "",
@@ -157,18 +157,7 @@ export default new Vuex.Store({
       [
         new Review(
           "",
-          1,
-          1,
-          "",
-          "",
-          new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
-          1,
-          "レビューのプレビュー",
-          1
-        ),
-        new Review(
-          "",
-          1,
+          7,
           1,
           "",
           "",
@@ -179,7 +168,7 @@ export default new Vuex.Store({
         ),
         new Review(
           "",
-          1,
+          8,
           1,
           "",
           "",
@@ -190,7 +179,18 @@ export default new Vuex.Store({
         ),
         new Review(
           "",
+          9,
           1,
+          "",
+          "",
+          new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
+          1,
+          "レビューのプレビュー",
+          1
+        ),
+        new Review(
+          "",
+          10,
           1,
           "",
           "",
@@ -201,7 +201,6 @@ export default new Vuex.Store({
         ),
       ]
     ),
-    searchData: [],
   },
   actions: {
     /**
@@ -273,10 +272,6 @@ export default new Vuex.Store({
       state.currentUser = payload;
     },
 
-    addSearchData(state, payload) {
-      state.searchData = payload;
-      console.dir(JSON.stringify(state.searchData));
-    },
     changeAccountIcon(state, payload) {
       const account = state.accountList.find(
         (account) => account.id === payload.id
