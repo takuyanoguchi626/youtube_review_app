@@ -25,6 +25,11 @@
             </div>
           </div>
         </div>
+        <div class="scroll">
+          <a href="#" id="page-top"
+            ><i class="blogicon-chevron-up"></i>ページ上部へ戻る</a
+          >
+        </div>
         <div class="footer-copyright grey darken-5">
           <div class="container center-align">&copy; 2022 1月入社Aチーム</div>
         </div>
@@ -47,5 +52,22 @@ img {
   width: 280px;
   height: 170px;
   object-fit: cover;
+}
+.scroll {
+  text-align: right;
+}
+#page-top {
+  display: inline-block;
+  font-weight: bold;
+  padding: 0.7em;
+  border-radius: 30px;
+  background: #fff; /*背景色*/
+  color: #666; /*文字色*/
+  transition: 0.3s;
+  margin-bottom: 10px;
+}
+#page-top:hover {
+  background-color: #99ccff;
+  color: #fff;
 }
 </style>
