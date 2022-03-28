@@ -23,6 +23,9 @@ export class Videos {
   get formatPublishedAt(): string {
     return format(new Date(this._publishedAt), "yyyy年MM月dd日HH時mm分");
   }
+  get formatViewCount(): string {
+    return Number(this._viewCount).toLocaleString();
+  }
 
   public get id(): number {
     return this._id;
