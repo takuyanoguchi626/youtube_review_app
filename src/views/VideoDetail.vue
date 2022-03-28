@@ -31,21 +31,22 @@
     <div class="review">
       <add-review :videoDetail="videoDetail"></add-review>
       <div class="row" v-for="review of reviewList" :key="review.id">
-        <div class="col s12">
-          <div class="card content">
-            <span class="card-image">
-              <img :src="review.accountIcon" />
-              <!-- <span class="card-title">アイコン</span> -->
-            </span>
-            <div class="card-content content">
-              <div class="content">{{ review.accountName }}</div>
-              <div class="content">{{ review.evaluation }}</div>
-              <p>
-                {{ review.review }}
-              </p>
+        <router-link :to="'/showReview/' + review.reviewId">
+          <div class="col s12">
+            <div class="card content">
+              <span class="card-image">
+                <img :src="review.accountIcon" />
+              </span>
+              <div class="card-content content">
+                <div class="content">{{ review.accountName }}</div>
+                <div class="content">{{ review.evaluation }}</div>
+                <p>
+                  {{ review.review }}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        </router-link>
       </div>
     </div>
   </div>
