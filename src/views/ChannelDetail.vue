@@ -92,8 +92,8 @@ export default class XXXComponent extends Vue {
   display: flex;
 }
 .img1 {
-  width: 500px;
-  height: 400px;
+  width: 450px;
+  height: 450px;
   object-fit: cover;
 }
 .channel-title {
@@ -101,8 +101,10 @@ export default class XXXComponent extends Vue {
   font-size: 30px;
 }
 .youtuber {
+  margin-top: 0;
   margin-right: 30px;
   width: 50%;
+  padding: 10px;
 }
 .video-title {
   font-weight: bold;
