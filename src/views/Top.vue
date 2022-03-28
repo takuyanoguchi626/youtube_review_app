@@ -180,6 +180,15 @@ export default class XXXComponent extends Vue {
   font-weight: bold;
   font-size: 25px;
 }
+/* count */
+.count {
+  position: absolute;
+  top: 65%;
+  left: 30%;
+  -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
 /* button1 */
 .top .button1 {
   position: absolute;
