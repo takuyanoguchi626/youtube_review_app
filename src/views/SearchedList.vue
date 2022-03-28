@@ -97,11 +97,17 @@ import { Videos } from "@/types/Videos";
 import { Channels } from "@/types/Channels";
 @Component
 export default class XXXComponent extends Vue {
+  // 動画情報の検索結果
   private searchedVideos: Array<Videos> = [];
+  // 検索される動画id
   private videoIdList = new Array<string>();
+  // チャンネルの検索結果
   private searchedChannels = new Array<Channels>();
+  // 検索されるチャンネルid
   private channelIdList = new Array<string>();
+  // 外部APIキー
   private key = "AIzaSyAzfoPPbpueXEcQypbLRLXXNCz5JQFDtlc";
+  // 検索ワード
   private searchText = "";
 
   async created(): Promise<void> {
@@ -126,10 +132,11 @@ export default class XXXComponent extends Vue {
       }
     }
 
+    // 検索ワードをURLより取得
     this.searchText = this.$route.params.searchText;
     console.log(this.searchText);
     const response1 = await axios.get(
-      // ビデオの検索API
+      // ビデオの検索APIでidを取得
       `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&maxResults=10&regionCode=JP&key=${this.key}&q=${this.searchText}`
     );
     const payload1 = response1.data.items;
@@ -138,6 +145,7 @@ export default class XXXComponent extends Vue {
     for (let preVideo of payload1) {
       this.videoIdList.push(preVideo.id.videoId);
     }
+    // 上で取得したidを使いビデオの情報をAPIで取得
     for (let videoId of this.videoIdList) {
       const response3 = await axios.get(
         `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet,statistics&regionCode=JP&key=${this.key}`
@@ -160,7 +168,7 @@ export default class XXXComponent extends Vue {
     }
 
     const response2 = await axios.get(
-      // チャンネルの検索API
+      // チャンネルの検索APIでidを取得
       `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=channel&maxResults=10&regionCode=JP&key=${this.key}&q=${this.searchText}`
     );
     const channel1Items = response2.data.items;
@@ -174,6 +182,7 @@ export default class XXXComponent extends Vue {
     }
     console.log("channelIdList" + this.channelIdList);
 
+    // 上で取得したidを使いチャンネルの情報をAPIで取得
     for (let channelId of this.channelIdList) {
       const response3 = await axios.get(
         `https://www.googleapis.com/youtube/v3/channels?key=${this.key}&maxResults=10&part=snippet,contentDetails,statistics,status&id=${channelId}`
