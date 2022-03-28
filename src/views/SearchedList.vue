@@ -117,7 +117,7 @@ export default class XXXComponent extends Vue {
           video.snippet.publishedAt,
           video.snippet.title,
           video.snippet.description,
-          video.snippet.thumbnails.default.url,
+          video.snippet.thumbnails.high.url,
           video.snippet.channelTitle,
           video.snippet.tags,
           video.snippet.viewCount
@@ -152,7 +152,7 @@ export default class XXXComponent extends Vue {
             channel2Item.snippet.title,
             channel2Item.snippet.description,
             channel2Item.snippet.publishedAt,
-            channel2Item.snippet.thumbnails.default.url,
+            channel2Item.snippet.thumbnails.high.url,
             channel2Item.statistics.viewCount,
             channel2Item.statistics.subscriberCount,
             channel2Item.statistics.videoCount
