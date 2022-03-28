@@ -2,14 +2,19 @@
   <div>
     <div class="content blue-grey lighten-5">
       <div class="account">
-        <div class="icon">
-          <img
-            class="account-img circle responsive-img"
-            v-bind:src="targetAccount.img"
-          />
-        </div>
+        <router-link :to="'/myProfile/' + targetAccount.id">
+          <div class="icon">
+            <img
+              class="account-img circle responsive-img"
+              v-bind:src="targetAccount.img"
+            />
+          </div>
+        </router-link>
+
         <div class="description">
-          <p>アカウント名： {{ targetAccount.name }}</p>
+          <router-link :to="'/myProfile/' + targetAccount.id">
+            <p>アカウント名： {{ targetAccount.name }}</p>
+          </router-link>
           <p>登録情報</p>
           <p>自己紹介： {{ targetAccount.introduction }}</p>
         </div>
@@ -17,12 +22,16 @@
 
       <div class="cardSize card large">
         <div class="movie">
-          <img
-            class="movie-img"
-            v-bind:src="targetReview.videos.thumbnailsUrl"
-          />
+          <router-link :to="'/videoDetail/' + targetReview.videos.id">
+            <img
+              class="movie-img"
+              v-bind:src="targetReview.videos.thumbnailsUrl"
+            />
+          </router-link>
           <div>
-            <p>タイトル：{{ targetReview.videos.title }}</p>
+            <router-link :to="'/videoDetail/' + targetReview.videos.id">
+              <p>タイトル：{{ targetReview.videos.title }}</p>
+            </router-link>
             <p>再生回数：{{ targetReview.videos.viewCount }}</p>
             <span class="movieDescription">
               概要：{{ targetReview.videos.description }}
