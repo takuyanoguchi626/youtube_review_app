@@ -10,7 +10,11 @@
     <div v-if="!flag">
       <div class="top">
         <img class="top-image" src="/img/topImage.gif" />
-        <div class="count">総レビュー数：0</div>
+        <div class="count">
+          総レビュー数：<img class="number-box" src="/img/numberBox.png" />{{
+            reviewCounts
+          }}
+        </div>
         <div class="register-user">
           <p class="p1">ユーザー登録はこちらから！</p>
           <button class="button1" type="button" v-on:click="moveToRegister">
@@ -112,11 +116,18 @@ export default class XXXComponent extends Vue {
   private recommendationAccountList = Array<Account>();
   // フラッグ
   private flag = true;
+  // 総レビュー数
+  private reviewCounts = 0;
 
   async created(): Promise<void> {
+    /**
+     * 総レビュー数を取得する.
+     */
+    this.reviewCounts = this.$store.getters.getReviewCounts;
+    console.log(this.reviewCounts);
+
     // スクロールトップボタン
     scrollTop(1); // 遅すぎるとガクガクになるので注意
-
     function scrollTop(duration: number) {
       let currentY = window.pageYOffset; // 現在のスクロール位置を取得
       let step = duration / currentY > 1 ? 10 : 100; // 三項演算子
@@ -301,7 +312,7 @@ i {
 .button4 span {
   color: white;
 }
-/* icon,image */
+/* ボタンのicon,image */
 .button-icon {
   width: 15px;
   height: 15px;
@@ -310,6 +321,11 @@ i {
   width: 100%;
   height: 500px;
   object-fit: cover;
+}
+/* レビューカウント数 */
+.number-box {
+  width: 2vw;
+  height: 6vh;
 }
 /* リロード中のGIF */
 .gif {
