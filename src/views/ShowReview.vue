@@ -18,59 +18,45 @@
             class="movie-img"
             v-bind:src="targetReview.videos.thumbnailsUrl"
           />
-          <p>タイトル：{{ targetReview.videos.title }}</p>
-          <p>再生回数：{{ targetReview.videos.viewCount }}</p>
-          <p>概要：{{ targetReview.videos.description }}</p>
-          <p>投稿日：{{ targetReview.videos.publishedAt }}</p>
+          <div>
+            <p>タイトル：{{ targetReview.videos.title }}</p>
+            <p>再生回数：{{ targetReview.videos.viewCount }}</p>
+            <span class="movieDescription"
+              >概要：{{ targetReview.videos.description }}</span
+            >
+            <p>投稿日：{{ targetReview.videos.formatPublishedAt }}</p>
+          </div>
           <div class="evaluation">
-            <p>
-              <span
-                v-if="targetReview.favoriteCount === 5"
-                class="star5_rating"
-                data-rate="5"
-              ></span>
+            <p v-if="targetReview.evaluation === '5'">
+              評価：
+              <span class="star5_rating" data-rate="5"></span>
             </p>
-            <p>
-              <span
-                v-if="targetReview.favoriteCount === 4"
-                class="star5_rating"
-                data-rate="4"
-              ></span>
+            <p v-if="targetReview.evaluation === '4'">
+              評価：
+              <span class="star5_rating" data-rate="4"></span>
             </p>
-            <p>
-              <span
-                v-if="targetReview.favoriteCount === 3"
-                class="star5_rating"
-                data-rate="3"
-              ></span>
+            <p v-if="targetReview.evaluation === '3'">
+              評価：
+              <span class="star5_rating" data-rate="3"></span>
             </p>
-            <p>
-              <span
-                v-if="targetReview.favoriteCount === 2"
-                class="star5_rating"
-                data-rate="2"
-              ></span>
+            <p v-if="targetReview.evaluation === '2'">
+              評価：
+              <span class="star5_rating" data-rate="2"></span>
             </p>
-            <p>
-              <span
-                v-if="targetReview.favoriteCount === 1"
-                class="star5_rating"
-                data-rate="1"
-              ></span>
+            <p v-if="targetReview.evaluation === '1'">
+              評価：
+              <span class="star5_rating" data-rate="1"></span>
             </p>
-            <p>
-              <span
-                v-if="targetReview.favoriteCount === 0"
-                class="star5_rating"
-                data-rate="0"
-              ></span>
+            <p v-if="targetReview.evaluation === '0'">
+              評価：
+              <span class="star5_rating" data-rate="0"></span>
             </p>
           </div>
         </div>
         <div class="review">
           <p>
-            {{ targetReview.review }}
-            {{ targetReview.reviewDate }}
+            {{ targetReview.review }}<br />
+            レビュー投稿日：{{ targetReview.reviewDate }}
           </p>
         </div>
       </div>
@@ -101,7 +87,10 @@ export default class XXXComponent extends Vue {
     "",
     0,
     0,
+    "",
+    "",
     new Videos(0, "", "", "", "", "", "", ""),
+    0,
     "",
     0
   );
@@ -118,7 +107,7 @@ export default class XXXComponent extends Vue {
       for (const review of account.reviewList) {
         console.dir(JSON.stringify("review" + review));
 
-        if (1 === review.reviewId) {
+        if (Number(reviewParamsId) === review.reviewId) {
           this.targetReview = review;
           this.targetAccount = account;
           console.dir("this.targetReview" + JSON.stringify(this.targetReview));
@@ -143,10 +132,12 @@ export default class XXXComponent extends Vue {
   height: auto;
   width: 50%;
   margin: 10px;
+  padding: 5px;
 }
 .movie {
   width: 300px;
   height: auto;
+  overflow-x: hidden;
 }
 .account-img {
   width: 300px;
@@ -156,7 +147,13 @@ export default class XXXComponent extends Vue {
 }
 .review {
   padding: 10px;
-  width: 400px;
+  width: 350px;
+}
+.movieDescription {
+  height: 300px;
+  width: 300px;
+  overflow-wrap: normal;
+  overflow-y: scroll;
 }
 .star5_rating {
   position: relative;

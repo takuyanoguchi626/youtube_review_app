@@ -12,7 +12,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     //最後のレビューID
-    lastReviewId: 0,
+    lastReviewId: 1,
     // Youtuber情報
     youtubersInfo: Array<Channels>(),
     accountList: [
