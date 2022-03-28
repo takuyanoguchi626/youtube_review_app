@@ -67,9 +67,13 @@
         </div>
         <div class="review">
           <p>
-            {{ targetReview.review }}<br />
             レビュー投稿日：{{ targetReview.reviewDate }}
+            {{ targetReview.review }}<br />
           </p>
+          <a class="waves-effect waves-light btn" v-on:click="favoriteReview()"
+            ><i class="material-icons left">thumb_up</i>いいね</a
+          >
+          {{ favoriteCount }}
         </div>
       </div>
     </div>
@@ -110,6 +114,8 @@ export default class XXXComponent extends Vue {
   );
   // ステートの全ユーザー情報
   private accountList = this.$store.getters.getAccountList;
+
+  private favoriteCount = this.targetReview.favoriteCount;
 
   created(): void {
     // スクロールトップボタン
@@ -155,6 +161,13 @@ export default class XXXComponent extends Vue {
         }
       }
     }
+  }
+  favoriteReview(): void {
+    this.favoriteCount = this.favoriteCount + 1;
+    const review = this.targetReview;
+    review.favoriteCount = this.favoriteCount;
+    this.$store.commit("addFavoriteCount", review.favoriteCount);
+    console.log(this.$store.state.accountList);
   }
 }
 </script>

@@ -235,6 +235,15 @@ export default new Vuex.Store({
         new Array<Review>()
       );
     },
+    addFavoriteCount(state, payload) {
+      for (const account of state.accountList) {
+        for (let review of account.reviewList) {
+          if (payload.reviewId === review.reviewId) {
+            review = payload;
+          }
+        }
+      }
+    },
     showSoaringVideos(state, payload) {
       state.soaringVideos = new Array<Videos>();
       for (const soaringVideo of payload) {
