@@ -25,7 +25,16 @@ export default new Vuex.Store({
         "ssss",
         "aaaaa",
         [
-          new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1),
+          new Channels(
+            "id",
+            "dddsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
+            "ddd",
+            "sss",
+            "/img/pagu.jpg",
+            1,
+            1,
+            1
+          ),
           new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1),
           new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1),
           new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1),
