@@ -180,6 +180,15 @@ export default new Vuex.Store({
         ),
       ]
     ),
+    apiKey: Array<string>(
+      "AIzaSyD0gPqZj2y8L2QVei5d4NUMsthKN3ltr1c",
+      "AIzaSyAzfoPPbpueXEcQypbLRLXXNCz5JQFDtlc",
+      "AIzaSyDH4tzh3tFM5Ok8Q5jSpPHxpcQZMnK4U9M",
+      "AIzaSyBOMUoWdabc9lzK4XQFop3x0dYtUeI6agU",
+      "AIzaSyAgRYbghnEpgHX9f980fKCzlTP6vESPkwo",
+      "AIzaSyByE-aaIhWOBWxX0MdlUN6szX6qMe7kX5s",
+      "AIzaSyAjmyhCg__LtgHseTa_w2NzZGdD_YLoVZY"
+    ),
   },
   actions: {
     /**
@@ -187,7 +196,7 @@ export default new Vuex.Store({
      * @param context コンテキスト
      */
     async getSoaringVideos(context) {
-      const key = "AIzaSyAzfoPPbpueXEcQypbLRLXXNCz5JQFDtlc";
+      const key = context.getters.getApiKey;
       const responce = await axios.get(
         `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&chart=mostPopular&regionCode=JP&maxResults=50&key=${key}`
       );
@@ -400,6 +409,9 @@ export default new Vuex.Store({
         }
         return reviewListByVideoId;
       };
+    },
+    getApiKey(state) {
+      return state.apiKey[Math.floor(Math.random() * state.apiKey.length)];
     },
   },
 });
