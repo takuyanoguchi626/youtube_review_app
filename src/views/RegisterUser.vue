@@ -173,7 +173,7 @@ export default class XXXComponent extends Vue {
     // idが既に存在する場合と存在しない場合で新たに付与するidを分ける
     if (accountId === undefined) {
       const newAccount = new Account(
-        0,
+        1,
         this.lastName + this.firstName,
         "",
         "",

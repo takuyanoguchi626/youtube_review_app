@@ -7,7 +7,7 @@
             <router-link to="/top">
               <span class="hide-on-small-only"
                 ><img
-                  src="/img/youtubeLogo.png"
+                  src="/img/youtube.png"
                   width="30"
                   id="appicon"
                   style="
@@ -45,6 +45,7 @@
               class="hide-on-med-and-down right menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-5 current_page_item menu-item-24"
             >
               <li
+                v-if="currentUserId === 0"
                 id="menu-item-24"
                 class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-5 current_page_item menu-item-24"
               >
@@ -56,8 +57,34 @@
                 id="menu-item-24"
                 class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-5 current_page_item menu-item-24"
               >
-                <router-link to="/registerUser" aria-current="page"
+                <router-link
+                  v-if="currentUserId !== 0"
+                  to="/top"
+                  aria-current="page"
+                  v-on:click.native="removeUser()"
+                  >ログアウト</router-link
+                >
+              </li>
+              <li
+                id="menu-item-24"
+                class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-5 current_page_item menu-item-24"
+              >
+                <router-link
+                  v-if="currentUserId === 0"
+                  to="/registerUser"
+                  aria-current="page"
                   >会員登録</router-link
+                >
+              </li>
+              <li
+                id="menu-item-24"
+                class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-5 current_page_item menu-item-24"
+              >
+                <router-link
+                  v-if="currentUserId !== 0"
+                  :to="'/myProfile/' + currentUserId"
+                  aria-current="page"
+                  >マイページ</router-link
                 >
               </li>
             </ul>
@@ -77,6 +104,8 @@ export default class XXXComponent extends Vue {
   private searchText = "";
   // パス
   private path = "";
+  // ユーザーID
+  private currentUserId = this.$store.getters.getCurrentUser.id;
 
   /**
    * ワードを検索のメソッド.
@@ -97,12 +126,19 @@ export default class XXXComponent extends Vue {
     } else if (location.pathname.startsWith("/2searchedList")) {
       console.log("1" + location.pathname);
 
-      // ドメイン以下のパス名が /searchedList/${searchText} の場合に実行する処理
+      // ドメイン以下のパス名が /2searchedList/${searchText} の場合に実行する処理
       this.$router.push(`/searchedList/${searchText}`);
       return;
     }
+    // 通常実行する処理
     this.$router.push(`/searchedList/${searchText}`);
     return;
+  }
+
+  removeUser(): void {
+    console.log("イベント発火");
+    this.$store.commit("removeUser");
+    console.log(this.$store.state.currentUser);
   }
 }
 </script>

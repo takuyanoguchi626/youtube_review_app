@@ -63,10 +63,15 @@ export default class XXXComponent extends Vue {
    * ログイン.
    */
   public login(): void {
+    this.loginError = "";
     const accountList = this.$store.getters.getAccountList;
+    console.log(this.email);
+    console.log(this.password);
+    console.log(accountList);
+
     for (const account of accountList) {
       if (
-        account.mailaddress === this.email ||
+        account.mailaddless === this.email &&
         account.password === this.password
       ) {
         const currentAccount = new Account(
@@ -74,7 +79,7 @@ export default class XXXComponent extends Vue {
           account.name,
           account.introduction,
           account.img,
-          account.mailaddress,
+          account.mailaddless,
           account.telephone,
           account.password,
           account.favoriteChannelList,
@@ -85,8 +90,11 @@ export default class XXXComponent extends Vue {
         this.$store.commit("addCurrentUser", currentAccount);
         console.dir(JSON.stringify(this.$store.state.currentUser));
         this.$router.push("/top");
+        return;
       }
     }
+    console.log(this.$store.state.currentUser);
+
     this.loginError = "メールアドレスまたはパスワードが誤っています";
   }
 }

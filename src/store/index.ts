@@ -92,7 +92,7 @@ export default new Vuex.Store({
         "山田花子",
         "aaaa",
         "/img/pagu.jpg",
-        "aaaa",
+        "aaas",
         "ssss",
         "aaaaa",
         [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
@@ -126,7 +126,7 @@ export default new Vuex.Store({
         "佐藤次郎",
         "aaaa",
         "/img/pagu.jpg",
-        "aaaa",
+        "aaak",
         "ssss",
         "aaaaa",
         [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
@@ -147,18 +147,18 @@ export default new Vuex.Store({
     ],
     soaringVideos: Array<Videos>(),
     currentUser: new Account(
-      3,
-      "鈴木太郎",
+      2,
+      "山田花子",
       "aaaa",
       "/img/pagu.jpg",
-      "aaaa",
+      "aaas",
       "ssss",
       "aaaaa",
       [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
       [
         new Review(
           "",
-          7,
+          4,
           1,
           "",
           "",
@@ -169,29 +169,7 @@ export default new Vuex.Store({
         ),
         new Review(
           "",
-          8,
-          1,
-          "",
-          "",
-          new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
-          1,
-          "レビューのプレビュー",
-          1
-        ),
-        new Review(
-          "",
-          9,
-          1,
-          "",
-          "",
-          new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
-          1,
-          "レビューのプレビュー",
-          1
-        ),
-        new Review(
-          "",
-          10,
+          5,
           1,
           "",
           "",
@@ -234,6 +212,19 @@ export default new Vuex.Store({
      */
     addUser(state, payload) {
       state.accountList.push(payload);
+    },
+    removeUser(state) {
+      state.currentUser = new Account(
+        0,
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        new Array<Channels>(),
+        new Array<Review>()
+      );
     },
     showSoaringVideos(state, payload) {
       state.soaringVideos = new Array<Videos>();
