@@ -181,16 +181,16 @@ export default class XXXComponent extends Vue {
 
 <style scoped>
 .image {
-  width: 250px;
-  height: 250px;
+  width: 15vw;
+  object-fit: cover;
 }
 .image2 {
-  width: 100px;
-  height: 100px;
+  width: 5vw;
+  object-fit: cover;
 }
 .image3 {
-  width: 150px;
-  height: 150px;
+  width: 10vw;
+  object-fit: cover;
 }
 
 .introduction {
@@ -232,7 +232,7 @@ export default class XXXComponent extends Vue {
   justify-content: center;
   margin-left: 30px;
   margin-top: 30px;
-  width: 600px;
+  width: 40vw;
 }
 
 .reviewText {

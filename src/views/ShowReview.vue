@@ -13,7 +13,7 @@
 
         <div class="description">
           <router-link :to="'/myProfile/' + targetAccount.id">
-            <p>アカウント名： {{ targetAccount.name }}</p>
+            <p class="name">アカウント名： {{ targetAccount.name }}</p>
           </router-link>
           <p>登録情報</p>
           <p>自己紹介： {{ targetAccount.introduction }}</p>
@@ -30,7 +30,7 @@
           </router-link>
           <div>
             <router-link :to="'/videoDetail/' + targetReview.videos.id">
-              <p>タイトル：{{ targetReview.videos.title }}</p>
+              <p class="name">タイトル：{{ targetReview.videos.title }}</p>
             </router-link>
             <p>再生回数：{{ targetReview.videos.viewCount }}</p>
             <span class="movieDescription">
@@ -166,6 +166,9 @@ export default class XXXComponent extends Vue {
   width: 50%;
   margin: 10px;
   padding: 5px;
+}
+.name {
+  font-weight: bold;
 }
 .movie {
   width: 300px;
