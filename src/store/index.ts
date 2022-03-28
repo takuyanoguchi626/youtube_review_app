@@ -28,15 +28,7 @@ export default new Vuex.Store({
         [
           new Review(
             "",
-            1,
-            1,
-            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
-            "レビューのプレビュー",
-            1
-          ),
-          new Review(
-            "",
-            1,
+            11,
             1,
             new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
             "レビューのプレビュー",
@@ -52,7 +44,15 @@ export default new Vuex.Store({
           ),
           new Review(
             "",
+            2,
             1,
+            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
+            "レビューのプレビュー",
+            1
+          ),
+          new Review(
+            "",
+            3,
             1,
             new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
             "レビューのプレビュー",
@@ -72,7 +72,7 @@ export default new Vuex.Store({
         [
           new Review(
             "",
-            1,
+            4,
             1,
             new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
             "レビューのプレビュー",
@@ -80,7 +80,7 @@ export default new Vuex.Store({
           ),
           new Review(
             "",
-            1,
+            5,
             1,
             new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
             "レビューのプレビュー",
@@ -100,7 +100,7 @@ export default new Vuex.Store({
         [
           new Review(
             "",
-            1,
+            6,
             1,
             new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
             "レビューのプレビュー",
@@ -122,15 +122,7 @@ export default new Vuex.Store({
       [
         new Review(
           "",
-          1,
-          1,
-          new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
-          "レビューのプレビュー",
-          1
-        ),
-        new Review(
-          "",
-          1,
+          7,
           1,
           new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
           "レビューのプレビュー",
@@ -138,7 +130,7 @@ export default new Vuex.Store({
         ),
         new Review(
           "",
-          1,
+          8,
           1,
           new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
           "レビューのプレビュー",
@@ -146,7 +138,15 @@ export default new Vuex.Store({
         ),
         new Review(
           "",
+          9,
           1,
+          new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
+          "レビューのプレビュー",
+          1
+        ),
+        new Review(
+          "",
+          10,
           1,
           new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
           "レビューのプレビュー",
