@@ -24,7 +24,12 @@ export default new Vuex.Store({
         "aaaa",
         "ssss",
         "aaaaa",
-        [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
+        [
+          new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1),
+          new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1),
+          new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1),
+          new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1),
+        ],
         [
           new Review(
             "",
@@ -32,7 +37,16 @@ export default new Vuex.Store({
             1,
             "",
             "",
-            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
+            new Videos(
+              1,
+              "2020/01/01",
+              "タイトル",
+              "概要欄",
+              "/img/pagu.jpg",
+              "ss",
+              "ss",
+              "ss"
+            ),
             1,
             "レビューのプレビュー",
             1
@@ -230,7 +244,7 @@ export default new Vuex.Store({
             soaringVideo.snippet.publishedAt,
             soaringVideo.snippet.title,
             soaringVideo.snippet.description,
-            soaringVideo.snippet.thumbnails.medium.url,
+            soaringVideo.snippet.thumbnails.high.url,
             soaringVideo.snippet.channelTitle,
             soaringVideo.snippet.tags,
             soaringVideo.statistics.viewCount
@@ -247,7 +261,7 @@ export default new Vuex.Store({
             youtuberInfo.snippet.title,
             youtuberInfo.snippet.description,
             youtuberInfo.snippet.publishedAt,
-            youtuberInfo.snippet.thumbnails.medium.url,
+            youtuberInfo.snippet.thumbnails.high.url,
             youtuberInfo.statistics.viewCount,
             youtuberInfo.statistics.subscriberCount,
             youtuberInfo.statistics.videoCount
