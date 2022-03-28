@@ -352,10 +352,10 @@ iframe {
 .img_wrap {
   border: 1px solid #ddd;
   margin: 0 auto;
-  overflow: hidden;
 }
-.img_wrap img {
-  width: 100%;
+.img_wrap {
+  width: 250px;
+  height: 250px;
   cursor: pointer;
   transition-duration: 0.3s;
 }
