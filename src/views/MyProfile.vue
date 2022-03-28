@@ -31,7 +31,7 @@
       >
         <router-link :to="'/channelDetail/' + favoriteChannel.id">
           <img
-            class="circle responsive-img image3"
+            class="circle responsive-img image3 channel"
             :src="favoriteChannel.thumbnailsUrl"
           />
         </router-link>
@@ -41,13 +41,13 @@
     <div class="reviewList">
       <div v-for="review of currentAccount.reviewList" :key="review.id">
         <router-link :to="'/showReview/' + review.reviewId">
-          <div class="review">
-            <div>
+          <div class="review z-depth-5">
+            <div class="reviewText">
               <div class="subtitle">
                 {{ review.videos.title }}
               </div>
               <div>
-                {{ review.videos.publishedAt }}
+                {{ review.evaluation }}
               </div>
               <div>
                 {{ review.videos.channelTitle }}
@@ -190,6 +190,10 @@ export default class XXXComponent extends Vue {
   justify-content: center;
 }
 
+.channel {
+  margin-left: 30px;
+}
+
 .selfIntroductionChange {
   margin-top: 68px;
   margin-left: 600px;
@@ -198,13 +202,19 @@ export default class XXXComponent extends Vue {
 .reviewList {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  width: 60%;
+  justify-content: left;
+  width: 90%;
   margin: 0 auto;
 }
 .review {
   display: flex;
   justify-content: center;
   margin-left: 30px;
+  margin-top: 30px;
+  width: 600px;
+}
+
+.reviewText {
+  width: 350px;
 }
 </style>

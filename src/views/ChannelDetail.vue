@@ -48,7 +48,7 @@ export default class XXXComponent extends Vue {
       items.snippet.title,
       items.snippet.description,
       items.snippet.publishedAt,
-      items.snippet.thumbnails.medium.url,
+      items.snippet.thumbnails.high.url,
       items.statistics.viewCount,
       items.statistics.subscriberCount,
       items.statistics.videoCount
@@ -70,7 +70,7 @@ export default class XXXComponent extends Vue {
           videoDetailItems.snippet.publishedAt,
           videoDetailItems.snippet.title,
           videoDetailItems.snippet.description,
-          videoDetailItems.snippet.thumbnails.medium.url,
+          videoDetailItems.snippet.thumbnails.high.url,
           videoDetailItems.snippet.channelTitle,
           videoDetailItems.snippet.tags,
           videoDetailItems.statistics.videoCount

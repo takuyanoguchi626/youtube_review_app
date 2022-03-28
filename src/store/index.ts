@@ -244,7 +244,7 @@ export default new Vuex.Store({
             soaringVideo.snippet.publishedAt,
             soaringVideo.snippet.title,
             soaringVideo.snippet.description,
-            soaringVideo.snippet.thumbnails.medium.url,
+            soaringVideo.snippet.thumbnails.high.url,
             soaringVideo.snippet.channelTitle,
             soaringVideo.snippet.tags,
             soaringVideo.statistics.viewCount
@@ -261,7 +261,7 @@ export default new Vuex.Store({
             youtuberInfo.snippet.title,
             youtuberInfo.snippet.description,
             youtuberInfo.snippet.publishedAt,
-            youtuberInfo.snippet.thumbnails.medium.url,
+            youtuberInfo.snippet.thumbnails.high.url,
             youtuberInfo.statistics.viewCount,
             youtuberInfo.statistics.subscriberCount,
             youtuberInfo.statistics.videoCount
