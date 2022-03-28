@@ -3,7 +3,10 @@
     <div class="content blue-grey lighten-5">
       <div class="account">
         <div class="icon">
-          <img class="account-img" v-bind:src="targetAccount.img" />
+          <img
+            class="account-img circle responsive-img"
+            v-bind:src="targetAccount.img"
+          />
         </div>
         <div class="description">
           <p>アカウント名： {{ targetAccount.name }}</p>
@@ -21,9 +24,9 @@
           <div>
             <p>タイトル：{{ targetReview.videos.title }}</p>
             <p>再生回数：{{ targetReview.videos.viewCount }}</p>
-            <span class="movieDescription"
-              >概要：{{ targetReview.videos.description }}</span
-            >
+            <span class="movieDescription">
+              概要：{{ targetReview.videos.description }}
+            </span>
             <p>投稿日：{{ targetReview.videos.formatPublishedAt }}</p>
           </div>
           <div class="evaluation">
@@ -141,6 +144,7 @@ export default class XXXComponent extends Vue {
 }
 .account-img {
   width: 300px;
+  height: 300px;
 }
 .movie-img {
   width: 300px;
@@ -150,10 +154,11 @@ export default class XXXComponent extends Vue {
   width: 350px;
 }
 .movieDescription {
-  height: 300px;
+  height: 150px;
   width: 300px;
-  overflow-wrap: normal;
+  overflow-wrap: break-word;
   overflow-y: scroll;
+  display: block;
 }
 .star5_rating {
   position: relative;
