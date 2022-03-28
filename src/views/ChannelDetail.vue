@@ -1,26 +1,34 @@
 <template>
   <div class="container">
-    <div class="youtuber">
-      <div>{{ currentChannel.title }}</div>
-      <img :src="currentChannel.thumbnailsUrl" />
+    <div class="youtuber item col card white">
+      <img class="img1" :src="currentChannel.thumbnailsUrl" />
+      <div class="channel-title">{{ currentChannel.title }}</div>
       <p>
         {{ currentChannel.description }}
       </p>
-      <span>総再生回数：{{ currentChannel.videoCount }} /</span
-      ><span> チャンネル登録者数：{{ currentChannel.subscriberCount }}人</span>
+      <span>総再生回数：{{ currentChannel.formatViewCount }}回 /</span
+      ><span>
+        チャンネル登録者数：{{ currentChannel.formatSubscriberCount }}人</span
+      >
     </div>
+
     <div class="videos">
-      <div v-for="videoDetail of videoArr" :key="videoDetail.id">
+      <div
+        v-for="videoDetail of videoArr"
+        :key="videoDetail.id"
+        class="item col card white video-card"
+      >
         <router-link :to="'/videoDetail/' + videoDetail.id"
-          ><img :src="videoDetail.thumbnailsUrl"
+          ><img class="img2" :src="videoDetail.thumbnailsUrl"
         /></router-link>
-        <div>
+        <div class="video-title">
           {{ videoDetail.title }}
         </div>
-        <span>{{ videoDetail.publishedAt }}</span>
+        <!-- <span>{{ videoDetail.tags }}</span
+        ><br /> -->
+        <span>投稿日：{{ videoDetail.formatPublishedAt }}</span
+        ><br />
         <span>{{ videoDetail.description }}</span>
-        <span>{{ videoDetail.channelTitle }}</span>
-        <span>{{ videoDetail.tags }}</span>
       </div>
     </div>
   </div>
@@ -35,7 +43,7 @@ import { Component, Vue } from "vue-property-decorator";
 export default class XXXComponent extends Vue {
   private currentChannel = new Channels("", "", "", "", "", 1, 1, 1);
   private videoArr = new Array<Videos>();
-  private apiKey = "AIzaSyAzfoPPbpueXEcQypbLRLXXNCz5JQFDtlc";
+  private apiKey = "AIzaSyD2e2JFujvHZWeu7dLwDveF64Nak97Agag";
 
   async created(): Promise<void> {
     const channelId = this.$route.params.id;
@@ -48,16 +56,14 @@ export default class XXXComponent extends Vue {
       items.snippet.title,
       items.snippet.description,
       items.snippet.publishedAt,
-      items.snippet.thumbnails.medium.url,
+      items.snippet.thumbnails.high.url,
       items.statistics.viewCount,
       items.statistics.subscriberCount,
       items.statistics.videoCount
     );
-    console.log(this.currentChannel);
     const responseVideo = await axios.get(
       `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&channelId=${this.currentChannel.id}&maxResults=10&regionCode=JP&key=${this.apiKey}&order=date`
     );
-    console.dir(JSON.stringify(responseVideo));
     const videoItems = responseVideo.data.items;
     for (const videoitem of videoItems) {
       const responceVideoDetail = await axios.get(
@@ -70,7 +76,7 @@ export default class XXXComponent extends Vue {
           videoDetailItems.snippet.publishedAt,
           videoDetailItems.snippet.title,
           videoDetailItems.snippet.description,
-          videoDetailItems.snippet.thumbnails.medium.url,
+          videoDetailItems.snippet.thumbnails.high.url,
           videoDetailItems.snippet.channelTitle,
           videoDetailItems.snippet.tags,
           videoDetailItems.statistics.videoCount
@@ -85,9 +91,37 @@ export default class XXXComponent extends Vue {
 .container {
   display: flex;
 }
-img {
+.img1 {
   width: 500px;
+  height: 400px;
+  object-fit: cover;
+}
+.channel-title {
+  font-weight: bold;
+  font-size: 30px;
+}
+.youtuber {
+  margin-right: 30px;
+  width: 50%;
+}
+.video-title {
+  font-weight: bold;
+}
+.video-card {
+  margin-top: 0;
+  overflow-x: auto;
+}
+.img2 {
+  width: 100%;
   height: 300px;
   object-fit: cover;
+}
+.img2:hover {
+  opacity: 0.7;
+  transition-duration: 0.3s;
+}
+.videos {
+  overflow-y: auto;
+  height: 700px;
 }
 </style>
