@@ -30,41 +30,23 @@
 
     <div class="review">
       <add-review :videoDetail="videoDetail"></add-review>
-      <div class="row">
-        <div class="col s12">
-          <div class="card content">
-            <span class="card-image">
-              <img src="/img/東海オンエア.jpeg" />
-              <span class="card-title">アイコン</span>
-            </span>
-            <div class="card-content content">
-              <div class="content">投稿者名</div>
-              <p>
-                I am a very simple card. I am good at containing small bits of
-                information. I am convenient because I require little markup to
-                use effectively.
-              </p>
+      <div class="row" v-for="review of reviewList" :key="review.id">
+        <router-link :to="'/showReview/' + review.reviewId">
+          <div class="col s12">
+            <div class="card content">
+              <span class="card-image">
+                <img :src="review.accountIcon" />
+              </span>
+              <div class="card-content content">
+                <div class="content">{{ review.accountName }}</div>
+                <div class="content">{{ review.evaluation }}</div>
+                <p>
+                  {{ review.review }}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col s12">
-          <div class="card content">
-            <span class="card-image">
-              <img src="/img/東海オンエア.jpeg" />
-              <span class="card-title">アイコン</span>
-            </span>
-            <div class="card-content content">
-              <div class="content">投稿者名</div>
-              <p>
-                I am a very simple card. I am good at containing small bits of
-                information. I am convenient because I require little markup to
-                use effectively.
-              </p>
-            </div>
-          </div>
-        </div>
+        </router-link>
       </div>
     </div>
   </div>
@@ -76,6 +58,7 @@ import AddReview from "@/components/AddReview.vue";
 import axios from "axios";
 import { Videos } from "@/types/Videos";
 import { Channels } from "@/types/Channels";
+import { Review } from "@/types/Review";
 
 @Component({
   components: { AddReview },
@@ -85,11 +68,11 @@ export default class XXXComponent extends Vue {
   private videoDetail = new Videos(0, "", "", "", "", "", "", "");
   // チャンネル詳細
   private channelDetail = new Channels("", "", "", "", "", 0, 0, 0);
+  private reviewList = new Array<Review>();
 
   async created(): Promise<void> {
     const videoId = this.$route.params.id;
     const key = "AIzaSyAzfoPPbpueXEcQypbLRLXXNCz5JQFDtlc";
-    console.log("call1");
     const responce = await axios.get(
       `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&key=${key}&id=${videoId}`
     );
@@ -106,7 +89,7 @@ export default class XXXComponent extends Vue {
       responceVideo.tags,
       responceVideo.statistics.viewCount
     );
-    console.log("call3");
+
     const responce2 = await axios.get(
       `https://www.googleapis.com/youtube/v3/channels?key=${key}&part=snippet,contentDetails,statistics,status&id=${responceVideo.snippet.channelId}`
     );
@@ -122,7 +105,11 @@ export default class XXXComponent extends Vue {
       responceChannel.statistics.subscriberCount,
       responceChannel.statistics.videoCount
     );
-  }
+    this.reviewList = this.$store.getters.getReviewListByVideoId(
+      this.videoDetail
+    );
+    console.log(this.reviewList[0].accountIcon);
+  } //end created
 }
 </script>
 
