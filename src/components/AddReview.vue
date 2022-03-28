@@ -64,7 +64,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import format from "date-fns/fp/format/index.js";
+import { format } from "date-fns";
 import { Videos } from "@/types/Videos";
 @Component
 export default class XXXComponent extends Vue {
@@ -75,7 +75,8 @@ export default class XXXComponent extends Vue {
   private videoDetail!: Videos;
 
   getDate(): string {
-    return format("yyyy年MM月dd日", this.date);
+    const nowDate = format(new Date(), "yyyy年MM月dd日");
+    return nowDate;
   }
 
   postReview(): void {
@@ -83,7 +84,7 @@ export default class XXXComponent extends Vue {
 
     // console.log(this.review);
     this.$store.commit("postReview", {
-      date: this.getDate,
+      date: this.getDate(),
       evaluation: this.evaluation,
       review: this.review,
       video: this.videoDetail,
