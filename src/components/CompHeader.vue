@@ -44,7 +44,7 @@
               id="nav-mobile"
               class="hide-on-med-and-down right menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-5 current_page_item menu-item-24"
             >
-            <!-- v-ifでログインの有無によるボタンの表示を分ける -->
+              <!-- v-ifでログインの有無によるボタンの表示を分ける -->
               <li
                 v-if="currentUserId === 0"
                 id="menu-item-24"
@@ -88,6 +88,18 @@
                   >マイページ</router-link
                 >
               </li>
+              <li class="icon">
+                <img
+                  v-if="currentUserId !== 0"
+                  class="userIcon circle"
+                  :src="accountImg"
+                />
+                <img
+                  v-if="currentUserId === 0"
+                  class="userIcon circle"
+                  src="/img/blank.png"
+                />
+              </li>
             </ul>
           </div>
         </nav>
@@ -98,6 +110,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import { Account } from "@/types/Account";
 
 @Component
 export default class XXXComponent extends Vue {
@@ -106,9 +119,32 @@ export default class XXXComponent extends Vue {
   // パス
   private path = "";
 
+  private imgSource = "";
+  /**
+   * ログイン中のユーザーのID取得.
+   * @returns - ログイン中のユーザーのID
+   */
   get currentUserId(): number {
     const currentUser = this.$store.getters.getCurrentUser;
     return currentUser.id;
+  }
+  /**
+   * ログイン中のユーザーのアイコン取得.
+   * @returns - ログイン中のユーザーのアイコン
+   */
+  get currentUserImg(): Account {
+    const currentUser = this.$store.getters.getCurrentUser;
+    return currentUser.img;
+  }
+  get accountImg(): string {
+    const accountList = this.$store.getters.getAccountList;
+
+    for (const account of accountList) {
+      if (this.currentUserId === account.id) {
+        this.imgSource = account.img;
+      }
+    }
+    return this.imgSource;
   }
   /**
    * ワードを検索のメソッド.
@@ -128,7 +164,7 @@ export default class XXXComponent extends Vue {
       this.$router.push(`/2searchedList/${searchText}`);
       return;
     } else if (location.pathname.startsWith("/2searchedList")) {
-        // 入力欄を空にする
+      // 入力欄を空にする
       this.searchText = "";
       // ドメイン以下のパス名が /2searchedList/${searchText} の場合に実行する処理
       this.$router.push(`/searchedList/${searchText}`);
@@ -136,7 +172,7 @@ export default class XXXComponent extends Vue {
     }
 
     // 通常実行する処理
-      // 入力欄を空にする
+    // 入力欄を空にする
     this.searchText = "";
     this.$router.push(`/searchedList/${searchText}`);
     return;
@@ -168,5 +204,16 @@ textarea {
 }
 .searchForm {
   margin: 5px;
+}
+.userIcon {
+  margin: 5px;
+  width: 55px;
+  height: 55px;
+  object-fit: cover;
+}
+.userIcon {
+  width: 55px;
+  height: 55px;
+  object-fit: cover;
 }
 </style>
