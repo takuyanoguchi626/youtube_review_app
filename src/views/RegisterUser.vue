@@ -134,6 +134,7 @@ export default class XXXComponent extends Vue {
     this.telError = "";
     this.passwordError = "";
     this.passwordConfirmError = "";
+
     // エラーハンドリング
     if (this.lastName === "") {
       this.lastNameError = "姓を入力してください";
@@ -163,10 +164,20 @@ export default class XXXComponent extends Vue {
       this.passwordError = "パスワードと確認用パスワードが異なります";
       this.errorChecker = true;
     }
+    //既にの登録されているアカウント情報の取得
+    const accountList = this.$store.getters.getAccountList;
+    // 既に登録されたメールアドレスが入力された時にエラーを出す
+    for (let account of accountList) {
+      if (this.email === account.mailaddless) {
+        this.emailError = "既に登録されたメールアドレスが入力されています";
+        this.errorChecker = true;
+      }
+    }
     if (this.errorChecker === true) {
       this.errorChecker = false;
       return;
     }
+
     // 登録されているユーザー情報の取得
     const accountLastId = this.$store.getters.getLastUserId;
     // 新たなユーザーに使用するID１
