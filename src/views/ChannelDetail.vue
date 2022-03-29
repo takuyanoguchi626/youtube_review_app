@@ -7,6 +7,9 @@
         概要欄をcheck！
       </button>
       <div class="channel-description" v-if="flag">
+      <a class="waves-effect waves-light btn" v-on:click="favoriteChannel()"
+        ><i class="material-icons left">star_border</i>お気に入り</a
+      >
         {{ currentChannel.description }}
       </div>
       <hr />
@@ -47,7 +50,7 @@ export default class XXXComponent extends Vue {
   private currentChannel = new Channels("", "", "", "", "", 1, 1, 1);
   private videoArr = new Array<Videos>();
   private flag = false;
-  private apiKey = "AIzaSyAzfoPPbpueXEcQypbLRLXXNCz5JQFDtlc";
+  private apiKey = this.$store.getters.getApiKey;
   async created(): Promise<void> {
     // スクロールトップボタン
     scrollTop(1); // 遅すぎるとガクガクになるので注意
@@ -118,6 +121,13 @@ export default class XXXComponent extends Vue {
    */
   showDescription(): void {
     this.flag = true;
+  }
+  /**
+   * チャンネル情報をfavoriteListに入れる.
+   */
+  favoriteChannel(): void {
+    this.$store.commit("addChannelData", this.currentChannel);
+    console.log(this.$store.state.accountList);
   }
 }
 </script>
