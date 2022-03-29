@@ -110,7 +110,6 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { Account } from "@/types/Account";
 
 @Component
 export default class XXXComponent extends Vue {
@@ -128,14 +127,11 @@ export default class XXXComponent extends Vue {
     const currentUser = this.$store.getters.getCurrentUser;
     return currentUser.id;
   }
+
   /**
    * ログイン中のユーザーのアイコン取得.
    * @returns - ログイン中のユーザーのアイコン
    */
-  get currentUserImg(): Account {
-    const currentUser = this.$store.getters.getCurrentUser;
-    return currentUser.img;
-  }
   get accountImg(): string {
     const accountList = this.$store.getters.getAccountList;
 
