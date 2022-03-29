@@ -18,7 +18,7 @@ export default new Vuex.Store({
     // ユーザー情報
     accountList: [
       new Account(
-        3,
+        1,
         "鈴木太郎",
         "aaaa",
         "/img/pagu.jpg",
@@ -26,7 +26,16 @@ export default new Vuex.Store({
         "ssss",
         "aaaaa",
         [
-          new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1),
+          new Channels(
+            "id",
+            "dddsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
+            "ddd",
+            "sss",
+            "/img/pagu.jpg",
+            1,
+            1,
+            1
+          ),
           new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1),
           new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1),
           new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1),
@@ -122,7 +131,7 @@ export default new Vuex.Store({
         ]
       ),
       new Account(
-        1,
+        3,
         "佐藤次郎",
         "aaaa",
         "/img/pagu.jpg",
@@ -196,7 +205,9 @@ export default new Vuex.Store({
      * @param context コンテキスト
      */
     async getSoaringVideos(context) {
+
       const key = context.getters.getApiKey;
+
       const responce = await axios.get(
         `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&chart=mostPopular&regionCode=JP&maxResults=50&key=${key}`
       );

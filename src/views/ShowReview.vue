@@ -13,7 +13,7 @@
 
         <div class="description">
           <router-link :to="'/myProfile/' + targetAccount.id">
-            <p class="name">アカウント名： {{ targetAccount.name }}</p>
+            <p>アカウント名： {{ targetAccount.name }}</p>
           </router-link>
           <p>登録情報</p>
           <p>自己紹介： {{ targetAccount.introduction }}</p>
@@ -30,7 +30,7 @@
           </router-link>
           <div>
             <router-link :to="'/videoDetail/' + targetReview.videos.id">
-              <p class="name">タイトル：{{ targetReview.videos.title }}</p>
+              <p>タイトル：{{ targetReview.videos.title }}</p>
             </router-link>
             <p>再生回数：{{ targetReview.videos.formatViewCount }}</p>
             <span class="movieDescription">
@@ -39,29 +39,12 @@
             <p>投稿日：{{ targetReview.videos.formatPublishedAt }}</p>
           </div>
           <div class="evaluation">
-            <p v-if="targetReview.evaluation === '5'">
+            <p>
               評価：
-              <span class="star5_rating" data-rate="5"></span>
-            </p>
-            <p v-if="targetReview.evaluation === '4'">
-              評価：
-              <span class="star5_rating" data-rate="4"></span>
-            </p>
-            <p v-if="targetReview.evaluation === '3'">
-              評価：
-              <span class="star5_rating" data-rate="3"></span>
-            </p>
-            <p v-if="targetReview.evaluation === '2'">
-              評価：
-              <span class="star5_rating" data-rate="2"></span>
-            </p>
-            <p v-if="targetReview.evaluation === '1'">
-              評価：
-              <span class="star5_rating" data-rate="1"></span>
-            </p>
-            <p v-if="targetReview.evaluation === '0'">
-              評価：
-              <span class="star5_rating" data-rate="0"></span>
+              <span
+                class="star5_rating"
+                :data-rate="targetReview.evaluation"
+              ></span>
             </p>
           </div>
         </div>
@@ -118,6 +101,7 @@ export default class XXXComponent extends Vue {
   private favoriteCount = this.targetReview.favoriteCount;
 
   created(): void {
+
     // スクロールトップボタン
     scrollTop(1); // 遅すぎるとガクガクになるので注意
 
@@ -140,6 +124,7 @@ export default class XXXComponent extends Vue {
     }
 
     // URLから取得したid
+
     const reviewParamsId = this.$route.params.id;
     console.dir(JSON.stringify("reviewParamsId" + reviewParamsId));
     console.log(this.accountList);
@@ -187,9 +172,6 @@ export default class XXXComponent extends Vue {
   width: 50%;
   margin: 10px;
   padding: 5px;
-}
-.name {
-  font-weight: bold;
 }
 .movie {
   width: 300px;

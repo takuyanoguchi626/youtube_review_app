@@ -13,7 +13,7 @@
       <div>{{ videoDetail.title }}</div>
       <div>
         動画投稿日：{{ videoDetail.formatPublishedAt }} / 再生回数：{{
-          videoDetail.viewCount
+          videoDetail.formatViewCount
         }}回
       </div>
       <br />
@@ -29,7 +29,9 @@
     </div>
 
     <div class="review">
-      <add-review :videoDetail="videoDetail"></add-review>
+      <div>
+        <button @click="postReview">レビューを投稿する</button>
+      </div>
       <div class="row" v-for="review of reviewList" :key="review.id">
         <router-link :to="'/showReview/' + review.reviewId">
           <div class="col s12">
@@ -93,7 +95,9 @@ export default class XXXComponent extends Vue {
     }
 
     const videoId = this.$route.params.id;
+
     const key = this.$store.getters.getApiKey;
+
     const responce = await axios.get(
       `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&key=${key}&id=${videoId}`
     );
@@ -131,6 +135,10 @@ export default class XXXComponent extends Vue {
     );
     console.log(this.reviewList[0].accountIcon);
   } //end created
+
+  postReview(): void {
+    this.$router.push(`/addReview/${this.videoDetail.id}`);
+  }
 }
 </script>
 
