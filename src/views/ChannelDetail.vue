@@ -28,12 +28,14 @@
         <hr />
       </div>
       <div class="channel-description" v-if="flag">
+
         <a
           class="waves-effect waves-light btn"
           v-on:click="favoriteChannel()"
           :disabled="favoriteFlag"
           ><i class="material-icons left">star_border</i>お気に入り</a
         >
+
         {{ currentChannel.description }}
       </div>
       <hr />
@@ -213,10 +215,7 @@ export default class XXXComponent extends Vue {
   width: 550px;
   padding: 10px;
   padding-bottom: 0;
-  /* height: 700px; */
   object-fit: cover;
-
-  /* object-fit: cover; */
 }
 .video-title {
   font-weight: bold;
@@ -241,8 +240,6 @@ export default class XXXComponent extends Vue {
 .videos {
   overflow-x: auto;
   height: 552px;
-  /* object-fit: cover; */
-
   margin-top: 30px;
 }
 .favoriteBtn {

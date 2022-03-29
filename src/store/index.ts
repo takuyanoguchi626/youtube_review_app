@@ -18,63 +18,7 @@ export default new Vuex.Store({
     // Youtuber情報
     youtubersInfo: Array<Channels>(),
     // ユーザー情報
-    accountList:
-      // Array<Account>(),
-
-      [
-        new Account(
-          2,
-          "山田花子",
-          "aaaa",
-          "/img/pagu.jpg",
-          "aaas",
-          "ssss",
-          "aaaaa",
-          [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
-          [
-            new Review(
-              "",
-              4,
-              1,
-              "",
-              "",
-              new Videos(
-                1,
-                "ss",
-                "ss",
-                "ss",
-                "/img/pagu.jpg",
-                "ss",
-                "ss",
-                "ss"
-              ),
-              1,
-              "レビューのプレビュー",
-              new Array<number>()
-            ),
-            new Review(
-              "",
-              5,
-              1,
-              "",
-              "",
-              new Videos(
-                1,
-                "ss",
-                "ss",
-                "ss",
-                "/img/pagu.jpg",
-                "ss",
-                "ss",
-                "ss"
-              ),
-              1,
-              "レビューのプレビュー",
-              new Array<number>()
-            ),
-          ]
-        ),
-      ],
+    accountList: Array<Account>(),
     soaringVideos: Array<Videos>(),
     currentUser: new Account(
       0,
@@ -96,11 +40,10 @@ export default new Vuex.Store({
       "AIzaSyAgRYbghnEpgHX9f980fKCzlTP6vESPkwo",
       "AIzaSyByE-aaIhWOBWxX0MdlUN6szX6qMe7kX5s",
       "AIzaSyAjmyhCg__LtgHseTa_w2NzZGdD_YLoVZY",
-      "AIzaSyDgB9MCfZvVqjzt_psZxNqxmdv06AJXDNg"
+      "AIzaSyDgB9MCfZvVqjzt_psZxNqxmdv06AJXDNg",
       "AIzaSyD1hsARhNyLS07rUwz6fqrVp2pWnGvkWTQ",
       "AIzaSyChyFfGpQSYRhWTBuyeXTflkqTd4Sgc1HU",
       "AIzaSyBaI5sqV11bUD-EzLC_lRmHBQztOctDwOc"
-
     ),
   },
   actions: {

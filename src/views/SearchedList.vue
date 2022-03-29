@@ -15,10 +15,12 @@
               >
                 <div class="c-item col card white">
                   <div>
-                    <img
-                      class="item-icon"
-                      v-bind:src="searchedChannel.thumbnailsUrl"
-                    />
+                    <router-link :to="'/channelDetail/' + searchedChannel.id">
+                      <img
+                        class="item-icon"
+                        v-bind:src="searchedChannel.thumbnailsUrl"
+                      />
+                    </router-link>
                   </div>
                   <router-link :to="'/channelDetail/' + searchedChannel.id">{{
                     searchedChannel.title
