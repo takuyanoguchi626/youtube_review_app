@@ -184,8 +184,8 @@ export default class XXXComponent extends Vue {
 </script>
 
 <style scoped>
-.header-logo {
-  display: flexbox;
+header {
+  margin-bottom: 20px;
 }
 .headerContainer {
   margin: 0 auto;
