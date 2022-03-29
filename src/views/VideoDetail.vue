@@ -108,7 +108,11 @@ export default class XXXComponent extends Vue {
     }
 
     const videoId = this.$route.params.id;
+
     const key = "AIzaSyC5rIjlnyhMouOVCBNhykDYlhw72d_j5CI";
+
+    // const key = this.$store.getters.getApiKey;
+
     const responce = await axios.get(
       `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&key=${key}&id=${videoId}`
     );

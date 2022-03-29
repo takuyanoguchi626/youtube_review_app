@@ -96,27 +96,46 @@ import { Channels } from "@/types/Channels";
 import { Review } from "@/types/Review";
 @Component
 export default class XXXComponent extends Vue {
+  // 姓
   private lastName = "";
+  // 名前
   private firstName = "";
+  // メールアドレス
   private email = "";
+  // 電話番号
   private tel = "";
+  // パスワード
   private password = "";
+  // 確認用パスワード
   private passwordConfirm = "";
+  // 姓のエラー文
   private lastNameError = "";
+  // 名のエラー文
   private firstNameError = "";
+  // メールアドレスのエラー文
   private emailError = "";
+  // 電話番号のエラー文
   private telError = "";
+  // パスワードのエラー文
   private passwordError = "";
+  // 確認用パスワードのエラー文
   private passwordConfirmError = "";
+  // エラーチェッカー
   private errorChecker = false;
 
+  /**
+   * ユーザー登録情報をstoreに送る.
+   */
   public register(): void {
+    // 空にする
     this.lastNameError = "";
     this.firstNameError = "";
     this.emailError = "";
     this.telError = "";
     this.passwordError = "";
     this.passwordConfirmError = "";
+
+    // エラーハンドリング
     if (this.lastName === "") {
       this.lastNameError = "姓を入力してください";
       this.errorChecker = true;
@@ -145,40 +164,59 @@ export default class XXXComponent extends Vue {
       this.passwordError = "パスワードと確認用パスワードが異なります";
       this.errorChecker = true;
     }
+    //既にの登録されているアカウント情報の取得
+    const accountList = this.$store.getters.getAccountList;
+    // 既に登録されたメールアドレスが入力された時にエラーを出す
+    for (let account of accountList) {
+      if (this.email === account.mailaddless) {
+        this.emailError = "既に登録されたメールアドレスが入力されています";
+        this.errorChecker = true;
+      }
+    }
     if (this.errorChecker === true) {
       this.errorChecker = false;
       return;
     }
-    const accountList = this.$store.getters.getAccountList;
-    const accountId = accountList.id;
-    if (accountId === undefined) {
+
+    // 登録されているユーザー情報の取得
+    const accountLastId = this.$store.getters.getLastUserId;
+    // 新たなユーザーに使用するID１
+    let newUserId = 0;
+    // idが既に存在する場合と存在しない場合で新たに付与するidを分ける
+    if (accountLastId === 0) {
       const newAccount = new Account(
-        0,
+        1,
         this.lastName + this.firstName,
         "",
-        "",
+        "/img/egg.png",
         this.email,
         this.tel,
         this.password,
         new Array<Channels>(),
         new Array<Review>()
       );
+      newUserId = newAccount.id;
       this.$store.commit("addUser", newAccount);
+      this.$store.commit("addLastUserId", newUserId);
+      this.$router.push("/top");
     } else {
       const newAccount = new Account(
-        accountList[accountList.length - 1].id + 1,
+        accountLastId + 1,
         this.lastName + this.firstName,
         "",
-        "",
+        "/img/egg.png",
         this.email,
         this.tel,
         this.password,
         new Array<Channels>(),
         new Array<Review>()
       );
+      newUserId = newAccount.id;
       this.$store.commit("addUser", newAccount);
+      this.$store.commit("addLastUserId", newUserId);
+      this.$router.push("/top");
     }
-    console.log(accountList);
+    console.log(this.$store.state.accountList);
   }
 }
 </script>

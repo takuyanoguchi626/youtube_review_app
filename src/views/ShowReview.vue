@@ -50,9 +50,13 @@
         </div>
         <div class="review">
           <p>
-            {{ targetReview.review }}<br />
             レビュー投稿日：{{ targetReview.reviewDate }}
+            {{ targetReview.review }}<br />
           </p>
+          <a class="waves-effect waves-light btn" v-on:click="favoriteReview()"
+            ><i class="material-icons left">thumb_up</i>いいね</a
+          >
+          {{ favoriteCount }}
         </div>
       </div>
     </div>
@@ -67,6 +71,7 @@ import { Channels } from "@/types/Channels";
 import { Component, Vue } from "vue-property-decorator";
 @Component
 export default class XXXComponent extends Vue {
+  // ステートから取得したユーザー情報
   private targetAccount = new Account(
     0,
     "",
@@ -78,6 +83,7 @@ export default class XXXComponent extends Vue {
     new Array<Channels>(),
     new Array<Review>()
   );
+  // ステートから取得したレビュー情報
   private targetReview = new Review(
     "",
     0,
@@ -89,13 +95,41 @@ export default class XXXComponent extends Vue {
     "",
     0
   );
+  // ステートの全ユーザー情報
   private accountList = this.$store.getters.getAccountList;
 
+  private favoriteCount = this.targetReview.favoriteCount;
+
   created(): void {
+
+    // スクロールトップボタン
+    scrollTop(1); // 遅すぎるとガクガクになるので注意
+
+    function scrollTop(duration: number) {
+      let currentY = window.pageYOffset; // 現在のスクロール位置を取得
+      let step = duration / currentY > 1 ? 10 : 100; // 三項演算子
+      let timeStep = (duration / currentY) * step; // スクロール時間
+      let intervalId = setInterval(scrollUp, timeStep);
+      // timeStepの間隔でscrollUpを繰り返す。
+      // clearItervalのために返り値intervalIdを定義する。
+
+      function scrollUp() {
+        currentY = window.pageYOffset;
+        if (currentY === 0) {
+          clearInterval(intervalId); // ページ最上部に来たら終了
+        } else {
+          scrollBy(0, -step); // step分上へスクロール
+        }
+      }
+    }
+
+    // URLから取得したid
+
     const reviewParamsId = this.$route.params.id;
     console.dir(JSON.stringify("reviewParamsId" + reviewParamsId));
     console.log(this.accountList);
 
+    // ステートの情報の中からURLで付与されたものと同一の一意のidのレビューを取得する
     for (const account of this.accountList) {
       console.dir(JSON.stringify("account" + account));
 
@@ -112,6 +146,16 @@ export default class XXXComponent extends Vue {
         }
       }
     }
+  }
+  /**
+   * レビューにいいねをする.
+   */
+  favoriteReview(): void {
+    this.favoriteCount = this.favoriteCount + 1;
+    const review = this.targetReview;
+    review.favoriteCount = this.favoriteCount;
+    this.$store.commit("addFavoriteCount", review.favoriteCount);
+    console.log(this.$store.state.accountList);
   }
 }
 </script>
