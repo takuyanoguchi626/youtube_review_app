@@ -44,7 +44,7 @@
               id="nav-mobile"
               class="hide-on-med-and-down right menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-5 current_page_item menu-item-24"
             >
-            <!-- v-ifでログインの有無によるボタンの表示を分ける -->
+              <!-- v-ifでログインの有無によるボタンの表示を分ける -->
               <li
                 v-if="currentUserId === 0"
                 id="menu-item-24"
@@ -128,7 +128,7 @@ export default class XXXComponent extends Vue {
       this.$router.push(`/2searchedList/${searchText}`);
       return;
     } else if (location.pathname.startsWith("/2searchedList")) {
-        // 入力欄を空にする
+      // 入力欄を空にする
       this.searchText = "";
       // ドメイン以下のパス名が /2searchedList/${searchText} の場合に実行する処理
       this.$router.push(`/searchedList/${searchText}`);
@@ -136,7 +136,7 @@ export default class XXXComponent extends Vue {
     }
 
     // 通常実行する処理
-      // 入力欄を空にする
+    // 入力欄を空にする
     this.searchText = "";
     this.$router.push(`/searchedList/${searchText}`);
     return;
@@ -152,8 +152,8 @@ export default class XXXComponent extends Vue {
 </script>
 
 <style scoped>
-.header-logo {
-  display: flexbox;
+header {
+  margin-bottom: 20px;
 }
 .headerContainer {
   margin: 0 auto;
