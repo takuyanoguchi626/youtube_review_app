@@ -77,10 +77,29 @@
             v-for="(account, index) of recommendationAccountList"
             :key="index"
           >
-            <div class="account-name">{{ account.name }}</div>
-            <router-link :to="'/myProfile/' + account.id"
-              ><img class="account-img" :src="account.img"
-            /></router-link>
+            <div class="account-top">
+              <router-link :to="'/myProfile/' + account.id"
+                ><img
+                  class="account-img circle responsive-img"
+                  :src="account.img"
+              /></router-link>
+              <div class="account-right">
+                <div class="account-name">{{ account.name }}</div>
+                <div>レビュー数：{{ account.reviewList.length }}件</div>
+              </div>
+            </div>
+            <img
+              class="review-list"
+              :src="account.reviewList[0].videos.thumbnailsUrl"
+            />
+            <!-- <img
+                class="review-list"
+                :src="account.reviewList[1].videos.thumbnailsUrl"
+              />
+              <img
+                class="review-list"
+                :src="account.reviewList[2].videos.thumbnailsUrl"
+              /> -->
           </div>
         </div>
       </div>
@@ -130,8 +149,6 @@ export default class XXXComponent extends Vue {
      * 総レビュー数を取得する.
      */
     this.reviewCounts = this.$store.getters.getReviewCounts;
-    console.log(this.reviewCounts);
-
     // スクロールトップボタン
     scrollTop(1); // 遅すぎるとガクガクになるので注意
     function scrollTop(duration: number) {
@@ -184,8 +201,13 @@ export default class XXXComponent extends Vue {
         }
       }
     }
+    // 人気アカウントとレビューした動画のサムネMAX3件表示
     this.$store.commit("sortByReviewCount");
     this.recommendationAccountList = this.$store.getters.getAccountList;
+    console.log(this.recommendationAccountList);
+    // for (let i = 1; i <= 3; i++) {
+    //   if (this.recommendationAccountList.reviewList[i] !== undefined){}
+    // }
   }
   /**
    *ユーザー登録画面に遷移する.
@@ -381,17 +403,30 @@ iframe {
 .popular-account {
   margin-right: 10px;
   margin-bottom: 30px;
-  padding: 30px;
+  padding-left: 5px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  padding-right: 20px;
+}
+.account-top {
+  display: flex;
 }
 .account-name {
+  text-align: right;
   font-size: 20px;
-  border: solid 3px black;
-  padding: 10px;
+  padding-top: 10px;
 }
 .account-img {
-  width: 280px;
-  height: 250px;
+  width: 120px;
+  height: 120px;
   object-fit: cover;
+  margin-right: 30px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+.review-list {
+  width: 70px;
+  height: 50px;
 }
 /* サブタイトル */
 .subtitle {

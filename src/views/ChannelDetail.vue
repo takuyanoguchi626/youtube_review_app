@@ -3,21 +3,23 @@
     <div class="youtuber item col card white">
       <img class="img1" :src="currentChannel.thumbnailsUrl" />
       <div class="channel-title">{{ currentChannel.title }}</div>
-      <p>
+      <button class="btn" type="button" v-on:click="showDescription">
+        概要欄をcheck！
+      </button>
+      <div class="channel-description" v-if="flag">
         {{ currentChannel.description }}
-      </p>
-      <span>総再生回数：{{ currentChannel.formatViewCount }}回</span><br />
-      <span>
-        チャンネル登録者数：{{ currentChannel.formatSubscriberCount }}人</span
-      >
+      </div>
+      <hr />
+      <div class="counts">
+        <span>総再生回数：{{ currentChannel.formatViewCount }}回</span><br />
+        <span>
+          チャンネル登録者数：{{ currentChannel.formatSubscriberCount }}人</span
+        >
+      </div>
     </div>
 
-    <div class="videos">
-      <div
-        v-for="videoDetail of videoArr"
-        :key="videoDetail.id"
-        class="item col card white video-card"
-      >
+    <div class="videos item col card white video-card">
+      <div v-for="videoDetail of videoArr" :key="videoDetail.id">
         <router-link :to="'/videoDetail/' + videoDetail.id"
           ><img class="img2" :src="videoDetail.thumbnailsUrl"
         /></router-link>
@@ -29,6 +31,7 @@
         <span>投稿日：{{ videoDetail.formatPublishedAt }}</span
         ><br />
         <span>{{ videoDetail.description }}</span>
+        <hr />
       </div>
     </div>
   </div>
@@ -44,6 +47,7 @@ export default class XXXComponent extends Vue {
   private currentChannel = new Channels("", "", "", "", "", 1, 1, 1);
   private videoArr = new Array<Videos>();
   private apiKey = "AIzaSyAjmyhCg__LtgHseTa_w2NzZGdD_YLoVZY";
+  private flag = false;
 
   async created(): Promise<void> {
     // スクロールトップボタン
@@ -104,6 +108,13 @@ export default class XXXComponent extends Vue {
         )
       );
     }
+    if (this.currentChannel.description === "") {
+      this.currentChannel.description =
+        "このYoutuberの概要欄は見つかりませんでした";
+    }
+  }
+  showDescription(): void {
+    this.flag = true;
   }
 }
 </script>
@@ -127,6 +138,7 @@ export default class XXXComponent extends Vue {
   margin-right: 30px;
   width: 50%;
   padding: 10px;
+  height: 820px;
 }
 .video-title {
   font-weight: bold;
@@ -148,7 +160,12 @@ export default class XXXComponent extends Vue {
   overflow-x: auto;
   height: 700px;
 }
-p {
-  overflow-y: auto;
+.channel-description {
+  margin-top: 5px;
+  height: 22%;
+  overflow-x: auto;
+}
+.counts {
+  margin-top: 20px;
 }
 </style>
