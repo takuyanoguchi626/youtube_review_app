@@ -173,7 +173,7 @@ export default class XXXComponent extends Vue {
 }
 .videos {
   overflow-x: auto;
-  height: 700px;
+  height: 840px;
 }
 .channel-description {
   margin-top: 5px;
