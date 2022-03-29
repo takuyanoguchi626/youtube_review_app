@@ -1,14 +1,6 @@
 <template>
   <div id="app">
     <CompHeader />
-    <div id="nav">
-      <router-link to="/iconChange">IconChange</router-link> |
-      <router-link :to="'/myProfile/' + 3">MyProfile</router-link>|
-      <router-link to="/selfIntroductionChange"
-        >SelfIntroductionChange</router-link
-      >
-      <router-link to="/showReview">showReview</router-link>|
-    </div>
     <router-view />
     <CompFooter />
   </div>
