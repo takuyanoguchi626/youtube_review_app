@@ -15,10 +15,12 @@
               >
                 <div class="c-item col card white">
                   <div>
-                    <img
-                      class="item-icon"
-                      v-bind:src="searchedChannel.thumbnailsUrl"
-                    />
+                    <router-link :to="'/channelDetail/' + searchedChannel.id">
+                      <img
+                        class="item-icon"
+                        v-bind:src="searchedChannel.thumbnailsUrl"
+                      />
+                    </router-link>
                   </div>
                   <router-link :to="'/channelDetail/' + searchedChannel.id">{{
                     searchedChannel.title
@@ -109,8 +111,6 @@ export default class XXXComponent extends Vue {
   // 外部APIキー
   private key = this.$store.getters.getApiKey;
   // 検索ワード
-
-
 
   private searchText = "";
 
