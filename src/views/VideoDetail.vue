@@ -45,9 +45,9 @@
         {{ channelDetail.description }}
       </div>
       <hr v-if="flag" />
-      <div>総再生回数：{{ channelDetail.viewCount }}回</div>
-      <div>チャンネル登録者数：{{ channelDetail.subscriberCount }}人</div>
-      <div>総動画数：{{ channelDetail.videoCount }}個</div>
+      <div>総再生回数：{{ channelDetail.formatViewCount }}回</div>
+      <div>チャンネル登録者数：{{ channelDetail.formatSubscriberCount }}人</div>
+      <div>総動画数：{{ channelDetail.formatVideoCount }}個</div>
     </div>
 
     <div class="review">
@@ -129,14 +129,10 @@ export default class XXXComponent extends Vue {
     }
 
     const videoId = this.$route.params.id;
-
     const key = this.$store.getters.getApiKey;
-
     const responce = await axios.get(
       `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&key=${key}&id=${videoId}`
     );
-    console.log("call2");
-    console.log(responce);
     const responceVideo = responce.data.items[0];
     this.videoDetail = new Videos(
       responceVideo.id,
@@ -148,11 +144,9 @@ export default class XXXComponent extends Vue {
       responceVideo.tags,
       responceVideo.statistics.viewCount
     );
-
     const responce2 = await axios.get(
       `https://www.googleapis.com/youtube/v3/channels?key=${key}&part=snippet,contentDetails,statistics,status&id=${responceVideo.snippet.channelId}`
     );
-    console.log("call4");
     const responceChannel = responce2.data.items[0];
     this.channelDetail = new Channels(
       responceChannel.id,
@@ -167,7 +161,6 @@ export default class XXXComponent extends Vue {
     this.reviewList = this.$store.getters.getReviewListByVideoId(
       this.videoDetail
     );
-    console.log(this.reviewList[0].accountIcon);
   } //end created
 
   showDescription(): void {

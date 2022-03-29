@@ -28,10 +28,10 @@
                   ><br />
                   <span class="title"></span>登録者数：{{
                     searchedChannel.formatSubscriberCount
-                  }}<br />
+                  }}人<br />
                   <span class="title"></span>総動画数：{{
                     searchedChannel.formatViewCount
-                  }}<br />
+                  }}個<br />
                   <span class="title"></span>説明：{{
                     searchedChannel.description
                   }}<br />
@@ -70,7 +70,7 @@
                       ><br />
                       <span class="title"></span>再生回数：{{
                         searchedVideo.viewCount
-                      }}<br />
+                      }}回<br />
                       <span class="title"></span>投稿日：{{
                         searchedVideo.formatPublishedAt
                       }}<br />
