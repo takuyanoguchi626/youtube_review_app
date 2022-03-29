@@ -57,7 +57,7 @@
               :disabled="flag"
               ><i class="material-icons left">thumb_up</i>いいね</a
             >
-            {{ favoriteCount.length }}
+            {{ count }}
           </div>
         </div>
       </div>
@@ -104,6 +104,30 @@ export default class XXXComponent extends Vue {
   // ボタンの使用可否
   private flag = false;
   private currentUserId = this.$store.getters.getCurrentUser.id;
+
+  get reviewFavorite(): Review {
+    // URLから取得したid
+
+    const reviewParamsId = this.$route.params.id;
+    console.dir(JSON.stringify("reviewParamsId" + reviewParamsId));
+    console.log(this.accountList);
+
+    // ステートの情報の中からURLで付与されたものと同一の一意のidのレビューを取得する
+    for (const account of this.accountList) {
+      console.dir(JSON.stringify("account" + account));
+
+      for (const review of account.reviewList) {
+        console.dir(JSON.stringify("review" + review));
+
+        if (Number(reviewParamsId) === review.reviewId) {
+          this.targetReview = review;
+        }
+      }
+    }
+    return this.targetReview;
+  }
+
+  private count = this.reviewFavorite.favoriteCount.length;
 
   created(): void {
     // スクロールトップボタン
@@ -153,7 +177,8 @@ export default class XXXComponent extends Vue {
     // ログインしていない、または投稿した本人だったらボタンを押せなくする
     if (
       this.targetReview.accountId === this.currentUserId ||
-      this.currentUserId === 0
+      this.currentUserId === 0 ||
+      this.reviewFavorite.favoriteCount.includes(this.currentUserId)
     ) {
       this.flag = true;
     }
@@ -162,15 +187,16 @@ export default class XXXComponent extends Vue {
    * レビューにいいねをする.
    */
   favoriteReview(): void {
-    this.favoriteCount.push(this.targetAccount.id);
+    this.count = this.count + 1;
+    this.reviewFavorite.favoriteCount.push(this.currentUserId);
 
     // 取得したレビューのいいね情報に現在のユーザー情報が含まれていたらボタンを押せなくする
 
-    if (this.favoriteCount.includes(this.currentUserId)) {
+    if (this.reviewFavorite.favoriteCount.includes(this.currentUserId)) {
       this.flag = true;
     }
 
-    this.$store.commit("addFavorite", this.targetReview);
+    this.$store.commit("addFavorite", this.reviewFavorite.favoriteCount);
   }
 }
 </script>
