@@ -255,14 +255,14 @@ export default class XXXComponent extends Vue {
 }
 .video-description {
   height: 60px;
-  width: 40vw;
+  width: 550px;
   overflow-wrap: break-word;
   overflow-y: scroll;
   display: block;
 }
 .channel-description {
   height: 200px;
-  width: 19vw;
+  width: 260px;
   overflow-wrap: break-word;
   overflow-y: scroll;
   display: block;
