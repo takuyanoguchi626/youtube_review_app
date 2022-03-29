@@ -103,11 +103,11 @@ export default class XXXComponent extends Vue {
   private favoriteCount = this.targetReview.favoriteCount;
   // ボタンの使用可否
   private flag = false;
+  // ログイン中のユーザー
   private currentUserId = this.$store.getters.getCurrentUser.id;
-
+  // ステートから取得したレビュー
   get reviewFavorite(): Review {
     // URLから取得したid
-
     const reviewParamsId = this.$route.params.id;
     console.dir(JSON.stringify("reviewParamsId" + reviewParamsId));
     console.log(this.accountList);
@@ -115,10 +115,8 @@ export default class XXXComponent extends Vue {
     // ステートの情報の中からURLで付与されたものと同一の一意のidのレビューを取得する
     for (const account of this.accountList) {
       console.dir(JSON.stringify("account" + account));
-
       for (const review of account.reviewList) {
         console.dir(JSON.stringify("review" + review));
-
         if (Number(reviewParamsId) === review.reviewId) {
           this.targetReview = review;
         }
@@ -126,7 +124,7 @@ export default class XXXComponent extends Vue {
     }
     return this.targetReview;
   }
-
+  // レビューのいいねカウント
   private count = this.reviewFavorite.favoriteCount.length;
 
   created(): void {
@@ -190,7 +188,7 @@ export default class XXXComponent extends Vue {
     this.count = this.count + 1;
     this.reviewFavorite.favoriteCount.push(this.currentUserId);
 
-    // 取得したレビューのいいね情報に現在のユーザー情報が含まれていたらボタンを押せなくする
+    // レビューのいいね情報に現在のユーザー情報が含まれていたらボタンを押せなくする
 
     if (this.reviewFavorite.favoriteCount.includes(this.currentUserId)) {
       this.flag = true;
