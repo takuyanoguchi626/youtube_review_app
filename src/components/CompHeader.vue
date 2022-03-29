@@ -44,6 +44,7 @@
               id="nav-mobile"
               class="hide-on-med-and-down right menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-5 current_page_item menu-item-24"
             >
+            <!-- v-ifでログインの有無によるボタンの表示を分ける -->
               <li
                 v-if="currentUserId === 0"
                 id="menu-item-24"
@@ -121,26 +122,29 @@ export default class XXXComponent extends Vue {
 
     // 検索表示画面でこのメソッドを実行するとcreatedメソッドは動かずリロードされないため、同一のページを行き来するように条件分岐する
     if (location.pathname.startsWith("/searchedList")) {
-      console.log("2" + location.pathname);
+      // 入力欄を空にする
       this.searchText = "";
       // ドメイン以下のパス名が /searchedList/${searchText} の場合に実行する処理
       this.$router.push(`/2searchedList/${searchText}`);
       return;
     } else if (location.pathname.startsWith("/2searchedList")) {
-      console.log("1" + location.pathname);
+        // 入力欄を空にする
       this.searchText = "";
       // ドメイン以下のパス名が /2searchedList/${searchText} の場合に実行する処理
       this.$router.push(`/searchedList/${searchText}`);
       return;
     }
-    this.searchText = "";
+
     // 通常実行する処理
+      // 入力欄を空にする
+    this.searchText = "";
     this.$router.push(`/searchedList/${searchText}`);
     return;
   }
-
+  /**
+   * ログアウトする.
+   */
   removeUser(): void {
-    console.log("イベント発火");
     this.$store.commit("removeUser");
     console.log(this.$store.state.currentUser);
   }

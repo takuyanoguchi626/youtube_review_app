@@ -108,6 +108,9 @@ export default class XXXComponent extends Vue {
       );
     }
   }
+  /**
+   * チャンネル情報をfavoriteListに入れる.
+   */
   favoriteChannel(): void {
     this.$store.commit("addChannelData", this.currentChannel);
     console.log(this.$store.state.accountList);

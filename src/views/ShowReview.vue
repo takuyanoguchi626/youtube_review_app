@@ -162,6 +162,9 @@ export default class XXXComponent extends Vue {
       }
     }
   }
+  /**
+   * レビューにいいねをする.
+   */
   favoriteReview(): void {
     this.favoriteCount = this.favoriteCount + 1;
     const review = this.targetReview;
