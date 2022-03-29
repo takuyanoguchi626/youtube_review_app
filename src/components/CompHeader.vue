@@ -212,4 +212,8 @@ textarea {
   height: 55px;
   object-fit: cover;
 }
+
+.materialize-textarea {
+  color: aliceblue;
+}
 </style>

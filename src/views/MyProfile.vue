@@ -36,7 +36,7 @@
         <router-link :to="'/channelDetail/' + favoriteChannel.id">
           <div class="icon2">
             <img
-              class="circle responsive-img image2 channel"
+              class="circle responsive-img image2 channel image5"
               :src="favoriteChannel.thumbnailsUrl"
             />
           </div>
@@ -230,7 +230,7 @@ export default class XXXComponent extends Vue {
   object-fit: cover;
 }
 
-.image2:hover {
+.image5:hover {
   opacity: 0.6;
 }
 
