@@ -88,18 +88,14 @@
                 <div>レビュー数：{{ account.reviewList.length }}件</div>
               </div>
             </div>
-            <img
-              class="review-list"
-              :src="account.reviewList[0].videos.thumbnailsUrl"
-            />
-            <!-- <img
-                class="review-list"
-                :src="account.reviewList[1].videos.thumbnailsUrl"
-              />
-              <img
-                class="review-list"
-                :src="account.reviewList[2].videos.thumbnailsUrl"
-              /> -->
+            <div class="account-bottom">
+              <div
+                v-for="(review, index) of videoThumnails[index]"
+                :key="index"
+              >
+                <img class="review" :src="review.videos.thumbnailsUrl" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -126,6 +122,7 @@ import { Component, Vue } from "vue-property-decorator";
 import { Videos } from "@/types/Videos";
 import { Channels } from "@/types/Channels";
 import { Account } from "@/types/Account";
+import { Review } from "@/types/Review";
 
 @Component
 export default class XXXComponent extends Vue {
@@ -143,6 +140,8 @@ export default class XXXComponent extends Vue {
   private flag = true;
   // 総レビュー数
   private reviewCounts = 0;
+  // 動画のサムネイル
+  private videoThumnails = Array<Array<Review>>();
 
   async created(): Promise<void> {
     /**
@@ -204,10 +203,21 @@ export default class XXXComponent extends Vue {
     // 人気アカウントとレビューした動画のサムネMAX3件表示
     this.$store.commit("sortByReviewCount");
     this.recommendationAccountList = this.$store.getters.getAccountList;
-    console.log(this.recommendationAccountList);
-    // for (let i = 1; i <= 3; i++) {
-    //   if (this.recommendationAccountList.reviewList[i] !== undefined){}
-    // }
+    for (let i = 0; i <= 2; i++) {
+      for (let j = 0; j <= 2; j++) {
+        if (this.recommendationAccountList[i].reviewList[j] !== undefined) {
+          if (this.videoThumnails[i] === undefined) {
+            this.videoThumnails.push([
+              this.recommendationAccountList[i].reviewList[j],
+            ]);
+          } else {
+            this.videoThumnails[i].push(
+              this.recommendationAccountList[i].reviewList[j]
+            );
+          }
+        }
+      }
+    }
   }
   /**
    *ユーザー登録画面に遷移する.
@@ -424,9 +434,15 @@ iframe {
   margin-left: 10px;
   margin-bottom: 10px;
 }
-.review-list {
-  width: 70px;
-  height: 50px;
+.account-bottom {
+  display: flex;
+  margin-left: 20px;
+}
+.review {
+  width: 90px;
+  height: 60px;
+  margin-right: 5px;
+  object-fit: cover;
 }
 /* サブタイトル */
 .subtitle {

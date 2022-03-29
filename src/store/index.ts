@@ -109,7 +109,7 @@ export default new Vuex.Store({
           new Review(
             "",
             4,
-            1,
+            2,
             "",
             "",
             new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
@@ -120,7 +120,7 @@ export default new Vuex.Store({
           new Review(
             "",
             5,
-            1,
+            2,
             "",
             "",
             new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
@@ -143,7 +143,7 @@ export default new Vuex.Store({
           new Review(
             "",
             6,
-            1,
+            3,
             "",
             "",
             new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
@@ -196,7 +196,10 @@ export default new Vuex.Store({
       "AIzaSyBOMUoWdabc9lzK4XQFop3x0dYtUeI6agU",
       "AIzaSyAgRYbghnEpgHX9f980fKCzlTP6vESPkwo",
       "AIzaSyByE-aaIhWOBWxX0MdlUN6szX6qMe7kX5s",
-      "AIzaSyAjmyhCg__LtgHseTa_w2NzZGdD_YLoVZY"
+      "AIzaSyAjmyhCg__LtgHseTa_w2NzZGdD_YLoVZY",
+      "AIzaSyD1hsARhNyLS07rUwz6fqrVp2pWnGvkWTQ",
+      "AIzaSyChyFfGpQSYRhWTBuyeXTflkqTd4Sgc1HU",
+      "AIzaSyBaI5sqV11bUD-EzLC_lRmHBQztOctDwOc"
     ),
   },
   actions: {
