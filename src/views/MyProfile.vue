@@ -6,20 +6,28 @@
           :to="'/iconChange/' + currentAccount.id"
           v-if="myAccountFlag"
         >
-          <img class="circle responsive-img image2" :src="currentAccount.img" />
+          <div class="icon">
+            <img
+              class="circle responsive-img image2"
+              :src="currentAccount.img"
+            />
+          </div>
         </router-link>
         <img :src="currentAccount.img" v-else />
       </div>
-      <div>
+      <div class="introduction2">
         <div class="subtitle">
           {{ currentAccount.name }}
         </div>
-        <div>
+        <div class="introduction3">
           {{ currentAccount.introduction }}
         </div>
       </div>
       <div v-if="myAccountFlag" class="selfIntroductionChange">
-        <button class="btn" @click="selfIntroductionChange()">編集</button>
+        <button class="btn icon3" @click="selfIntroductionChange()">
+          <i class="material-icons prefix">build</i>
+          編集
+        </button>
       </div>
     </div>
     <hr />
@@ -30,35 +38,45 @@
         :key="favoriteChannel.id"
       >
         <router-link :to="'/channelDetail/' + favoriteChannel.id">
-          <img
-            class="circle responsive-img image3 channel"
-            :src="favoriteChannel.thumbnailsUrl"
-          />
+          <div class="icon2">
+            <img
+              class="circle responsive-img image2 channel"
+              :src="favoriteChannel.thumbnailsUrl"
+            />
+          </div>
         </router-link>
+        <div class="channelTitle">{{ favoriteChannel.title }}</div>
       </div>
     </div>
     <hr />
     <div class="reviewList">
-      <div v-for="review of currentAccount.reviewList" :key="review.id">
+      <div
+        v-for="review of currentAccount.reviewList"
+        :key="review.id"
+        class="reviewCard"
+      >
         <router-link :to="'/showReview/' + review.reviewId">
           <div class="review z-depth-5">
             <div class="reviewText">
               <div class="subtitle">
                 {{ review.videos.title }}
               </div>
-              <div>
-                {{ review.evaluation }}
+              <div class="evaluation">
+                評価：
+                <span
+                  class="star5_rating"
+                  :data-rate="review.evaluation"
+                ></span>
               </div>
-              <div>
-                {{ review.videos.channelTitle }}
+              <div class="reviewText2">
+                【{{ review.videos.channelTitle }}】
               </div>
+              <hr />
               <div>
                 {{ review.review }}
               </div>
             </div>
-            <div>
-              <img class="image" :src="review.videos.thumbnailsUrl" />
-            </div>
+            <img class="image" :src="review.videos.thumbnailsUrl" />
           </div>
         </router-link>
       </div>
@@ -157,7 +175,6 @@ export default class XXXComponent extends Vue {
 
     console.log(this.$route.params.id);
     const accountId = Number(this.$route.params.id);
-    // const accountId = 3;
     const account = this.$store.getters.getAccountById(accountId);
     this.currentAccount = new Account(
       account.id,
@@ -181,13 +198,44 @@ export default class XXXComponent extends Vue {
 
 <style scoped>
 .image {
-  width: 15vw;
-  object-fit: cover;
+  width: 20vw;
+  /* height: 20hw; */
+  /* object-fit: cover; */
 }
+.icon {
+  width: 100px;
+  height: 100px;
+}
+
+.icon2 {
+  width: 150px;
+  height: 150px;
+  margin-right: 30px;
+}
+
+.icon3 {
+  width: 82px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.icon4 {
+  width: 280px;
+  height: 200px;
+}
+
 .image2 {
-  width: 5vw;
+  width: 100%;
+  height: 100%;
+  margin: auto;
   object-fit: cover;
 }
+
+.image2:hover {
+  opacity: 0.6;
+}
+
 .image3 {
   width: 10vw;
   object-fit: cover;
@@ -200,9 +248,16 @@ export default class XXXComponent extends Vue {
   margin: 0 auto;
 }
 
+.introduction2 {
+  width: 600px;
+  text-align: left;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
 .subtitle {
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 8px;
+  /* margin-bottom: 2px; */
   font-weight: bold;
 }
 
@@ -217,7 +272,7 @@ export default class XXXComponent extends Vue {
 
 .selfIntroductionChange {
   margin-top: 68px;
-  margin-left: 600px;
+  /* margin-left: 600px; */
 }
 
 .reviewList {
@@ -232,10 +287,80 @@ export default class XXXComponent extends Vue {
   justify-content: center;
   margin-left: 30px;
   margin-top: 30px;
-  width: 40vw;
+  width: 550px;
+  height: 200px;
 }
 
 .reviewText {
   width: 350px;
+}
+
+.star5_rating {
+  position: relative;
+  z-index: 0;
+  display: inline-block;
+  white-space: nowrap;
+  color: #cccccc; /* グレーカラー 自由に設定化 */
+  /*font-size: 30px; フォントサイズ 自由に設定化 */
+}
+
+.star5_rating:before,
+.star5_rating:after {
+  content: "★★★★★";
+}
+
+.star5_rating:after {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  color: #ffcf32; /* イエローカラー 自由に設定化 */
+}
+
+.star5_rating[data-rate="5"]:after {
+  width: 100%;
+} /* 星5 */
+
+.star5_rating[data-rate="4"]:after {
+  width: 80%;
+} /* 星4 */
+
+.star5_rating[data-rate="3"]:after {
+  width: 60%;
+} /* 星3 */
+
+.star5_rating[data-rate="2"]:after {
+  width: 40%;
+} /* 星2 */
+
+.star5_rating[data-rate="1"]:after {
+  width: 20%;
+} /* 星1 */
+
+.star5_rating[data-rate="0"]:after {
+  width: 0%;
+} /* 星0 */
+
+.reviewText {
+  overflow-wrap: break-word;
+  overflow: hidden;
+}
+
+.reviewCard:hover {
+  opacity: 0.6;
+}
+
+.channelTitle {
+  width: 150px;
+  height: 50px;
+  margin-left: 30px;
+  overflow-wrap: break-word;
+  overflow: hidden;
+}
+
+.introduction3 {
+  overflow-wrap: break-word;
 }
 </style>

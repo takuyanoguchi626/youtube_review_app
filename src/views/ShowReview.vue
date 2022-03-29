@@ -13,7 +13,7 @@
 
         <div class="description">
           <router-link :to="'/myProfile/' + targetAccount.id">
-            <p class="name">アカウント名： {{ targetAccount.name }}</p>
+            <p>アカウント名： {{ targetAccount.name }}</p>
           </router-link>
           <p>登録情報</p>
           <p>自己紹介： {{ targetAccount.introduction }}</p>
@@ -30,7 +30,7 @@
           </router-link>
           <div>
             <router-link :to="'/videoDetail/' + targetReview.videos.id">
-              <p class="name">タイトル：{{ targetReview.videos.title }}</p>
+              <p>タイトル：{{ targetReview.videos.title }}</p>
             </router-link>
             <p>再生回数：{{ targetReview.videos.formatViewCount }}</p>
             <span class="movieDescription">
@@ -39,29 +39,12 @@
             <p>投稿日：{{ targetReview.videos.formatPublishedAt }}</p>
           </div>
           <div class="evaluation">
-            <p v-if="targetReview.evaluation === '5'">
+            <p>
               評価：
-              <span class="star5_rating" data-rate="5"></span>
-            </p>
-            <p v-if="targetReview.evaluation === '4'">
-              評価：
-              <span class="star5_rating" data-rate="4"></span>
-            </p>
-            <p v-if="targetReview.evaluation === '3'">
-              評価：
-              <span class="star5_rating" data-rate="3"></span>
-            </p>
-            <p v-if="targetReview.evaluation === '2'">
-              評価：
-              <span class="star5_rating" data-rate="2"></span>
-            </p>
-            <p v-if="targetReview.evaluation === '1'">
-              評価：
-              <span class="star5_rating" data-rate="1"></span>
-            </p>
-            <p v-if="targetReview.evaluation === '0'">
-              評価：
-              <span class="star5_rating" data-rate="0"></span>
+              <span
+                class="star5_rating"
+                :data-rate="targetReview.evaluation"
+              ></span>
             </p>
           </div>
         </div>
@@ -109,27 +92,6 @@ export default class XXXComponent extends Vue {
   private accountList = this.$store.getters.getAccountList;
 
   created(): void {
-    // スクロールトップボタン
-    scrollTop(1); // 遅すぎるとガクガクになるので注意
-
-    function scrollTop(duration: number) {
-      let currentY = window.pageYOffset; // 現在のスクロール位置を取得
-      let step = duration / currentY > 1 ? 10 : 100; // 三項演算子
-      let timeStep = (duration / currentY) * step; // スクロール時間
-      let intervalId = setInterval(scrollUp, timeStep);
-      // timeStepの間隔でscrollUpを繰り返す。
-      // clearItervalのために返り値intervalIdを定義する。
-
-      function scrollUp() {
-        currentY = window.pageYOffset;
-        if (currentY === 0) {
-          clearInterval(intervalId); // ページ最上部に来たら終了
-        } else {
-          scrollBy(0, -step); // step分上へスクロール
-        }
-      }
-    }
-
     const reviewParamsId = this.$route.params.id;
     console.dir(JSON.stringify("reviewParamsId" + reviewParamsId));
     console.log(this.accountList);
@@ -166,9 +128,6 @@ export default class XXXComponent extends Vue {
   width: 50%;
   margin: 10px;
   padding: 5px;
-}
-.name {
-  font-weight: bold;
 }
 .movie {
   width: 300px;
