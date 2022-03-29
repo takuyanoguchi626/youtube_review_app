@@ -63,16 +63,34 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import { format } from "date-fns";
 import { Videos } from "@/types/Videos";
+import axios from "axios";
 @Component
 export default class XXXComponent extends Vue {
-  private date = new Date();
   private evaluation = 0;
   private review = "";
-  @Prop()
-  private videoDetail!: Videos;
+  private videoDetail = new Videos(0, "", "", "", "", "", "", "");
+
+  async created(): Promise<void> {
+    const videoId = this.$route.params.id;
+    const key = "AIzaSyAjmyhCg__LtgHseTa_w2NzZGdD_YLoVZY";
+    const responce = await axios.get(
+      `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&key=${key}&id=${videoId}`
+    );
+    const responceVideo = responce.data.items[0];
+    this.videoDetail = new Videos(
+      responceVideo.id,
+      responceVideo.snippet.publishedAt,
+      responceVideo.snippet.title,
+      responceVideo.snippet.description,
+      responceVideo.snippet.thumbnails.medium.url,
+      responceVideo.snippet.channelTitle,
+      responceVideo.tags,
+      responceVideo.statistics.viewCount
+    );
+  }
 
   getDate(): string {
     const nowDate = format(new Date(), "yyyy年MM月dd日");
@@ -80,15 +98,13 @@ export default class XXXComponent extends Vue {
   }
 
   postReview(): void {
-    console.log(this.videoDetail);
-
-    // console.log(this.review);
     this.$store.commit("postReview", {
       date: this.getDate(),
       evaluation: this.evaluation,
       review: this.review,
       video: this.videoDetail,
     });
+    this.$router.push(`/videoDetail/${this.videoDetail.id}`);
   }
 }
 </script>

@@ -51,7 +51,7 @@ const routes: Array<RouteConfig> = [
     component: () => import("../views/SelfIntroductionChange.vue"),
   },
   {
-    path: "/addReview",
+    path: "/addReview/:id",
     name: "",
     component: () => import("../components/AddReview.vue"),
   },

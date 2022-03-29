@@ -101,7 +101,7 @@ export default class XXXComponent extends Vue {
   private videoIdList = new Array<string>();
   private searchedChannels = new Array<Channels>();
   private channelIdList = new Array<string>();
-  private key = "AIzaSyAzfoPPbpueXEcQypbLRLXXNCz5JQFDtlc";
+  private key = "AIzaSyAjmyhCg__LtgHseTa_w2NzZGdD_YLoVZY";
   private searchText = "";
 
   async created(): Promise<void> {
