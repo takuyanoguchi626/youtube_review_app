@@ -258,15 +258,15 @@ export default class XXXComponent extends Vue {
   transition-duration: 0.3s;
 }
 .video-description {
-  height: 20vh;
-  width: 40vw;
+  height: 60px;
+  width: 550px;
   overflow-wrap: break-word;
   overflow-y: scroll;
   display: block;
 }
 .channel-description {
-  height: 55vh;
-  width: 19vw;
+  height: 200px;
+  width: 260px;
   overflow-wrap: break-word;
   overflow-y: scroll;
   display: block;

@@ -39,7 +39,6 @@
                     説明：{{ searchedChannel.description }}
                   </div>
                   <br />
-
                 </div>
               </div>
             </div>
@@ -87,7 +86,6 @@
                         説明：{{ searchedVideo.description }}
                       </div>
                       <br />
-
                     </div>
                   </div>
                 </div>
@@ -256,15 +254,15 @@ export default class XXXComponent extends Vue {
   height: 200px;
 }
 .video-description {
-  height: 20vh;
-  width: 40vw;
+  height: 60px;
+  width: 550px;
   overflow-wrap: break-word;
   overflow-y: scroll;
   display: block;
 }
 .channel-description {
-  height: 55vh;
-  width: 19vw;
+  height: 200px;
+  width: 260px;
   overflow-wrap: break-word;
   overflow-y: scroll;
   display: block;
