@@ -104,9 +104,11 @@ export default class XXXComponent extends Vue {
   private searchText = "";
   // パス
   private path = "";
-  // ユーザーID
-  private currentUserId = this.$store.getters.getCurrentUser.id;
 
+  get currentUserId(): number {
+    const currentUser = this.$store.getters.getCurrentUser;
+    return currentUser.id;
+  }
   /**
    * ワードを検索のメソッド.
    *
@@ -120,16 +122,18 @@ export default class XXXComponent extends Vue {
     // 検索表示画面でこのメソッドを実行するとcreatedメソッドは動かずリロードされないため、同一のページを行き来するように条件分岐する
     if (location.pathname.startsWith("/searchedList")) {
       console.log("2" + location.pathname);
+      this.searchText = "";
       // ドメイン以下のパス名が /searchedList/${searchText} の場合に実行する処理
       this.$router.push(`/2searchedList/${searchText}`);
       return;
     } else if (location.pathname.startsWith("/2searchedList")) {
       console.log("1" + location.pathname);
-
+      this.searchText = "";
       // ドメイン以下のパス名が /2searchedList/${searchText} の場合に実行する処理
       this.$router.push(`/searchedList/${searchText}`);
       return;
     }
+    this.searchText = "";
     // 通常実行する処理
     this.$router.push(`/searchedList/${searchText}`);
     return;

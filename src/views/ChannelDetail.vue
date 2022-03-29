@@ -110,6 +110,7 @@ export default class XXXComponent extends Vue {
   }
   favoriteChannel(): void {
     this.$store.commit("addChannelData", this.currentChannel);
+    console.log(this.$store.state.accountList);
   }
 }
 </script>
