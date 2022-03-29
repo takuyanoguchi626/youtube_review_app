@@ -75,7 +75,7 @@ export default class XXXComponent extends Vue {
 
   async created(): Promise<void> {
     const videoId = this.$route.params.id;
-    const key = "AIzaSyAjmyhCg__LtgHseTa_w2NzZGdD_YLoVZY";
+    const key = this.$store.getters.getApiKey;
     const responce = await axios.get(
       `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&key=${key}&id=${videoId}`
     );
@@ -90,6 +90,7 @@ export default class XXXComponent extends Vue {
       responceVideo.tags,
       responceVideo.statistics.viewCount
     );
+    console.log(this.videoDetail);
   }
 
   getDate(): string {

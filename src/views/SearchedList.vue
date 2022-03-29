@@ -15,10 +15,12 @@
               >
                 <div class="c-item col card white">
                   <div>
-                    <img
-                      class="item-icon"
-                      v-bind:src="searchedChannel.thumbnailsUrl"
-                    />
+                    <router-link :to="'/channelDetail/' + searchedChannel.id">
+                      <img
+                        class="item-icon"
+                        v-bind:src="searchedChannel.thumbnailsUrl"
+                      />
+                    </router-link>
                   </div>
                   <router-link :to="'/channelDetail/' + searchedChannel.id">{{
                     searchedChannel.title
@@ -105,12 +107,11 @@ export default class XXXComponent extends Vue {
   private searchedChannels = new Array<Channels>();
   // 検索されるチャンネルid
   private channelIdList = new Array<string>();
+  private key = "AIzaSyC5rIjlnyhMouOVCBNhykDYlhw72d_j5CI";
 
   // 外部APIキー
-  private key = this.$store.getters.getApiKey;
+  // private key = this.$store.getters.getApiKey;
   // 検索ワード
-
-
 
   private searchText = "";
 

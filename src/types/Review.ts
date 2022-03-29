@@ -19,7 +19,7 @@ export class Review {
     //レビュー
     private _review: string,
     //いいね数
-    private _favoriteCount: number
+    private _favoriteCount: Array<number>
   ) {}
 
   public get reviewDate(): string {
@@ -86,11 +86,11 @@ export class Review {
     this._review = review;
   }
 
-  public get favoriteCount(): number {
+  public get favoriteCount(): Array<number> {
     return this._favoriteCount;
   }
 
-  public set favoriteCount(favoriteCount: number) {
+  public set favoriteCount(favoriteCount: Array<number>) {
     this._favoriteCount = favoriteCount;
   }
 }
