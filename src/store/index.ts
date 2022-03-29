@@ -18,6 +18,7 @@ export default new Vuex.Store({
     // Youtuber情報
     youtubersInfo: Array<Channels>(),
     // ユーザー情報
+
     accountList: Array<Account>(),
     // [
     //   new Account(
@@ -157,6 +158,7 @@ export default new Vuex.Store({
     //     ]
     //   ),
     // ],
+
     soaringVideos: Array<Videos>(),
     currentUser: new Account(
       2,
@@ -199,7 +201,10 @@ export default new Vuex.Store({
       "AIzaSyBOMUoWdabc9lzK4XQFop3x0dYtUeI6agU",
       "AIzaSyAgRYbghnEpgHX9f980fKCzlTP6vESPkwo",
       "AIzaSyByE-aaIhWOBWxX0MdlUN6szX6qMe7kX5s",
-      "AIzaSyAjmyhCg__LtgHseTa_w2NzZGdD_YLoVZY"
+      "AIzaSyAjmyhCg__LtgHseTa_w2NzZGdD_YLoVZY",
+      "AIzaSyD1hsARhNyLS07rUwz6fqrVp2pWnGvkWTQ",
+      "AIzaSyChyFfGpQSYRhWTBuyeXTflkqTd4Sgc1HU",
+      "AIzaSyBaI5sqV11bUD-EzLC_lRmHBQztOctDwOc"
     ),
   },
   actions: {
