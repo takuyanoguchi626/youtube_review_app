@@ -171,6 +171,14 @@ export default class XXXComponent extends Vue {
   }
 
   postReview(): void {
+    const user = this.$store.getters.getCurrentUser;
+    console.log(user);
+
+    if (user.id === 0) {
+      this.$router.push("/login");
+      console.log("ddd");
+      return;
+    }
     this.$router.push(`/addReview/${this.videoDetail.id}`);
   }
 }
