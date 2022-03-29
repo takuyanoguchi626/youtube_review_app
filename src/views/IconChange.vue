@@ -1,7 +1,7 @@
 <template>
   <div class="iconChange">
-    <h4>プロフィール画像の編集</h4>
-    <label for="iconChange">
+    <!-- <h4>プロフィール画像の編集</h4> -->
+    <label for="iconChangeBtn">
       <img :src="image" alt="" class="circle responsive-img image" />
     </label>
     <input
@@ -10,15 +10,20 @@
       ref="newImage"
       v-on:change="iconChange"
     />
-    <button class="btn" @click="iconChangeButton()">変更</button>
+    <button class="btn" @click="iconChangeButton()">画像を変更</button>
+    <div>
+      {{ this.message }}
+    </div>
   </div>
 </template>
 
 <script>
 export default {
+  name: "IconChange",
   data() {
     return {
       image: "",
+      message: "",
     };
   },
   methods: {
@@ -32,7 +37,8 @@ export default {
         id: id,
         img: this.image,
       });
-      this.$router.push(`/myProfile/${id}`);
+      this.message = "画像を変更しました！";
+      // this.$router.push(`/myProfile/${id}`);
     },
   },
   mounted() {
@@ -55,15 +61,16 @@ export default {
   align-items: center;
 }
 .image {
-  width: 300px;
-  height: 300px;
+  width: 80px;
+  height: 80px;
 }
 .image:hover {
   opacity: 0.6;
   cursor: crosshair;
 }
 .btn {
-  margin-top: 20px;
+  margin-top: 10px;
+  height: 30px;
 }
 #iconChangeBtn {
   padding-top: 10px;

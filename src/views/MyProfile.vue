@@ -2,18 +2,14 @@
   <div>
     <div class="introduction">
       <div>
-        <router-link
+        <!-- <router-link
           :to="'/iconChange/' + currentAccount.id"
           v-if="myAccountFlag"
-        >
-          <div class="icon">
-            <img
-              class="circle responsive-img image2"
-              :src="currentAccount.img"
-            />
-          </div>
-        </router-link>
-        <img :src="currentAccount.img" v-else />
+        > -->
+        <div class="icon">
+          <img class="circle responsive-img image2" :src="currentAccount.img" />
+        </div>
+        <!-- </router-link> -->
       </div>
       <div class="introduction2">
         <div class="subtitle">
