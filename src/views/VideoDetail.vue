@@ -22,7 +22,7 @@
       <router-link :to="'/channelDetail/' + channelDetail.id">
         <img :src="channelDetail.thumbnailsUrl" />
       </router-link>
-      <div>{{ videoDetail.channelTitle }}</div>
+      <div>【{{ videoDetail.channelTitle }}】</div>
       <div>チャンネル設立日：{{ channelDetail.formatPublishedAt }}</div>
       <div>{{ channelDetail.description }}</div>
       <div>総再生回数：{{ channelDetail.viewCount }}回</div>
@@ -120,7 +120,7 @@ export default class XXXComponent extends Vue {
       responceVideo.snippet.publishedAt,
       responceVideo.snippet.title,
       responceVideo.snippet.description,
-      responceVideo.snippet.thumbnails.medium.url,
+      responceVideo.snippet.thumbnails.high.url,
       responceVideo.snippet.channelTitle,
       responceVideo.tags,
       responceVideo.statistics.viewCount
@@ -136,7 +136,7 @@ export default class XXXComponent extends Vue {
       responceChannel.snippet.title,
       responceChannel.snippet.description,
       responceChannel.snippet.publishedAt,
-      responceChannel.snippet.thumbnails.medium.url,
+      responceChannel.snippet.thumbnails.high.url,
       responceChannel.statistics.viewCount,
       responceChannel.statistics.subscriberCount,
       responceChannel.statistics.videoCount
