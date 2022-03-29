@@ -1,6 +1,6 @@
 <template>
   <div class="container context">
-    <div class="video">
+    <div class="video item col card white">
       <div class="frame">
         <iframe
           width="560"
@@ -13,18 +13,38 @@
         ></iframe>
       </div>
       <div>{{ videoDetail.title }}</div>
-      <div>
-        動画投稿日：{{ videoDetail.formatPublishedAt }} / 再生回数：{{
-          videoDetail.formatViewCount
-        }}回
-      </div>
+      <div>動画投稿日：{{ videoDetail.formatPublishedAt }}</div>
+      <div>再生回数：{{ videoDetail.formatViewCount }}回</div>
       <br />
       <router-link :to="'/channelDetail/' + channelDetail.id">
         <img :src="channelDetail.thumbnailsUrl" />
       </router-link>
       <div>【{{ videoDetail.channelTitle }}】</div>
       <div>チャンネル設立日：{{ channelDetail.formatPublishedAt }}</div>
-      <div>{{ channelDetail.description }}</div>
+      <button
+        class="btn"
+        type="button"
+        v-on:click="showDescription"
+        v-if="!flag"
+      >
+        概要欄をcheck！
+      </button>
+      <button
+        class="btn"
+        type="button"
+        v-on:click="hiddenDescription"
+        v-if="flag"
+      >
+        概要欄を閉じる！
+      </button>
+      <hr />
+      <div v-if="flag">
+        <h7>【概要欄】</h7>
+      </div>
+      <div v-if="flag" class="description">
+        {{ channelDetail.description }}
+      </div>
+      <hr v-if="flag" />
       <div>総再生回数：{{ channelDetail.viewCount }}回</div>
       <div>チャンネル登録者数：{{ channelDetail.subscriberCount }}人</div>
       <div>総動画数：{{ channelDetail.videoCount }}個</div>
@@ -84,6 +104,7 @@ export default class XXXComponent extends Vue {
   // チャンネル詳細
   private channelDetail = new Channels("", "", "", "", "", 0, 0, 0);
   private reviewList = new Array<Review>();
+  private flag = false;
 
   async created(): Promise<void> {
     // スクロールトップボタン
@@ -109,9 +130,7 @@ export default class XXXComponent extends Vue {
 
     const videoId = this.$route.params.id;
 
-    const key = "AIzaSyC5rIjlnyhMouOVCBNhykDYlhw72d_j5CI";
-
-    // const key = this.$store.getters.getApiKey;
+    const key = this.$store.getters.getApiKey;
 
     const responce = await axios.get(
       `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&key=${key}&id=${videoId}`
@@ -151,6 +170,13 @@ export default class XXXComponent extends Vue {
     console.log(this.reviewList[0].accountIcon);
   } //end created
 
+  showDescription(): void {
+    this.flag = true;
+  }
+  hiddenDescription(): void {
+    this.flag = false;
+  }
+
   postReview(): void {
     this.$router.push(`/addReview/${this.videoDetail.id}`);
   }
@@ -179,11 +205,13 @@ img {
 }
 
 .video {
-  width: 450px;
+  width: 500px;
+  /* height: 850px; */
+  object-fit: cover;
 }
 
 .review {
-  width: 600px;
+  width: 550px;
 }
 
 iframe {
@@ -196,6 +224,12 @@ iframe {
 .frame {
   width: 400px;
   height: 225px;
+  margin: 8px 0 0 8px;
+}
+
+.description {
+  overflow-y: scroll;
+  height: 153px;
 }
 
 .row {
