@@ -46,9 +46,8 @@ import { Component, Vue } from "vue-property-decorator";
 export default class XXXComponent extends Vue {
   private currentChannel = new Channels("", "", "", "", "", 1, 1, 1);
   private videoArr = new Array<Videos>();
-  private apiKey = "AIzaSyAjmyhCg__LtgHseTa_w2NzZGdD_YLoVZY";
   private flag = false;
-
+  private apiKey = "AIzaSyAzfoPPbpueXEcQypbLRLXXNCz5JQFDtlc";
   async created(): Promise<void> {
     // スクロールトップボタン
     scrollTop(1); // 遅すぎるとガクガクになるので注意
@@ -108,11 +107,15 @@ export default class XXXComponent extends Vue {
         )
       );
     }
+    // 概要欄がない場合の処理
     if (this.currentChannel.description === "") {
       this.currentChannel.description =
         "このYoutuberの概要欄は見つかりませんでした";
     }
   }
+  /**
+   * 概要欄を表示する.
+   */
   showDescription(): void {
     this.flag = true;
   }

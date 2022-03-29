@@ -1,8 +1,16 @@
 <template>
-  <div>
-    <img :src="image" alt="" />
-    <input type="file" ref="newImage" v-on:change="iconChange" />
-    <button @click="iconChangeButton()">変更</button>
+  <div class="iconChange">
+    <h4>プロフィール画像の編集</h4>
+    <label for="iconChange">
+      <img :src="image" alt="" class="circle responsive-img image" />
+    </label>
+    <input
+      id="iconChangeBtn"
+      type="file"
+      ref="newImage"
+      v-on:change="iconChange"
+    />
+    <button class="btn" @click="iconChangeButton()">変更</button>
   </div>
 </template>
 
@@ -39,4 +47,25 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.iconChange {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.image {
+  width: 300px;
+  height: 300px;
+}
+.image:hover {
+  opacity: 0.6;
+  cursor: crosshair;
+}
+.btn {
+  margin-top: 20px;
+}
+#iconChangeBtn {
+  padding-top: 10px;
+}
+</style>
