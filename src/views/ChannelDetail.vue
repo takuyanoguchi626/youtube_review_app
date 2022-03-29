@@ -103,6 +103,11 @@ export default class XXXComponent extends Vue {
       }
     }
 
+    // ログインしていない場合を押せなくする
+    if (this.currentUserId === 0) {
+      this.favoriteFlag = true;
+    }
+
     const channelId = this.$route.params.id;
     const response = await axios.get(
       `https://www.googleapis.com/youtube/v3/channels?id=${channelId}&key=${this.apiKey}&part=snippet,contentDetails,statistics,status`
@@ -145,10 +150,7 @@ export default class XXXComponent extends Vue {
       this.currentChannel.description =
         "このYoutuberの概要欄は見つかりませんでした";
     }
-    // ログインしていない場合を押せなくする
-    if (this.currentUserId === 0) {
-      this.favoriteFlag = true;
-    }
+
     // 既にお気に入り登録している場合を押せなくする
     for (const account of this.$store.getters.getAccountList) {
       console.log(account);

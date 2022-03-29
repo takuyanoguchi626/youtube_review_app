@@ -86,7 +86,6 @@
                         説明：{{ searchedVideo.description }}
                       </div>
                       <br />
-
                     </div>
                   </div>
                 </div>
@@ -253,6 +252,10 @@ export default class XXXComponent extends Vue {
 .item-icon {
   width: 200px;
   height: 200px;
+}
+.item-icon:hover {
+  opacity: 0.6;
+  transition-duration: 0.3s;
 }
 .video-description {
   height: 20vh;
