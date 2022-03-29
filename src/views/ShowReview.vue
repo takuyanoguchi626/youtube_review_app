@@ -49,14 +49,16 @@
           </div>
         </div>
         <div class="review">
-          <p>
-            レビュー投稿日：{{ targetReview.reviewDate }}
-            {{ targetReview.review }}<br />
-          </p>
-          <a class="waves-effect waves-light btn" v-on:click="favoriteReview()"
-            ><i class="material-icons left">thumb_up</i>いいね</a
-          >
-          {{ favoriteCount }}
+          <p>{{ targetReview.review }}<br /></p>
+          <div class="review-data">
+            <p>レビュー投稿日：{{ targetReview.reviewDate }}</p>
+            <a
+              class="waves-effect waves-light btn"
+              v-on:click="favoriteReview()"
+              ><i class="material-icons left">thumb_up</i>いいね</a
+            >
+            {{ favoriteCount }}
+          </div>
         </div>
       </div>
     </div>
@@ -101,7 +103,6 @@ export default class XXXComponent extends Vue {
   private favoriteCount = this.targetReview.favoriteCount;
 
   created(): void {
-
     // スクロールトップボタン
     scrollTop(1); // 遅すぎるとガクガクになるので注意
 
@@ -188,7 +189,9 @@ export default class XXXComponent extends Vue {
 .review {
   padding: 10px;
   width: 350px;
+  position: relative;
 }
+
 .movieDescription {
   height: 150px;
   width: 300px;
