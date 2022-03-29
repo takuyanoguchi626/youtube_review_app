@@ -28,7 +28,6 @@
         <hr />
       </div>
       <div class="channel-description" v-if="flag">
-
         <a
           class="waves-effect waves-light btn"
           v-on:click="favoriteChannel()"
@@ -230,7 +229,7 @@ export default class XXXComponent extends Vue {
 }
 .img2 {
   width: 100%;
-  height: 300px;
+  height: 320px;
   object-fit: cover;
 }
 .img2:hover {
