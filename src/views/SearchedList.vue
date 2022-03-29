@@ -86,7 +86,6 @@
                         説明：{{ searchedVideo.description }}
                       </div>
                       <br />
-
                     </div>
                   </div>
                 </div>
@@ -255,14 +254,14 @@ export default class XXXComponent extends Vue {
   height: 200px;
 }
 .video-description {
-  height: 20vh;
+  height: 60px;
   width: 40vw;
   overflow-wrap: break-word;
   overflow-y: scroll;
   display: block;
 }
 .channel-description {
-  height: 55vh;
+  height: 200px;
   width: 19vw;
   overflow-wrap: break-word;
   overflow-y: scroll;

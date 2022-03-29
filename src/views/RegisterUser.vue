@@ -198,7 +198,7 @@ export default class XXXComponent extends Vue {
       newUserId = newAccount.id;
       this.$store.commit("addUser", newAccount);
       this.$store.commit("addLastUserId", newUserId);
-      this.$router.push("/top");
+      this.$router.push("/login");
     } else {
       const newAccount = new Account(
         accountLastId + 1,
