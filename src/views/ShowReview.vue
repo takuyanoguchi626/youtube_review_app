@@ -15,7 +15,6 @@
           <router-link :to="'/myProfile/' + targetAccount.id">
             <p>アカウント名： {{ targetAccount.name }}</p>
           </router-link>
-          <p>登録情報</p>
           <p>自己紹介： {{ targetAccount.introduction }}</p>
         </div>
       </div>
@@ -38,6 +37,8 @@
             </span>
             <p>投稿日：{{ targetReview.videos.formatPublishedAt }}</p>
           </div>
+        </div>
+        <div class="review">
           <div class="evaluation">
             <p>
               評価：
@@ -47,8 +48,6 @@
               ></span>
             </p>
           </div>
-        </div>
-        <div class="review">
           <p>{{ targetReview.review }}<br /></p>
           <div class="review-data">
             <p>レビュー投稿日：{{ targetReview.reviewDate }}</p>
