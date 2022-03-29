@@ -20,6 +20,7 @@ export default new Vuex.Store({
     // ユーザー情報
     accountList:
       // Array<Account>(),
+
       [
         new Account(
           2,
@@ -96,6 +97,10 @@ export default new Vuex.Store({
       "AIzaSyByE-aaIhWOBWxX0MdlUN6szX6qMe7kX5s",
       "AIzaSyAjmyhCg__LtgHseTa_w2NzZGdD_YLoVZY",
       "AIzaSyDgB9MCfZvVqjzt_psZxNqxmdv06AJXDNg"
+      "AIzaSyD1hsARhNyLS07rUwz6fqrVp2pWnGvkWTQ",
+      "AIzaSyChyFfGpQSYRhWTBuyeXTflkqTd4Sgc1HU",
+      "AIzaSyBaI5sqV11bUD-EzLC_lRmHBQztOctDwOc"
+
     ),
   },
   actions: {
