@@ -26,15 +26,19 @@
                     searchedChannel.title
                   }}</router-link
                   ><br />
-                  <span class="title"></span>登録者数：{{
-                    searchedChannel.formatSubscriberCount
-                  }}人<br />
-                  <span class="title"></span>総動画数：{{
-                    searchedChannel.formatViewCount
-                  }}個<br />
-                  <span class="title"></span>説明：{{
-                    searchedChannel.description
-                  }}<br />
+
+                  <span class="title"
+                    >登録者数：{{
+                      searchedChannel.formatSubscriberCount
+                    }}人</span
+                  ><br />
+                  <span class="title"
+                    >総動画数：{{ searchedChannel.formatViewCount }}個</span
+                  ><br />
+                  <div class="channel-description">
+                    説明：{{ searchedChannel.description }}
+                  </div>
+                  <br />
                 </div>
               </div>
             </div>
@@ -68,18 +72,21 @@
                         v-bind:to="'/videoDetail/' + searchedVideo.id"
                         >タイトル：{{ searchedVideo.title }}</router-link
                       ><br />
-                      <span class="title"></span>再生回数：{{
-                        searchedVideo.formatViewCount
-                      }}回<br />
-                      <span class="title"></span>投稿日：{{
-                        searchedVideo.formatPublishedAt
-                      }}<br />
-                      <span class="title"></span>チャンネル名：{{
-                        searchedVideo.channelTitle
-                      }}<br />
-                      <span class="title"></span>説明：{{
-                        searchedVideo.description
-                      }}<br />
+
+                      <span class="title"
+                        >再生回数：{{ searchedVideo.viewCount }}回</span
+                      ><br />
+                      <span class="title"
+                        >投稿日：{{ searchedVideo.formatPublishedAt }}</span
+                      ><br />
+                      <span class="title"
+                        >チャンネル名：{{ searchedVideo.channelTitle }}</span
+                      ><br />
+                      <div class="video-description">
+                        説明：{{ searchedVideo.description }}
+                      </div>
+                      <br />
+
                     </div>
                   </div>
                 </div>
@@ -140,37 +147,6 @@ export default class XXXComponent extends Vue {
     // 検索ワードをURLより取得
     this.searchText = this.$route.params.searchText;
     console.log(this.searchText);
-    const response1 = await axios.get(
-      // ビデオの検索APIでidを取得
-      `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&maxResults=10&regionCode=JP&key=${this.key}&q=${this.searchText}`
-    );
-    const payload1 = response1.data.items;
-    console.dir("レスポンスデータ" + payload1);
-
-    for (let preVideo of payload1) {
-      this.videoIdList.push(preVideo.id.videoId);
-    }
-    // 上で取得したidを使いビデオの情報をAPIで取得
-    for (let videoId of this.videoIdList) {
-      const response3 = await axios.get(
-        `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet,statistics&regionCode=JP&key=${this.key}`
-      );
-      const video = response3.data.items[0];
-      console.dir("video" + JSON.stringify(video));
-      this.searchedVideos.push(
-        new Videos(
-          video.id,
-          video.snippet.publishedAt,
-          video.snippet.title,
-          video.snippet.description,
-          video.snippet.thumbnails.high.url,
-          video.snippet.channelTitle,
-          video.snippet.tags,
-          video.statistics.viewCount
-        )
-      );
-      console.log(this.searchedVideos);
-    }
 
     const response2 = await axios.get(
       // チャンネルの検索APIでidを取得
@@ -209,6 +185,38 @@ export default class XXXComponent extends Vue {
       }
     }
     console.log(this.searchedChannels);
+
+    const response1 = await axios.get(
+      // ビデオの検索APIでidを取得
+      `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&maxResults=10&regionCode=JP&key=${this.key}&q=${this.searchText}`
+    );
+    const payload1 = response1.data.items;
+    console.dir("レスポンスデータ" + payload1);
+
+    for (let preVideo of payload1) {
+      this.videoIdList.push(preVideo.id.videoId);
+    }
+    // 上で取得したidを使いビデオの情報をAPIで取得
+    for (let videoId of this.videoIdList) {
+      const response3 = await axios.get(
+        `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet,statistics&regionCode=JP&key=${this.key}`
+      );
+      const video = response3.data.items[0];
+      console.dir("video" + JSON.stringify(video));
+      this.searchedVideos.push(
+        new Videos(
+          video.id,
+          video.snippet.publishedAt,
+          video.snippet.title,
+          video.snippet.description,
+          video.snippet.thumbnails.high.url,
+          video.snippet.channelTitle,
+          video.snippet.tags,
+          video.statistics.viewCount
+        )
+      );
+      console.log(this.searchedVideos);
+    }
   }
 }
 </script>
@@ -246,7 +254,20 @@ export default class XXXComponent extends Vue {
   width: 200px;
   height: 200px;
 }
-
+.video-description {
+  height: 20vh;
+  width: 40vw;
+  overflow-wrap: break-word;
+  overflow-y: scroll;
+  display: block;
+}
+.channel-description {
+  height: 55vh;
+  width: 19vw;
+  overflow-wrap: break-word;
+  overflow-y: scroll;
+  display: block;
+}
 .c-item {
   /* flex: 0 0 320px; paddingやborder含むitem全体の横幅を320pxにする */
   padding: 20px;

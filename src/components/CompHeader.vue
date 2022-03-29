@@ -88,6 +88,18 @@
                   >マイページ</router-link
                 >
               </li>
+              <li class="icon">
+                <img
+                  v-if="currentUserId !== 0"
+                  class="userIcon circle"
+                  :src="accountImg"
+                />
+                <img
+                  v-if="currentUserId === 0"
+                  class="userIcon circle"
+                  src="/img/blank.png"
+                />
+              </li>
             </ul>
           </div>
         </nav>
@@ -106,9 +118,29 @@ export default class XXXComponent extends Vue {
   // パス
   private path = "";
 
+  private imgSource = "";
+  /**
+   * ログイン中のユーザーのID取得.
+   * @returns - ログイン中のユーザーのID
+   */
   get currentUserId(): number {
     const currentUser = this.$store.getters.getCurrentUser;
     return currentUser.id;
+  }
+
+  /**
+   * ログイン中のユーザーのアイコン取得.
+   * @returns - ログイン中のユーザーのアイコン
+   */
+  get accountImg(): string {
+    const accountList = this.$store.getters.getAccountList;
+
+    for (const account of accountList) {
+      if (this.currentUserId === account.id) {
+        this.imgSource = account.img;
+      }
+    }
+    return this.imgSource;
   }
   /**
    * ワードを検索のメソッド.
@@ -168,5 +200,16 @@ textarea {
 }
 .searchForm {
   margin: 5px;
+}
+.userIcon {
+  margin: 5px;
+  width: 55px;
+  height: 55px;
+  object-fit: cover;
+}
+.userIcon {
+  width: 55px;
+  height: 55px;
+  object-fit: cover;
 }
 </style>
