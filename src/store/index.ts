@@ -13,6 +13,8 @@ export default new Vuex.Store({
   state: {
     //最後のレビューID
     lastReviewId: 1,
+    // 登録された最後のユーザーID
+    lastUserId: 0,
     // Youtuber情報
     youtubersInfo: Array<Channels>(),
     // ユーザー情報
@@ -205,7 +207,6 @@ export default new Vuex.Store({
      * @param context コンテキスト
      */
     async getSoaringVideos(context) {
-
       const key = context.getters.getApiKey;
 
       const responce = await axios.get(
@@ -233,6 +234,10 @@ export default new Vuex.Store({
     addUser(state, payload) {
       state.accountList.push(payload);
     },
+    /**
+     * カレントユーザーにからのアカウントオブジェクトを代入し、ログアウトする.
+     * @param state - ステート
+     */
     removeUser(state) {
       state.currentUser = new Account(
         0,
@@ -246,6 +251,11 @@ export default new Vuex.Store({
         new Array<Review>()
       );
     },
+    /**
+     * stateのユーザーリスト中のレビュー情報にいいねカウントを入れる.
+     * @param state - ステート
+     * @param payload - ペイロード
+     */
     addFavoriteCount(state, payload) {
       for (const account of state.accountList) {
         for (let review of account.reviewList) {
@@ -306,7 +316,6 @@ export default new Vuex.Store({
     addCurrentUser(state, payload) {
       state.currentUser = payload;
     },
-
     changeAccountIcon(state, payload) {
       const account = state.accountList.find(
         (account) => account.id === payload.id
@@ -437,8 +446,22 @@ export default new Vuex.Store({
         return reviewListByVideoId;
       };
     },
+    /**
+     * APIキーをランダムに取得.
+     * @param state - ステート
+     * @returns APIキー
+     */
     getApiKey(state) {
       return state.apiKey[Math.floor(Math.random() * state.apiKey.length)];
+    },
+    /**
+     * 登録された最後のユーザーに使用されるIDを取得.
+     *
+     * @param state -ステート
+     * @returns 登録された最後のユーザーに使用されるID
+     */
+    getLastUserId(state) {
+      return state.lastUserId;
     },
   },
 });
