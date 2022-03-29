@@ -76,39 +76,17 @@ export default new Vuex.Store({
       ],
     soaringVideos: Array<Videos>(),
     currentUser: new Account(
-      2,
-      "山田花子",
-      "aaaa",
-      "/img/pagu.jpg",
-      "aaas",
-      "ssss",
-      "aaaaa",
-      [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
-      [
-        new Review(
-          "",
-          4,
-          1,
-          "",
-          "",
-          new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
-          1,
-          "レビューのプレビュー",
-          new Array<number>()
-        ),
-        new Review(
-          "",
-          5,
-          1,
-          "",
-          "",
-          new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
-          1,
-          "レビューのプレビュー",
-          new Array<number>()
-        ),
-      ]
+      0,
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      new Array<Channels>(),
+      new Array<Review>()
     ),
+
     apiKey: Array<string>(
       "AIzaSyD0gPqZj2y8L2QVei5d4NUMsthKN3ltr1c",
       "AIzaSyAzfoPPbpueXEcQypbLRLXXNCz5JQFDtlc",
