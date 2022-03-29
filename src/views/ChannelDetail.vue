@@ -28,13 +28,6 @@
         <hr />
       </div>
       <div class="channel-description" v-if="flag">
-        <a
-          class="waves-effect waves-light btn"
-          v-on:click="favoriteChannel()"
-          :disabled="favoriteFlag"
-          ><i class="material-icons left">star_border</i>お気に入り</a
-        >
-
         {{ currentChannel.description }}
       </div>
       <hr />
@@ -44,12 +37,12 @@
           チャンネル登録者数：{{ currentChannel.formatSubscriberCount }}人
         </div>
       </div>
-      <button
+      <a
         class="waves-effect waves-light btn favorite favoriteBtn"
         v-on:click="favoriteChannel()"
+        :disabled="favoriteFlag"
+        ><i class="material-icons left">star_border</i>お気に入り</a
       >
-        <i class="material-icons left">star_border</i>お気に入り
-      </button>
     </div>
 
     <div class="videos item col card white video-card">
