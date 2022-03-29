@@ -28,13 +28,6 @@
         <hr />
       </div>
       <div class="channel-description" v-if="flag">
-        <!-- <a
-          class="waves-effect waves-light btn"
-          v-on:click="favoriteChannel()"
-          :disabled="favoriteFlag"
-          ><i class="material-icons left">star_border</i>お気に入り</a
-        > -->
-
         {{ currentChannel.description }}
       </div>
       <hr />
@@ -44,12 +37,6 @@
           チャンネル登録者数：{{ currentChannel.formatSubscriberCount }}人
         </div>
       </div>
-      <!-- <button
-        class="waves-effect waves-light btn favorite favoriteBtn"
-        v-on:click="favoriteChannel()"
-      >
-        <i class="material-icons left">star_border</i>お気に入り
-      </button> -->
       <a
         class="waves-effect waves-light btn favorite favoriteBtn"
         v-on:click="favoriteChannel()"
@@ -235,7 +222,7 @@ export default class XXXComponent extends Vue {
 }
 .img2 {
   width: 100%;
-  height: 300px;
+  height: 320px;
   object-fit: cover;
 }
 .img2:hover {

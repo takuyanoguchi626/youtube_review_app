@@ -2,18 +2,14 @@
   <div>
     <div class="introduction">
       <div>
-        <router-link
+        <!-- <router-link
           :to="'/iconChange/' + currentAccount.id"
           v-if="myAccountFlag"
-        >
-          <div class="icon">
-            <img
-              class="circle responsive-img image2"
-              :src="currentAccount.img"
-            />
-          </div>
-        </router-link>
-        <img :src="currentAccount.img" v-else />
+        > -->
+        <div class="icon">
+          <img class="circle responsive-img image2" :src="currentAccount.img" />
+        </div>
+        <!-- </router-link> -->
       </div>
       <div class="introduction2">
         <div class="subtitle">
@@ -202,7 +198,7 @@ export default class XXXComponent extends Vue {
 .image {
   width: 20vw;
   /* height: 20hw; */
-  /* object-fit: cover; */
+  object-fit: cover;
 }
 .icon {
   width: 100px;

@@ -4,41 +4,48 @@
       <div class="row login-page">
         <div class="col s12 z-depth-6 card-panel">
           <h4 class="pageTitle">プロフィール内容の編集</h4>
-          <form class="login-form" action="employeeList.html">
-            <div class="row">
-              <div class="input-field col s12">
-                <i class="material-icons prefix">person</i>
-                <input
-                  class="validate"
-                  id="mailAddress"
-                  type="email"
-                  v-model="name"
-                />
+          <!-- <form action="#"> -->
+          <div class="login-form">
+            <!-- <div> -->
+            <IconChange class="iconChange"></IconChange>
+            <!-- </div> -->
+            <div class="context">
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="material-icons prefix">person</i>
+                  <input
+                    class="validate"
+                    id="mailAddress"
+                    type="text"
+                    v-model="name"
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="material-icons prefix">short_text</i>
+                  <textarea
+                    name=""
+                    id="password"
+                    cols="30"
+                    rows="10"
+                    v-model="introduction"
+                  ></textarea>
+                  <!-- <input id="password" type="text" v-model="introduction" /> -->
+                </div>
+              </div>
+              <div class="row login-btn">
+                <button
+                  class="btn"
+                  type="button"
+                  v-on:click="selfIntroductionChange()"
+                >
+                  <span>変更</span>
+                </button>
               </div>
             </div>
-            <div class="row">
-              <div class="input-field col s12">
-                <i class="material-icons prefix">short_text</i>
-                <textarea
-                  name=""
-                  id="password"
-                  cols="30"
-                  rows="10"
-                  v-model="introduction"
-                ></textarea>
-                <!-- <input id="password" type="text" v-model="introduction" /> -->
-              </div>
-            </div>
-            <div class="row login-btn">
-              <button
-                class="btn"
-                type="button"
-                v-on:click="selfIntroductionChange()"
-              >
-                <span>変更</span>
-              </button>
-            </div>
-          </form>
+          </div>
+          <!-- </form> -->
         </div>
       </div>
     </div>
@@ -55,7 +62,10 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-@Component
+import IconChange from "@/views/IconChange.vue";
+@Component({
+  components: { IconChange },
+})
 export default class XXXComponent extends Vue {
   private name = "";
   private introduction = "";
@@ -85,4 +95,18 @@ export default class XXXComponent extends Vue {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.context {
+  /* display: flex;
+  flex-direction: column; */
+  width: 600px;
+}
+.iconChange {
+  width: 300px;
+  /* height: 500px; */
+}
+.login-form {
+  display: flex;
+  /* flex-direction: column; */
+}
+</style>

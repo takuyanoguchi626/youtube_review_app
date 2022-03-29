@@ -29,6 +29,9 @@ export class Channels {
   get formatSubscriberCount(): string {
     return Number(this._subscriberCount).toLocaleString();
   }
+  get formatVideoCount(): string {
+    return Number(this._videoCount).toLocaleString();
+  }
 
   public get id(): string {
     return this._id;

@@ -26,6 +26,7 @@
                     searchedChannel.title
                   }}</router-link
                   ><br />
+
                   <span class="title"
                     >登録者数：{{
                       searchedChannel.formatSubscriberCount
@@ -71,6 +72,7 @@
                         v-bind:to="'/videoDetail/' + searchedVideo.id"
                         >タイトル：{{ searchedVideo.title }}</router-link
                       ><br />
+
                       <span class="title"
                         >再生回数：{{ searchedVideo.viewCount }}回</span
                       ><br />
@@ -84,6 +86,7 @@
                         説明：{{ searchedVideo.description }}
                       </div>
                       <br />
+
                     </div>
                   </div>
                 </div>
