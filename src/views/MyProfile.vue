@@ -282,7 +282,7 @@ export default class XXXComponent extends Vue {
   flex-wrap: wrap;
   justify-content: left;
   width: 90%;
-  margin: 0 auto;
+  margin: 0 auto 20px auto;
 }
 .review {
   display: flex;
