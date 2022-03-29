@@ -54,9 +54,10 @@
             <a
               class="waves-effect waves-light btn"
               v-on:click="favoriteReview()"
+              :disabled="flag"
               ><i class="material-icons left">thumb_up</i>いいね</a
             >
-            {{ favoriteCount }}
+            {{ favoriteCount.length }}
           </div>
         </div>
       </div>
@@ -98,8 +99,10 @@ export default class XXXComponent extends Vue {
   );
   // ステートの全ユーザー情報
   private accountList = this.$store.getters.getAccountList;
-
+  // 取得したレビューのいいねカウント
   private favoriteCount = this.targetReview.favoriteCount;
+  // ボタンの使用可否
+  private flag = false;
 
   created(): void {
     // スクロールトップボタン
@@ -151,12 +154,18 @@ export default class XXXComponent extends Vue {
    * レビューにいいねをする.
    */
   favoriteReview(): void {
-    // 現在のいいね数にプラス１する
-    this.favoriteCount = new Array<number>();
+    this.favoriteCount.push(this.targetAccount.id);
+
     const review = this.targetReview;
     review.favoriteCount = this.favoriteCount;
     this.$store.commit("addFavoriteCount", review.favoriteCount);
     console.log(this.$store.state.accountList);
+    for (const account of this.accountList) {
+      for (const review of account.reviewList) {
+        review.reviewId === this.targetAccount.id;
+        this.flag = true;
+      }
+    }
   }
 }
 </script>

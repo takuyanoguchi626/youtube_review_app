@@ -18,145 +18,62 @@ export default new Vuex.Store({
     // Youtuber情報
     youtubersInfo: Array<Channels>(),
     // ユーザー情報
-    accountList: Array<Account>(),
-    // [
-    //   new Account(
-    //     1,
-    //     "鈴木太郎",
-    //     "aaaa",
-    //     "/img/pagu.jpg",
-    //     "aaaa",
-    //     "ssss",
-    //     "aaaaa",
-    //     [
-    //       new Channels(
-    //         "id",
-    //         "dddsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
-    //         "ddd",
-    //         "sss",
-    //         "/img/pagu.jpg",
-    //         1,
-    //         1,
-    //         1
-    //       ),
-    //       new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1),
-    //       new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1),
-    //       new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1),
-    //     ],
-    //     [
-    //       new Review(
-    //         "",
-    //         11,
-    //         1,
-    //         "",
-    //         "",
-    //         new Videos(
-    //           1,
-    //           "2020/01/01",
-    //           "タイトル",
-    //           "概要欄",
-    //           "/img/pagu.jpg",
-    //           "ss",
-    //           "ss",
-    //           "ss"
-    //         ),
-    //         1,
-    //         "レビューのプレビュー",
-    //         1
-    //       ),
-    //       new Review(
-    //         "",
-    //         1,
-    //         1,
-    //         "",
-    //         "",
-    //         new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
-    //         1,
-    //         "レビューのプレビュー",
-    //         1
-    //       ),
-    //       new Review(
-    //         "",
-    //         2,
-    //         1,
-    //         "",
-    //         "",
-    //         new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
-    //         1,
-    //         "レビューのプレビュー",
-    //         1
-    //       ),
-    //       new Review(
-    //         "",
-    //         3,
-    //         1,
-    //         "",
-    //         "",
-    //         new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
-    //         1,
-    //         "レビューのプレビュー",
-    //         1
-    //       ),
-    //     ]
-    //   ),
-    //   new Account(
-    //     2,
-    //     "山田花子",
-    //     "aaaa",
-    //     "/img/pagu.jpg",
-    //     "aaas",
-    //     "ssss",
-    //     "aaaaa",
-    //     [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
-    //     [
-    //       new Review(
-    //         "",
-    //         4,
-    //         1,
-    //         "",
-    //         "",
-    //         new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
-    //         1,
-    //         "レビューのプレビュー",
-    //         1
-    //       ),
-    //       new Review(
-    //         "",
-    //         5,
-    //         1,
-    //         "",
-    //         "",
-    //         new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
-    //         1,
-    //         "レビューのプレビュー",
-    //         1
-    //       ),
-    //     ]
-    //   ),
-    //   new Account(
-    //     3,
-    //     "佐藤次郎",
-    //     "aaaa",
-    //     "/img/pagu.jpg",
-    //     "aaak",
-    //     "ssss",
-    //     "aaaaa",
-    //     [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
-    //     [
-    //       new Review(
-    //         "",
-    //         6,
-    //         1,
-    //         "",
-    //         "",
-    //         new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
-    //         1,
-    //         "レビューのプレビュー",
-    //         1
-    //       ),
-    //     ]
-    //   ),
-    // ],
+    accountList:
+      // Array<Account>(),
+      [
+        new Account(
+          2,
+          "山田花子",
+          "aaaa",
+          "/img/pagu.jpg",
+          "aaas",
+          "ssss",
+          "aaaaa",
+          [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
+          [
+            new Review(
+              "",
+              4,
+              1,
+              "",
+              "",
+              new Videos(
+                1,
+                "ss",
+                "ss",
+                "ss",
+                "/img/pagu.jpg",
+                "ss",
+                "ss",
+                "ss"
+              ),
+              1,
+              "レビューのプレビュー",
+              new Array<number>()
+            ),
+            new Review(
+              "",
+              5,
+              1,
+              "",
+              "",
+              new Videos(
+                1,
+                "ss",
+                "ss",
+                "ss",
+                "/img/pagu.jpg",
+                "ss",
+                "ss",
+                "ss"
+              ),
+              1,
+              "レビューのプレビュー",
+              new Array<number>()
+            ),
+          ]
+        ),
+      ],
     soaringVideos: Array<Videos>(),
     currentUser: new Account(
       2,
