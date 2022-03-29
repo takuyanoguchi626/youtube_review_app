@@ -94,7 +94,7 @@ export default class XXXComponent extends Vue {
     new Videos(0, "", "", "", "", "", "", ""),
     0,
     "",
-    0
+    new Array<number>()
   );
   // ステートの全ユーザー情報
   private accountList = this.$store.getters.getAccountList;
@@ -151,7 +151,8 @@ export default class XXXComponent extends Vue {
    * レビューにいいねをする.
    */
   favoriteReview(): void {
-    this.favoriteCount = this.favoriteCount + 1;
+    // 現在のいいね数にプラス１する
+    this.favoriteCount = new Array<number>();
     const review = this.targetReview;
     review.favoriteCount = this.favoriteCount;
     this.$store.commit("addFavoriteCount", review.favoriteCount);

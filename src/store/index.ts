@@ -177,7 +177,7 @@ export default new Vuex.Store({
           new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
           1,
           "レビューのプレビュー",
-          1
+          new Array<number>()
         ),
         new Review(
           "",
@@ -188,7 +188,7 @@ export default new Vuex.Store({
           new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
           1,
           "レビューのプレビュー",
-          1
+          new Array<number>()
         ),
       ]
     ),
@@ -389,7 +389,7 @@ export default new Vuex.Store({
             payload.video,
             payload.evaluation,
             payload.review,
-            0
+            new Array<number>()
           )
         );
         state.lastReviewId++;
