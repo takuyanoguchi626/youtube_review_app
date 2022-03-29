@@ -10,7 +10,15 @@
     <div v-if="!flag">
       <div class="top">
         <img class="top-image" src="/img/topImage.gif" />
-        <div class="count">総レビュー数：0</div>
+        <div class="count">
+          <img class="number-box" src="/img/numberBox.png" />
+        </div>
+        <span class="review-counts"
+          >{{ reviewCounts.toLocaleString()
+          }}<span class="span1"
+            >&nbsp;件レビューが投稿されています！</span
+          ></span
+        >
         <div class="register-user">
           <p class="p1">ユーザー登録はこちらから！</p>
           <button class="button1" type="button" v-on:click="moveToRegister">
@@ -69,8 +77,29 @@
             v-for="(account, index) of recommendationAccountList"
             :key="index"
           >
-            <div class="account-name">{{ account.name }}</div>
-            <img class="account-img" :src="account.img" />
+            <div class="account-top">
+              <router-link :to="'/myProfile/' + account.id"
+                ><img
+                  class="account-img circle responsive-img"
+                  :src="account.img"
+              /></router-link>
+              <div class="account-right">
+                <div class="account-name">{{ account.name }}</div>
+                <div>レビュー数：{{ account.reviewList.length }}件</div>
+              </div>
+            </div>
+            <img
+              class="review-list"
+              :src="account.reviewList[0].videos.thumbnailsUrl"
+            />
+            <!-- <img
+                class="review-list"
+                :src="account.reviewList[1].videos.thumbnailsUrl"
+              />
+              <img
+                class="review-list"
+                :src="account.reviewList[2].videos.thumbnailsUrl"
+              /> -->
           </div>
         </div>
       </div>
@@ -112,11 +141,16 @@ export default class XXXComponent extends Vue {
   private recommendationAccountList = Array<Account>();
   // フラッグ
   private flag = true;
+  // 総レビュー数
+  private reviewCounts = 0;
 
   async created(): Promise<void> {
+    /**
+     * 総レビュー数を取得する.
+     */
+    this.reviewCounts = this.$store.getters.getReviewCounts;
     // スクロールトップボタン
     scrollTop(1); // 遅すぎるとガクガクになるので注意
-
     function scrollTop(duration: number) {
       let currentY = window.pageYOffset; // 現在のスクロール位置を取得
       let step = duration / currentY > 1 ? 10 : 100; // 三項演算子
@@ -167,8 +201,13 @@ export default class XXXComponent extends Vue {
         }
       }
     }
+    // 人気アカウントとレビューした動画のサムネMAX3件表示
     this.$store.commit("sortByReviewCount");
     this.recommendationAccountList = this.$store.getters.getAccountList;
+    console.log(this.recommendationAccountList);
+    // for (let i = 1; i <= 3; i++) {
+    //   if (this.recommendationAccountList.reviewList[i] !== undefined){}
+    // }
   }
   /**
    *ユーザー登録画面に遷移する.
@@ -197,15 +236,6 @@ export default class XXXComponent extends Vue {
   color: black;
   font-weight: bold;
   font-size: 25px;
-}
-/* count */
-.count {
-  position: absolute;
-  top: 65%;
-  left: 30%;
-  -ms-transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
 }
 /* button1 */
 .top .button1 {
@@ -301,7 +331,7 @@ i {
 .button4 span {
   color: white;
 }
-/* icon,image */
+/* ボタンのicon,image */
 .button-icon {
   width: 15px;
   height: 15px;
@@ -310,6 +340,28 @@ i {
   width: 100%;
   height: 500px;
   object-fit: cover;
+}
+/* レビューカウント数 */
+.count {
+  position: absolute;
+  top: 68%;
+  left: 24.5%;
+  -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.number-box {
+  width: 2vw;
+  height: 5vh;
+}
+.review-counts {
+  position: absolute;
+  top: 63%;
+  left: 24%;
+  font-size: 35px;
+}
+.span1 {
+  font-size: 17px;
 }
 /* リロード中のGIF */
 .gif {
@@ -351,17 +403,30 @@ iframe {
 .popular-account {
   margin-right: 10px;
   margin-bottom: 30px;
-  padding: 30px;
+  padding-left: 5px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  padding-right: 20px;
+}
+.account-top {
+  display: flex;
 }
 .account-name {
+  text-align: right;
   font-size: 20px;
-  border: solid 3px black;
-  padding: 10px;
+  padding-top: 10px;
 }
 .account-img {
-  width: 280px;
-  height: 250px;
+  width: 120px;
+  height: 120px;
   object-fit: cover;
+  margin-right: 30px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+.review-list {
+  width: 70px;
+  height: 50px;
 }
 /* サブタイトル */
 .subtitle {
@@ -380,8 +445,6 @@ iframe {
 .img_wrap {
   border: 1px solid #ddd;
   margin: 0 auto;
-}
-.img_wrap {
   width: 250px;
   height: 250px;
   cursor: pointer;
@@ -392,7 +455,8 @@ iframe {
 .video-title:hover,
 .button2:hover,
 .button3:hover,
-.button4:hover {
+.button4:hover,
+.account-img:hover {
   opacity: 0.6;
   transition-duration: 0.3s;
 }

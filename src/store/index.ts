@@ -205,9 +205,8 @@ export default new Vuex.Store({
      * @param context コンテキスト
      */
     async getSoaringVideos(context) {
-
+      const key = "AIzaSyAzfoPPbpueXEcQypbLRLXXNCz5JQFDtlc";
       const key = context.getters.getApiKey;
-
       const responce = await axios.get(
         `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&chart=mostPopular&regionCode=JP&maxResults=50&key=${key}`
       );
@@ -412,7 +411,13 @@ export default new Vuex.Store({
     getCurrentUser(state) {
       return state.currentUser;
     },
-
+    getReviewCounts(state) {
+      let reviewCounts = 0;
+      for (let i = 0; i < state.accountList.length; i++) {
+        reviewCounts += state.accountList[i].reviewList.length;
+      }
+      return reviewCounts;
+    },
     getAccountById(state) {
       return (id: number) => {
         return state.accountList.filter((account) => account.id === id)[0];
