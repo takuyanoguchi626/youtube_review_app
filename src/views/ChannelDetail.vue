@@ -7,9 +7,6 @@
         概要欄をcheck！
       </button>
       <div class="channel-description" v-if="flag">
-      <a class="waves-effect waves-light btn" v-on:click="favoriteChannel()"
-        ><i class="material-icons left">star_border</i>お気に入り</a
-      >
         {{ currentChannel.description }}
       </div>
       <hr />
@@ -19,6 +16,11 @@
           チャンネル登録者数：{{ currentChannel.formatSubscriberCount }}人</span
         >
       </div>
+      <a
+        class="waves-effect waves-light btn favorite"
+        v-on:click="favoriteChannel()"
+        ><i class="material-icons left">star_border</i>お気に入り</a
+      >
     </div>
 
     <div class="videos item col card white video-card">
@@ -151,7 +153,7 @@ export default class XXXComponent extends Vue {
   margin-right: 30px;
   width: 50%;
   padding: 10px;
-  height: 820px;
+  height: 840px;
 }
 .video-title {
   font-weight: bold;
@@ -180,5 +182,8 @@ export default class XXXComponent extends Vue {
 }
 .counts {
   margin-top: 20px;
+}
+.favorite {
+  margin-top: 5px;
 }
 </style>
