@@ -44,8 +44,7 @@ export default class XXXComponent extends Vue {
   private currentChannel = new Channels("", "", "", "", "", 1, 1, 1);
   private videoArr = new Array<Videos>();
 
-  private apiKey = "AIzaSyAzfoPPbpueXEcQypbLRLXXNCz5JQFDtlc";
-
+  private apiKey = "AIzaSyAjmyhCg__LtgHseTa_w2NzZGdD_YLoVZY";
 
   async created(): Promise<void> {
     // スクロールトップボタン

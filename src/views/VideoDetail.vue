@@ -1,15 +1,17 @@
 <template>
-  <div class="container">
+  <div class="container context">
     <div class="video">
-      <iframe
-        width="560"
-        height="315"
-        :src="'https://www.youtube.com/embed/' + videoDetail.id"
-        title="YouTube video player"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-      ></iframe>
+      <div class="frame">
+        <iframe
+          width="560"
+          height="315"
+          :src="'https://www.youtube.com/embed/' + videoDetail.id"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
       <div>{{ videoDetail.title }}</div>
       <div>
         動画投稿日：{{ videoDetail.formatPublishedAt }} / 再生回数：{{
@@ -30,25 +32,36 @@
 
     <div class="review">
       <div>
-        <button @click="postReview">レビューを投稿する</button>
+        <button class="btn" @click="postReview">レビューを投稿する</button>
       </div>
-      <div class="row" v-for="review of reviewList" :key="review.id">
-        <router-link :to="'/showReview/' + review.reviewId">
-          <div class="col s12">
-            <div class="card content">
-              <span class="card-image">
-                <img :src="review.accountIcon" />
-              </span>
-              <div class="card-content content">
-                <div class="content">{{ review.accountName }}</div>
-                <div class="content">{{ review.evaluation }}</div>
-                <p>
-                  {{ review.review }}
-                </p>
+      <div class="reviewList300">
+        <div class="row" v-for="review of reviewList" :key="review.id">
+          <router-link :to="'/showReview/' + review.reviewId">
+            <div class="col s10 offset-s1">
+              <div class="card content">
+                <div class="card-image">
+                  <img class="accountImage" :src="review.accountIcon" />
+                </div>
+                <div class="card-content content">
+                  <div class="card-name">{{ review.accountName }}</div>
+                  <div class="card-evaluation evaluation">
+                    評価：
+                    <span
+                      class="star5_rating"
+                      :data-rate="review.evaluation"
+                    ></span>
+                  </div>
+                  <div>
+                    <hr />
+                  </div>
+                  <p class="reviewDetail">
+                    {{ review.review }}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        </router-link>
+          </router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -95,7 +108,7 @@ export default class XXXComponent extends Vue {
     }
 
     const videoId = this.$route.params.id;
-    const key = "AIzaSyAjmyhCg__LtgHseTa_w2NzZGdD_YLoVZY";
+    const key = "AIzaSyC5rIjlnyhMouOVCBNhykDYlhw72d_j5CI";
     const responce = await axios.get(
       `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&key=${key}&id=${videoId}`
     );
@@ -145,13 +158,10 @@ export default class XXXComponent extends Vue {
   display: flex;
   justify-content: space-around;
 }
-.account {
-  border: solid 3px black;
-  padding: 50px;
-}
+
 img {
-  width: 400px;
-  height: 300px;
+  width: 200px;
+  height: 150px;
   object-fit: cover;
 }
 .content {
@@ -159,5 +169,115 @@ img {
 }
 .card-content {
   flex-direction: column;
+  width: 300px;
+  height: 150px;
+  padding: 0;
 }
+
+.video {
+  width: 450px;
+}
+
+.review {
+  width: 600px;
+}
+
+iframe {
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  object-fit: cover;
+}
+
+.frame {
+  width: 400px;
+  height: 225px;
+}
+
+.row {
+  width: 480px;
+  margin: 0;
+}
+
+.card-image {
+  width: 150px;
+  height: 150px;
+}
+
+.card-name {
+  text-align: left;
+  padding: 5px 0 0 10px;
+}
+
+.card-evaluation {
+  text-align: left;
+  padding: 5px 0 0 10px;
+}
+
+.reviewDetail {
+  overflow: hidden;
+}
+
+.reviewList300 {
+  height: 520px;
+  width: 550px;
+  margin-left: 50px;
+  overflow-y: scroll;
+  padding: 0;
+}
+
+.accountImage {
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  object-fit: cover;
+}
+
+.star5_rating {
+  position: relative;
+  z-index: 0;
+  display: inline-block;
+  white-space: nowrap;
+  color: #cccccc; /* グレーカラー 自由に設定化 */
+  /*font-size: 30px; フォントサイズ 自由に設定化 */
+}
+
+.star5_rating:before,
+.star5_rating:after {
+  content: "★★★★★";
+}
+
+.star5_rating:after {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  color: #ffcf32; /* イエローカラー 自由に設定化 */
+}
+
+.star5_rating[data-rate="5"]:after {
+  width: 100%;
+} /* 星5 */
+
+.star5_rating[data-rate="4"]:after {
+  width: 80%;
+} /* 星4 */
+
+.star5_rating[data-rate="3"]:after {
+  width: 60%;
+} /* 星3 */
+
+.star5_rating[data-rate="2"]:after {
+  width: 40%;
+} /* 星2 */
+
+.star5_rating[data-rate="1"]:after {
+  width: 20%;
+} /* 星1 */
+
+.star5_rating[data-rate="0"]:after {
+  width: 0%;
+} /* 星0 */
 </style>
