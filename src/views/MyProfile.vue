@@ -187,6 +187,8 @@ export default class XXXComponent extends Vue {
       account.favoriteChannelList,
       account.reviewList
     );
+    console.log(account.favoriteChannelList);
+
     this.myAccountFlag = this.$store.getters.getMyAccountFlag(account);
   }
 
