@@ -103,6 +103,7 @@ export default class XXXComponent extends Vue {
   private favoriteCount = this.targetReview.favoriteCount;
   // ボタンの使用可否
   private flag = false;
+  private currentUserId = this.$store.getters.getCurrentUser.id;
 
   created(): void {
     // スクロールトップボタン
@@ -149,6 +150,13 @@ export default class XXXComponent extends Vue {
         }
       }
     }
+    // ログインしていない、または投稿した本人だったらボタンを押せなくする
+    if (
+      this.targetReview.accountId === this.currentUserId ||
+      this.currentUserId === 0
+    ) {
+      this.flag = true;
+    }
   }
   /**
    * レビューにいいねをする.
@@ -156,16 +164,13 @@ export default class XXXComponent extends Vue {
   favoriteReview(): void {
     this.favoriteCount.push(this.targetAccount.id);
 
-    const review = this.targetReview;
-    review.favoriteCount = this.favoriteCount;
-    this.$store.commit("addFavoriteCount", review.favoriteCount);
-    console.log(this.$store.state.accountList);
-    for (const account of this.accountList) {
-      for (const review of account.reviewList) {
-        review.reviewId === this.targetAccount.id;
-        this.flag = true;
-      }
+    // 取得したレビューのいいね情報に現在のユーザー情報が含まれていたらボタンを押せなくする
+
+    if (this.favoriteCount.includes(this.currentUserId)) {
+      this.flag = true;
     }
+
+    this.$store.commit("addFavorite", this.targetReview);
   }
 }
 </script>
