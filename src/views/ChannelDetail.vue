@@ -7,9 +7,12 @@
         概要欄をcheck！
       </button>
       <div class="channel-description" v-if="flag">
-      <a class="waves-effect waves-light btn" v-on:click="favoriteChannel()"
-        ><i class="material-icons left">star_border</i>お気に入り</a
-      >
+        <a
+          class="waves-effect waves-light btn"
+          v-on:click="favoriteChannel()"
+          :disabled="favoriteFlag"
+          ><i class="material-icons left">star_border</i>お気に入り</a
+        >
         {{ currentChannel.description }}
       </div>
       <hr />
@@ -50,6 +53,11 @@ export default class XXXComponent extends Vue {
   private currentChannel = new Channels("", "", "", "", "", 1, 1, 1);
   private videoArr = new Array<Videos>();
   private flag = false;
+  // チャンネルお気に入りボタンのフラグ
+  private favoriteFlag = false;
+  // ログイン中のユーザーのID
+  private currentUserId = this.$store.getters.getCurrentUser.id;
+  // APIキー
   private apiKey = this.$store.getters.getApiKey;
   async created(): Promise<void> {
     // スクロールトップボタン
@@ -115,6 +123,24 @@ export default class XXXComponent extends Vue {
       this.currentChannel.description =
         "このYoutuberの概要欄は見つかりませんでした";
     }
+    // ログインしていない場合を押せなくする
+    if (this.currentUserId === 0) {
+      this.favoriteFlag = true;
+    }
+    // 既にお気に入り登録している場合を押せなくする
+    for (const account of this.$store.getters.getAccountList) {
+      console.log(account);
+
+      if (this.currentUserId === account.id) {
+        for (const favoriteChannel of account.favoriteChannelList) {
+          console.log(channelId);
+
+          if (channelId === favoriteChannel.id) {
+            this.favoriteFlag = true;
+          }
+        }
+      }
+    }
   }
   /**
    * 概要欄を表示する.
@@ -128,6 +154,7 @@ export default class XXXComponent extends Vue {
   favoriteChannel(): void {
     this.$store.commit("addChannelData", this.currentChannel);
     console.log(this.$store.state.accountList);
+    this.favoriteFlag = true;
   }
 }
 </script>
