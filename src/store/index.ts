@@ -15,6 +15,7 @@ export default new Vuex.Store({
     lastReviewId: 1,
     // Youtuber情報
     youtubersInfo: Array<Channels>(),
+    // ユーザー情報
     accountList: [
       new Account(
         1,
@@ -100,7 +101,7 @@ export default new Vuex.Store({
         "山田花子",
         "aaaa",
         "/img/pagu.jpg",
-        "aaaa",
+        "aaas",
         "ssss",
         "aaaaa",
         [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
@@ -134,7 +135,7 @@ export default new Vuex.Store({
         "佐藤次郎",
         "aaaa",
         "/img/pagu.jpg",
-        "aaaa",
+        "aaak",
         "ssss",
         "aaaaa",
         [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
@@ -155,18 +156,18 @@ export default new Vuex.Store({
     ],
     soaringVideos: Array<Videos>(),
     currentUser: new Account(
-      3,
-      "鈴木太郎",
+      2,
+      "山田花子",
       "aaaa",
       "/img/pagu.jpg",
-      "aaaa",
+      "aaas",
       "ssss",
       "aaaaa",
       [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
       [
         new Review(
           "",
-          7,
+          4,
           1,
           "",
           "",
@@ -177,29 +178,7 @@ export default new Vuex.Store({
         ),
         new Review(
           "",
-          8,
-          1,
-          "",
-          "",
-          new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
-          1,
-          "レビューのプレビュー",
-          1
-        ),
-        new Review(
-          "",
-          9,
-          1,
-          "",
-          "",
-          new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
-          1,
-          "レビューのプレビュー",
-          1
-        ),
-        new Review(
-          "",
-          10,
+          5,
           1,
           "",
           "",
@@ -210,6 +189,15 @@ export default new Vuex.Store({
         ),
       ]
     ),
+    apiKey: Array<string>(
+      "AIzaSyD0gPqZj2y8L2QVei5d4NUMsthKN3ltr1c",
+      "AIzaSyAzfoPPbpueXEcQypbLRLXXNCz5JQFDtlc",
+      "AIzaSyDH4tzh3tFM5Ok8Q5jSpPHxpcQZMnK4U9M",
+      "AIzaSyBOMUoWdabc9lzK4XQFop3x0dYtUeI6agU",
+      "AIzaSyAgRYbghnEpgHX9f980fKCzlTP6vESPkwo",
+      "AIzaSyByE-aaIhWOBWxX0MdlUN6szX6qMe7kX5s",
+      "AIzaSyAjmyhCg__LtgHseTa_w2NzZGdD_YLoVZY"
+    ),
   },
   actions: {
     /**
@@ -218,7 +206,7 @@ export default new Vuex.Store({
      */
     async getSoaringVideos(context) {
 
-      const key = "AIzaSyAzfoPPbpueXEcQypbLRLXXNCz5JQFDtlc";
+      const key = context.getters.getApiKey;
 
       const responce = await axios.get(
         `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&chart=mostPopular&regionCode=JP&maxResults=50&key=${key}`
@@ -244,6 +232,35 @@ export default new Vuex.Store({
      */
     addUser(state, payload) {
       state.accountList.push(payload);
+    },
+    removeUser(state) {
+      state.currentUser = new Account(
+        0,
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        new Array<Channels>(),
+        new Array<Review>()
+      );
+    },
+    addFavoriteCount(state, payload) {
+      for (const account of state.accountList) {
+        for (let review of account.reviewList) {
+          if (payload.reviewId === review.reviewId) {
+            review = payload;
+          }
+        }
+      }
+    },
+    addChannelData(state, payload) {
+      for (const account of state.accountList) {
+        if (account.id === state.currentUser.id) {
+          account.favoriteChannelList = payload;
+        }
+      }
     },
     showSoaringVideos(state, payload) {
       state.soaringVideos = new Array<Videos>();
@@ -279,6 +296,13 @@ export default new Vuex.Store({
         );
       }
     },
+
+    /**
+     * ログインしたユーザー情報をstateに保存する.
+     *
+     * @param state - ステート
+     * @param payload - ペイロード
+     */
     addCurrentUser(state, payload) {
       state.currentUser = payload;
     },
@@ -377,6 +401,11 @@ export default new Vuex.Store({
     getYoutubersInfo(state) {
       return state.youtubersInfo;
     },
+    /**
+     * 全てのアカウント情報を返す.
+     * @param state - ステート
+     * @returns - 全てのアカウント情報
+     */
     getAccountList(state) {
       return state.accountList;
     },
@@ -407,6 +436,9 @@ export default new Vuex.Store({
         }
         return reviewListByVideoId;
       };
+    },
+    getApiKey(state) {
+      return state.apiKey[Math.floor(Math.random() * state.apiKey.length)];
     },
   },
 });

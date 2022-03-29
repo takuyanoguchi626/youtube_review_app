@@ -3,6 +3,9 @@
     <div class="youtuber item col card white">
       <img class="img1" :src="currentChannel.thumbnailsUrl" />
       <div class="channel-title">{{ currentChannel.title }}</div>
+      <a class="waves-effect waves-light btn" v-on:click="favoriteChannel()"
+        ><i class="material-icons left">star_border</i>お気に入り</a
+      >
       <p>
         {{ currentChannel.description }}
       </p>
@@ -44,7 +47,8 @@ export default class XXXComponent extends Vue {
   private currentChannel = new Channels("", "", "", "", "", 1, 1, 1);
   private videoArr = new Array<Videos>();
 
-  private apiKey = "AIzaSyAzfoPPbpueXEcQypbLRLXXNCz5JQFDtlc";
+  private apiKey = this.$store.getters.getApiKey;
+
 
 
   async created(): Promise<void> {
@@ -106,6 +110,13 @@ export default class XXXComponent extends Vue {
         )
       );
     }
+  }
+  /**
+   * チャンネル情報をfavoriteListに入れる.
+   */
+  favoriteChannel(): void {
+    this.$store.commit("addChannelData", this.currentChannel);
+    console.log(this.$store.state.accountList);
   }
 }
 </script>

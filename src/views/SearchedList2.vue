@@ -25,10 +25,10 @@
                   }}</router-link
                   ><br />
                   <span class="title"></span>登録者数：{{
-                    searchedChannel.subscriberCount
+                    searchedChannel.formatSubscriberCount
                   }}<br />
                   <span class="title"></span>総動画数：{{
-                    searchedChannel.videoCount
+                    searchedChannel.formatViewCount
                   }}<br />
                   <span class="title"></span>説明：{{
                     searchedChannel.description
@@ -64,10 +64,13 @@
                       </div>
                       <router-link
                         v-bind:to="'/videoDetail/' + searchedVideo.id"
-                        >{{ searchedVideo.title }}</router-link
+                        >タイトル：{{ searchedVideo.title }}</router-link
                       ><br />
-                      <span class="title"></span>タイトル：{{
-                        searchedVideo.publishedAt
+                      <span class="title"></span>再生回数：{{
+                        searchedVideo.viewCount
+                      }}<br />
+                      <span class="title"></span>投稿日：{{
+                        searchedVideo.formatPublishedAt
                       }}<br />
                       <span class="title"></span>チャンネル名：{{
                         searchedVideo.channelTitle
@@ -94,10 +97,17 @@ import { Videos } from "@/types/Videos";
 import { Channels } from "@/types/Channels";
 @Component
 export default class XXXComponent extends Vue {
+  // 動画情報の検索結果
   private searchedVideos: Array<Videos> = [];
+  // 検索される動画id
+  private videoIdList = new Array<string>();
+  // チャンネルの検索結果
   private searchedChannels = new Array<Channels>();
+  // 検索されるチャンネルid
   private channelIdList = new Array<string>();
-  private key = "AIzaSyAzfoPPbpueXEcQypbLRLXXNCz5JQFDtlc";
+  // 外部APIキー
+  private key = this.$store.getters.getApiKey;
+  // 検索ワード
   private searchText = "";
 
   async created(): Promise<void> {
@@ -122,32 +132,43 @@ export default class XXXComponent extends Vue {
       }
     }
 
+    // 検索ワードをURLより取得
     this.searchText = this.$route.params.searchText;
     console.log(this.searchText);
     const response1 = await axios.get(
-      // ビデオの検索API
+      // ビデオの検索APIでidを取得
       `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&maxResults=10&regionCode=JP&key=${this.key}&q=${this.searchText}`
     );
     const payload1 = response1.data.items;
     console.dir("レスポンスデータ" + payload1);
 
-    for (let video of payload1) {
+    for (let preVideo of payload1) {
+      this.videoIdList.push(preVideo.id.videoId);
+    }
+    // 上で取得したidを使いビデオの情報をAPIで取得
+    for (let videoId of this.videoIdList) {
+      const response3 = await axios.get(
+        `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet,statistics&regionCode=JP&key=${this.key}`
+      );
+      const video = response3.data.items[0];
+      console.dir("video" + JSON.stringify(video));
       this.searchedVideos.push(
         new Videos(
-          video.id.videoId,
+          video.id,
           video.snippet.publishedAt,
           video.snippet.title,
           video.snippet.description,
-          video.snippet.thumbnails.default.url,
+          video.snippet.thumbnails.high.url,
           video.snippet.channelTitle,
           video.snippet.tags,
-          video.snippet.viewCount
+          video.statistics.viewCount
         )
       );
       console.log(this.searchedVideos);
     }
+
     const response2 = await axios.get(
-      // チャンネルの検索API
+      // チャンネルの検索APIでidを取得
       `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=channel&maxResults=10&regionCode=JP&key=${this.key}&q=${this.searchText}`
     );
     const channel1Items = response2.data.items;
@@ -161,6 +182,7 @@ export default class XXXComponent extends Vue {
     }
     console.log("channelIdList" + this.channelIdList);
 
+    // 上で取得したidを使いチャンネルの情報をAPIで取得
     for (let channelId of this.channelIdList) {
       const response3 = await axios.get(
         `https://www.googleapis.com/youtube/v3/channels?key=${this.key}&maxResults=10&part=snippet,contentDetails,statistics,status&id=${channelId}`
@@ -173,7 +195,7 @@ export default class XXXComponent extends Vue {
             channel2Item.snippet.title,
             channel2Item.snippet.description,
             channel2Item.snippet.publishedAt,
-            channel2Item.snippet.thumbnails.default.url,
+            channel2Item.snippet.thumbnails.high.url,
             channel2Item.statistics.viewCount,
             channel2Item.statistics.subscriberCount,
             channel2Item.statistics.videoCount
