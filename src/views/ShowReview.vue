@@ -15,7 +15,6 @@
           <router-link :to="'/myProfile/' + targetAccount.id">
             <p>アカウント名： {{ targetAccount.name }}</p>
           </router-link>
-          <p>登録情報</p>
           <p>自己紹介： {{ targetAccount.introduction }}</p>
         </div>
       </div>
@@ -38,6 +37,8 @@
             </span>
             <p>投稿日：{{ targetReview.videos.formatPublishedAt }}</p>
           </div>
+        </div>
+        <div class="review">
           <div class="evaluation">
             <p>
               評価：
@@ -47,16 +48,17 @@
               ></span>
             </p>
           </div>
-        </div>
-        <div class="review">
-          <p>
-            レビュー投稿日：{{ targetReview.reviewDate }}
-            {{ targetReview.review }}<br />
-          </p>
-          <a class="waves-effect waves-light btn" v-on:click="favoriteReview()"
-            ><i class="material-icons left">thumb_up</i>いいね</a
-          >
-          {{ favoriteCount }}
+          <p>{{ targetReview.review }}<br /></p>
+          <div class="review-data">
+            <p>レビュー投稿日：{{ targetReview.reviewDate }}</p>
+            <a
+              class="waves-effect waves-light btn"
+              v-on:click="favoriteReview()"
+              :disabled="flag"
+              ><i class="material-icons left">thumb_up</i>いいね</a
+            >
+            {{ favoriteCount.length }}
+          </div>
         </div>
       </div>
     </div>
@@ -93,15 +95,17 @@ export default class XXXComponent extends Vue {
     new Videos(0, "", "", "", "", "", "", ""),
     0,
     "",
-    0
+    new Array<number>()
   );
   // ステートの全ユーザー情報
   private accountList = this.$store.getters.getAccountList;
-
+  // 取得したレビューのいいねカウント
   private favoriteCount = this.targetReview.favoriteCount;
+  // ボタンの使用可否
+  private flag = false;
+  private currentUserId = this.$store.getters.getCurrentUser.id;
 
   created(): void {
-
     // スクロールトップボタン
     scrollTop(1); // 遅すぎるとガクガクになるので注意
 
@@ -146,16 +150,27 @@ export default class XXXComponent extends Vue {
         }
       }
     }
+    // ログインしていない、または投稿した本人だったらボタンを押せなくする
+    if (
+      this.targetReview.accountId === this.currentUserId ||
+      this.currentUserId === 0
+    ) {
+      this.flag = true;
+    }
   }
   /**
    * レビューにいいねをする.
    */
   favoriteReview(): void {
-    this.favoriteCount = this.favoriteCount + 1;
-    const review = this.targetReview;
-    review.favoriteCount = this.favoriteCount;
-    this.$store.commit("addFavoriteCount", review.favoriteCount);
-    console.log(this.$store.state.accountList);
+    this.favoriteCount.push(this.targetAccount.id);
+
+    // 取得したレビューのいいね情報に現在のユーザー情報が含まれていたらボタンを押せなくする
+
+    if (this.favoriteCount.includes(this.currentUserId)) {
+      this.flag = true;
+    }
+
+    this.$store.commit("addFavorite", this.targetReview);
   }
 }
 </script>
@@ -188,7 +203,9 @@ export default class XXXComponent extends Vue {
 .review {
   padding: 10px;
   width: 350px;
+  position: relative;
 }
+
 .movieDescription {
   height: 150px;
   width: 300px;
