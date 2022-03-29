@@ -107,9 +107,10 @@ export default class XXXComponent extends Vue {
   private searchedChannels = new Array<Channels>();
   // 検索されるチャンネルid
   private channelIdList = new Array<string>();
+  private key = "AIzaSyC5rIjlnyhMouOVCBNhykDYlhw72d_j5CI";
 
   // 外部APIキー
-  private key = this.$store.getters.getApiKey;
+  // private key = this.$store.getters.getApiKey;
   // 検索ワード
 
   private searchText = "";

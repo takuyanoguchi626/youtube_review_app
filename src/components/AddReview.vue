@@ -90,6 +90,7 @@ export default class XXXComponent extends Vue {
       responceVideo.tags,
       responceVideo.statistics.viewCount
     );
+    console.log(this.videoDetail);
   }
 
   getDate(): string {

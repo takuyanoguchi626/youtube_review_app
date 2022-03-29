@@ -1,11 +1,32 @@
 <template>
   <div class="container">
     <div class="youtuber item col card white">
-      <img class="img1" :src="currentChannel.thumbnailsUrl" />
+      <div>
+        <img class="img1" :src="currentChannel.thumbnailsUrl" />
+      </div>
       <div class="channel-title">{{ currentChannel.title }}</div>
-      <button class="btn" type="button" v-on:click="showDescription">
+      <button
+        class="btn"
+        type="button"
+        v-on:click="showDescription"
+        key="show"
+        v-if="!flag"
+      >
         概要欄をcheck！
       </button>
+      <button
+        class="btn hidden"
+        type="button"
+        v-on:click="hiddenDescription"
+        key="hidden"
+        v-if="flag"
+      >
+        概要欄を閉じる。
+      </button>
+      <div v-if="flag">
+        <h7>【概要欄】</h7>
+        <hr />
+      </div>
       <div class="channel-description" v-if="flag">
 
         <a
@@ -19,16 +40,17 @@
       </div>
       <hr />
       <div class="counts">
-        <span>総再生回数：{{ currentChannel.formatViewCount }}回</span><br />
-        <span>
-          チャンネル登録者数：{{ currentChannel.formatSubscriberCount }}人</span
-        >
+        <div>総再生回数：{{ currentChannel.formatViewCount }}回</div>
+        <div>
+          チャンネル登録者数：{{ currentChannel.formatSubscriberCount }}人
+        </div>
       </div>
-      <a
-        class="waves-effect waves-light btn favorite"
+      <button
+        class="waves-effect waves-light btn favorite favoriteBtn"
         v-on:click="favoriteChannel()"
-        ><i class="material-icons left">star_border</i>お気に入り</a
       >
+        <i class="material-icons left">star_border</i>お気に入り
+      </button>
     </div>
 
     <div class="videos item col card white video-card">
@@ -59,6 +81,7 @@ import { Component, Vue } from "vue-property-decorator";
 export default class XXXComponent extends Vue {
   private currentChannel = new Channels("", "", "", "", "", 1, 1, 1);
   private videoArr = new Array<Videos>();
+
   private flag = false;
   // チャンネルお気に入りボタンのフラグ
   private favoriteFlag = false;
@@ -155,6 +178,9 @@ export default class XXXComponent extends Vue {
   showDescription(): void {
     this.flag = true;
   }
+  hiddenDescription(): void {
+    this.flag = false;
+  }
   /**
    * チャンネル情報をfavoriteListに入れる.
    */
@@ -171,21 +197,25 @@ export default class XXXComponent extends Vue {
   display: flex;
 }
 .img1 {
-  width: 30vw;
-  height: auto;
-  object-fit: cover;
+  width: 350px;
+  height: 350px;
+  /* height: auto; */
+  /* object-fit: cover; */
 }
+
 .channel-title {
   font-weight: bold;
   font-size: 30px;
 }
 .youtuber {
-  overflow-wrap: break-word;
+  /* overflow-wrap: break-word; */
   margin-top: 0;
   margin-right: 30px;
-  width: 50%;
+  margin-bottom: 20px;
+  width: 550px;
   padding: 10px;
-  height: 840px;
+  padding-bottom: 0;
+  object-fit: cover;
 }
 .video-title {
   font-weight: bold;
@@ -193,6 +223,10 @@ export default class XXXComponent extends Vue {
 .video-card {
   margin-top: 0;
   overflow-x: auto;
+  overflow-wrap: break-word;
+}
+.hidden {
+  margin-bottom: 10px;
 }
 .img2 {
   width: 100%;
@@ -205,11 +239,15 @@ export default class XXXComponent extends Vue {
 }
 .videos {
   overflow-x: auto;
-  height: 840px;
+  height: 552px;
+  margin-top: 30px;
+}
+.favoriteBtn {
+  margin-bottom: 20px;
 }
 .channel-description {
   margin-top: 5px;
-  height: 22%;
+  height: 224px;
   overflow-x: auto;
 }
 .counts {

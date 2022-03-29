@@ -19,7 +19,6 @@ export default new Vuex.Store({
     youtubersInfo: Array<Channels>(),
     // ユーザー情報
     accountList: Array<Account>(),
-
     soaringVideos: Array<Videos>(),
     currentUser: new Account(
       0,
