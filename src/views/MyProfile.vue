@@ -202,7 +202,7 @@ export default class XXXComponent extends Vue {
 .image {
   width: 20vw;
   /* height: 20hw; */
-  /* object-fit: cover; */
+  object-fit: cover;
 }
 .icon {
   width: 100px;
