@@ -13,147 +13,152 @@ export default new Vuex.Store({
   state: {
     //最後のレビューID
     lastReviewId: 1,
+    // 登録された最後のユーザーID
+    lastUserId: 0,
     // Youtuber情報
     youtubersInfo: Array<Channels>(),
     // ユーザー情報
-    accountList: [
-      new Account(
-        1,
-        "鈴木太郎",
-        "aaaa",
-        "/img/pagu.jpg",
-        "aaaa",
-        "ssss",
-        "aaaaa",
-        [
-          new Channels(
-            "id",
-            "dddsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
-            "ddd",
-            "sss",
-            "/img/pagu.jpg",
-            1,
-            1,
-            1
-          ),
-          new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1),
-          new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1),
-          new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1),
-        ],
-        [
-          new Review(
-            "",
-            11,
-            1,
-            "",
-            "",
-            new Videos(
-              1,
-              "2020/01/01",
-              "タイトル",
-              "概要欄",
-              "/img/pagu.jpg",
-              "ss",
-              "ss",
-              "ss"
-            ),
-            1,
-            "レビューのプレビュー",
-            1
-          ),
-          new Review(
-            "",
-            1,
-            1,
-            "",
-            "",
-            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
-            1,
-            "レビューのプレビュー",
-            1
-          ),
-          new Review(
-            "",
-            2,
-            1,
-            "",
-            "",
-            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
-            1,
-            "レビューのプレビュー",
-            1
-          ),
-          new Review(
-            "",
-            3,
-            1,
-            "",
-            "",
-            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
-            1,
-            "レビューのプレビュー",
-            1
-          ),
-        ]
-      ),
-      new Account(
-        2,
-        "山田花子",
-        "aaaa",
-        "/img/pagu.jpg",
-        "aaas",
-        "ssss",
-        "aaaaa",
-        [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
-        [
-          new Review(
-            "",
-            4,
-            2,
-            "",
-            "",
-            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
-            1,
-            "レビューのプレビュー",
-            1
-          ),
-          new Review(
-            "",
-            5,
-            2,
-            "",
-            "",
-            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
-            1,
-            "レビューのプレビュー",
-            1
-          ),
-        ]
-      ),
-      new Account(
-        3,
-        "佐藤次郎",
-        "aaaa",
-        "/img/pagu.jpg",
-        "aaak",
-        "ssss",
-        "aaaaa",
-        [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
-        [
-          new Review(
-            "",
-            6,
-            3,
-            "",
-            "",
-            new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
-            1,
-            "レビューのプレビュー",
-            1
-          ),
-        ]
-      ),
-    ],
+
+    accountList: Array<Account>(),
+    // [
+    //   new Account(
+    //     1,
+    //     "鈴木太郎",
+    //     "aaaa",
+    //     "/img/pagu.jpg",
+    //     "aaaa",
+    //     "ssss",
+    //     "aaaaa",
+    //     [
+    //       new Channels(
+    //         "id",
+    //         "dddsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
+    //         "ddd",
+    //         "sss",
+    //         "/img/pagu.jpg",
+    //         1,
+    //         1,
+    //         1
+    //       ),
+    //       new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1),
+    //       new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1),
+    //       new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1),
+    //     ],
+    //     [
+    //       new Review(
+    //         "",
+    //         11,
+    //         1,
+    //         "",
+    //         "",
+    //         new Videos(
+    //           1,
+    //           "2020/01/01",
+    //           "タイトル",
+    //           "概要欄",
+    //           "/img/pagu.jpg",
+    //           "ss",
+    //           "ss",
+    //           "ss"
+    //         ),
+    //         1,
+    //         "レビューのプレビュー",
+    //         1
+    //       ),
+    //       new Review(
+    //         "",
+    //         1,
+    //         1,
+    //         "",
+    //         "",
+    //         new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
+    //         1,
+    //         "レビューのプレビュー",
+    //         1
+    //       ),
+    //       new Review(
+    //         "",
+    //         2,
+    //         1,
+    //         "",
+    //         "",
+    //         new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
+    //         1,
+    //         "レビューのプレビュー",
+    //         1
+    //       ),
+    //       new Review(
+    //         "",
+    //         3,
+    //         1,
+    //         "",
+    //         "",
+    //         new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
+    //         1,
+    //         "レビューのプレビュー",
+    //         1
+    //       ),
+    //     ]
+    //   ),
+    //   new Account(
+    //     2,
+    //     "山田花子",
+    //     "aaaa",
+    //     "/img/pagu.jpg",
+    //     "aaas",
+    //     "ssss",
+    //     "aaaaa",
+    //     [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
+    //     [
+    //       new Review(
+    //         "",
+    //         4,
+    //         1,
+    //         "",
+    //         "",
+    //         new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
+    //         1,
+    //         "レビューのプレビュー",
+    //         1
+    //       ),
+    //       new Review(
+    //         "",
+    //         5,
+    //         1,
+    //         "",
+    //         "",
+    //         new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
+    //         1,
+    //         "レビューのプレビュー",
+    //         1
+    //       ),
+    //     ]
+    //   ),
+    //   new Account(
+    //     3,
+    //     "佐藤次郎",
+    //     "aaaa",
+    //     "/img/pagu.jpg",
+    //     "aaak",
+    //     "ssss",
+    //     "aaaaa",
+    //     [new Channels("id", "ddd", "ddd", "sss", "/img/pagu.jpg", 1, 1, 1)],
+    //     [
+    //       new Review(
+    //         "",
+    //         6,
+    //         1,
+    //         "",
+    //         "",
+    //         new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
+    //         1,
+    //         "レビューのプレビュー",
+    //         1
+    //       ),
+    //     ]
+    //   ),
+    // ],
+
     soaringVideos: Array<Videos>(),
     currentUser: new Account(
       2,
@@ -234,6 +239,10 @@ export default new Vuex.Store({
     addUser(state, payload) {
       state.accountList.push(payload);
     },
+    /**
+     * カレントユーザーにからのアカウントオブジェクトを代入し、ログアウトする.
+     * @param state - ステート
+     */
     removeUser(state) {
       state.currentUser = new Account(
         0,
@@ -247,6 +256,11 @@ export default new Vuex.Store({
         new Array<Review>()
       );
     },
+    /**
+     * stateのユーザーリスト中のレビュー情報にいいねカウントを入れる.
+     * @param state - ステート
+     * @param payload - ペイロード
+     */
     addFavoriteCount(state, payload) {
       for (const account of state.accountList) {
         for (let review of account.reviewList) {
@@ -256,10 +270,18 @@ export default new Vuex.Store({
         }
       }
     },
+    /**
+     * ユーザー登録時のIDの更新.
+     * @param state - ステート
+     * @param payload - ペイロード
+     */
+    addLastUserId(state, payload) {
+      state.lastUserId = payload;
+    },
     addChannelData(state, payload) {
       for (const account of state.accountList) {
         if (account.id === state.currentUser.id) {
-          account.favoriteChannelList = payload;
+          account.favoriteChannelList.push(payload);
         }
       }
     },
@@ -307,7 +329,6 @@ export default new Vuex.Store({
     addCurrentUser(state, payload) {
       state.currentUser = payload;
     },
-
     changeAccountIcon(state, payload) {
       const account = state.accountList.find(
         (account) => account.id === payload.id
@@ -444,8 +465,22 @@ export default new Vuex.Store({
         return reviewListByVideoId;
       };
     },
+    /**
+     * APIキーをランダムに取得.
+     * @param state - ステート
+     * @returns APIキー
+     */
     getApiKey(state) {
       return state.apiKey[Math.floor(Math.random() * state.apiKey.length)];
+    },
+    /**
+     * 登録された最後のユーザーに使用されるIDを取得.
+     *
+     * @param state -ステート
+     * @returns 登録された最後のユーザーに使用されるID
+     */
+    getLastUserId(state) {
+      return state.lastUserId;
     },
   },
 });
