@@ -60,10 +60,10 @@
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowfullscreen
             ></iframe>
-            <div class="channel-title1">{{ video.channelTitle }}</div>
             <router-link :to="'/videoDetail/' + video.id">
               <div class="video-title">{{ video.title }}</div>
             </router-link>
+            <div class="channel-title1">{{ video.channelTitle }}</div>
             <div>投稿日：{{ video.formatPublishedAt }}</div>
           </div>
         </div>
@@ -425,6 +425,7 @@ iframe {
   text-align: right;
   font-size: 20px;
   padding-top: 10px;
+  font-weight: bold;
 }
 .account-img {
   width: 120px;
