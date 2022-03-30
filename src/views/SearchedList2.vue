@@ -140,7 +140,6 @@ export default class XXXComponent extends Vue {
 
     // 検索ワードをURLより取得
     this.searchText = this.$route.params.searchText;
-    console.log(this.searchText);
 
     const response2 = await axios.get(
       // チャンネルの検索APIでidを取得
