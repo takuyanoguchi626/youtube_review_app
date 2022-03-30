@@ -113,18 +113,14 @@ export default class XXXComponent extends Vue {
   private searchedChannels = new Array<Channels>();
   // 検索されるチャンネルid
   private channelIdList = new Array<string>();
-  private key = "AIzaSyC5rIjlnyhMouOVCBNhykDYlhw72d_j5CI";
-
   // 外部APIキー
-  // private key = this.$store.getters.getApiKey;
+  private key = this.$store.getters.getApiKey;
   // 検索ワード
-
   private searchText = "";
 
   async created(): Promise<void> {
     // スクロールトップボタン
     scrollTop(1); // 遅すぎるとガクガクになるので注意
-
     function scrollTop(duration: number) {
       let currentY = window.pageYOffset; // 現在のスクロール位置を取得
       let step = duration / currentY > 1 ? 10 : 100; // 三項演算子
@@ -132,7 +128,6 @@ export default class XXXComponent extends Vue {
       let intervalId = setInterval(scrollUp, timeStep);
       // timeStepの間隔でscrollUpを繰り返す。
       // clearItervalのために返り値intervalIdを定義する。
-
       function scrollUp() {
         currentY = window.pageYOffset;
         if (currentY === 0) {
@@ -145,22 +140,16 @@ export default class XXXComponent extends Vue {
 
     // 検索ワードをURLより取得
     this.searchText = this.$route.params.searchText;
-    console.log(this.searchText);
 
     const response2 = await axios.get(
       // チャンネルの検索APIでidを取得
       `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=channel&maxResults=10&regionCode=JP&key=${this.key}&q=${this.searchText}`
     );
     const channel1Items = response2.data.items;
-    console.log(channel1Items);
 
     for (const item of channel1Items) {
-      console.dir("item" + JSON.stringify(item));
-      console.log("ChannelId" + item.snippet.channelId);
-
       this.channelIdList.push(item.snippet.channelId);
     }
-    console.log("channelIdList" + this.channelIdList);
 
     // 上で取得したidを使いチャンネルの情報をAPIで取得
     for (let channelId of this.channelIdList) {
@@ -183,14 +172,12 @@ export default class XXXComponent extends Vue {
         );
       }
     }
-    console.log(this.searchedChannels);
 
     const response1 = await axios.get(
       // ビデオの検索APIでidを取得
       `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&maxResults=10&regionCode=JP&key=${this.key}&q=${this.searchText}`
     );
     const payload1 = response1.data.items;
-    console.dir("レスポンスデータ" + payload1);
 
     for (let preVideo of payload1) {
       this.videoIdList.push(preVideo.id.videoId);
@@ -201,7 +188,6 @@ export default class XXXComponent extends Vue {
         `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet,statistics&regionCode=JP&key=${this.key}`
       );
       const video = response3.data.items[0];
-      console.dir("video" + JSON.stringify(video));
       this.searchedVideos.push(
         new Videos(
           video.id,
@@ -214,7 +200,6 @@ export default class XXXComponent extends Vue {
           video.statistics.viewCount
         )
       );
-      console.log(this.searchedVideos);
     }
   }
 }

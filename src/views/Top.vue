@@ -20,7 +20,7 @@
           ></span
         >
         <div class="register-user">
-          <p class="p1">ユーザー登録はこちらから！</p>
+          <p class="p1">会員登録はこちらから！</p>
           <button class="button1" type="button" v-on:click="moveToRegister">
             <span>
               <i class="small material-icons">ondemand_video</i>
@@ -230,7 +230,6 @@ export default class XXXComponent extends Vue {
 
 <style scoped>
 @import "https://use.fontawesome.com/releases/v5.13.0/css/all.css";
-
 /* TOP上部の画像に当てるCSS（テキスト、ボタン含む） */
 .top {
   position: relative;

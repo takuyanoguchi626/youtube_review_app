@@ -21,7 +21,7 @@
         key="hidden"
         v-if="flag"
       >
-        概要欄を閉じる。
+        概要欄を閉じる
       </button>
       <div v-if="flag">
         <h7>【概要欄】</h7>
@@ -81,10 +81,10 @@ export default class XXXComponent extends Vue {
   private currentUserId = this.$store.getters.getCurrentUser.id;
   // APIキー
   private apiKey = this.$store.getters.getApiKey;
+
   async created(): Promise<void> {
     // スクロールトップボタン
     scrollTop(1); // 遅すぎるとガクガクになるので注意
-
     function scrollTop(duration: number) {
       let currentY = window.pageYOffset; // 現在のスクロール位置を取得
       let step = duration / currentY > 1 ? 10 : 100; // 三項演算子
@@ -92,7 +92,6 @@ export default class XXXComponent extends Vue {
       let intervalId = setInterval(scrollUp, timeStep);
       // timeStepの間隔でscrollUpを繰り返す。
       // clearItervalのために返り値intervalIdを定義する。
-
       function scrollUp() {
         currentY = window.pageYOffset;
         if (currentY === 0) {
@@ -153,12 +152,8 @@ export default class XXXComponent extends Vue {
 
     // 既にお気に入り登録している場合を押せなくする
     for (const account of this.$store.getters.getAccountList) {
-      console.log(account);
-
       if (this.currentUserId === account.id) {
         for (const favoriteChannel of account.favoriteChannelList) {
-          console.log(channelId);
-
           if (channelId === favoriteChannel.id) {
             this.favoriteFlag = true;
           }
@@ -180,7 +175,6 @@ export default class XXXComponent extends Vue {
    */
   favoriteChannel(): void {
     this.$store.commit("addChannelData", this.currentChannel);
-    console.log(this.$store.state.accountList);
     this.favoriteFlag = true;
   }
 }
