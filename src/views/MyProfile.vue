@@ -12,7 +12,7 @@
         <!-- </router-link> -->
       </div>
       <div class="introduction2">
-        <div class="subtitle">
+        <div class="subtitle name">
           {{ currentAccount.name }}
         </div>
         <div class="introduction3">
@@ -199,6 +199,9 @@ export default class XXXComponent extends Vue {
   width: 20vw;
   /* height: 20hw; */
   object-fit: cover;
+}
+.name {
+  font-size: 25px;
 }
 .icon {
   width: 100px;

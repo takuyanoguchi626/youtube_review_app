@@ -123,6 +123,27 @@ export default class XXXComponent extends Vue {
   // エラーチェッカー
   private errorChecker = false;
 
+  created(): void {
+    // スクロールトップボタン
+    scrollTop(1); // 遅すぎるとガクガクになるので注意
+    function scrollTop(duration: number) {
+      let currentY = window.pageYOffset; // 現在のスクロール位置を取得
+      let step = duration / currentY > 1 ? 10 : 100; // 三項演算子
+      let timeStep = (duration / currentY) * step; // スクロール時間
+      let intervalId = setInterval(scrollUp, timeStep);
+      // timeStepの間隔でscrollUpを繰り返す。
+      // clearItervalのために返り値intervalIdを定義する。
+      function scrollUp() {
+        currentY = window.pageYOffset;
+        if (currentY === 0) {
+          clearInterval(intervalId); // ページ最上部に来たら終了
+        } else {
+          scrollBy(0, -step); // step分上へスクロール
+        }
+      }
+    }
+  }
+
   /**
    * ユーザー登録情報をstoreに送る.
    */
@@ -216,7 +237,6 @@ export default class XXXComponent extends Vue {
       this.$store.commit("addLastUserId", newUserId);
       this.$router.push("/login");
     }
-    console.log(this.$store.state.accountList);
   }
 }
 </script>

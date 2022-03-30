@@ -35,7 +35,7 @@
         v-on:click="hiddenDescription"
         v-if="flag"
       >
-        概要欄を閉じる！
+        概要欄を閉じる
       </button>
       <hr />
       <div v-if="flag">
@@ -109,7 +109,6 @@ export default class XXXComponent extends Vue {
   async created(): Promise<void> {
     // スクロールトップボタン
     scrollTop(1); // 遅すぎるとガクガクになるので注意
-
     function scrollTop(duration: number) {
       let currentY = window.pageYOffset; // 現在のスクロール位置を取得
       let step = duration / currentY > 1 ? 10 : 100; // 三項演算子
@@ -117,7 +116,6 @@ export default class XXXComponent extends Vue {
       let intervalId = setInterval(scrollUp, timeStep);
       // timeStepの間隔でscrollUpを繰り返す。
       // clearItervalのために返り値intervalIdを定義する。
-
       function scrollUp() {
         currentY = window.pageYOffset;
         if (currentY === 0) {
@@ -172,11 +170,9 @@ export default class XXXComponent extends Vue {
 
   postReview(): void {
     const user = this.$store.getters.getCurrentUser;
-    console.log(user);
 
     if (user.id === 0) {
       this.$router.push("/login");
-      console.log("ddd");
       return;
     }
     this.$router.push(`/addReview/${this.videoDetail.id}`);
