@@ -5,22 +5,15 @@ Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
+    path: "/",
+    component: () => import("../views/Top.vue"),
   },
   {
     path: "/login",
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/Login.vue"),
+    component: () => import("../views/Login.vue"),
   },
   {
     path: "/iconChange/:id",
-    name: "",
     component: () => import("../views/IconChange.vue"),
   },
   {
@@ -41,42 +34,31 @@ const routes: Array<RouteConfig> = [
     component: () => import("../views/Top.vue"),
   },
   {
-    path: "/",
-    component: () => import("../views/Top.vue"),
-  },
-  {
     path: "/myProfile/:id",
-    name: "",
     component: () => import("../views/MyProfile.vue"),
   },
   {
     path: "/selfIntroductionChange/:id",
-    name: "",
     component: () => import("../views/SelfIntroductionChange.vue"),
   },
   {
     path: "/addReview/:id",
-    name: "",
     component: () => import("../components/AddReview.vue"),
   },
   {
     path: "/showReview/:id",
-    name: "",
     component: () => import("../views/ShowReview.vue"),
   },
   {
     path: "/2searchedList/:searchText",
-    name: "",
     component: () => import("../views/SearchedList2.vue"),
   },
   {
     path: "/searchedList/:searchText",
-    name: "",
     component: () => import("../views/SearchedList.vue"),
   },
   {
     path: "/404",
-    name: "",
     component: () => import("../views/404.vue"),
   },
 ];

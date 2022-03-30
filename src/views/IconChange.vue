@@ -38,7 +38,6 @@ export default {
         img: this.image,
       });
       this.message = "画像を変更しました！";
-      // this.$router.push(`/myProfile/${id}`);
     },
   },
   mounted() {
