@@ -116,14 +116,10 @@ export default class XXXComponent extends Vue {
   get reviewFavorite(): Review {
     // URLから取得したid
     const reviewParamsId = this.$route.params.id;
-    console.dir(JSON.stringify("reviewParamsId" + reviewParamsId));
-    console.log(this.accountList);
 
     // ステートの情報の中からURLで付与されたものと同一の一意のidのレビューを取得する
     for (const account of this.accountList) {
-      console.dir(JSON.stringify("account" + account));
       for (const review of account.reviewList) {
-        console.dir(JSON.stringify("review" + review));
         if (Number(reviewParamsId) === review.reviewId) {
           this.targetReview = review;
         }
@@ -159,23 +155,13 @@ export default class XXXComponent extends Vue {
     // URLから取得したid
 
     const reviewParamsId = this.$route.params.id;
-    console.dir(JSON.stringify("reviewParamsId" + reviewParamsId));
-    console.log(this.accountList);
 
     // ステートの情報の中からURLで付与されたものと同一の一意のidのレビューを取得する
     for (const account of this.accountList) {
-      console.dir(JSON.stringify("account" + account));
-
       for (const review of account.reviewList) {
-        console.dir(JSON.stringify("review" + review));
-
         if (Number(reviewParamsId) === review.reviewId) {
           this.targetReview = review;
           this.targetAccount = account;
-          console.dir("this.targetReview" + JSON.stringify(this.targetReview));
-          console.dir(
-            "this.targetAccount" + JSON.stringify(this.targetAccount)
-          );
         }
       }
     }
