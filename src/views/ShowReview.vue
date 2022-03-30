@@ -12,10 +12,13 @@
         </router-link>
 
         <div class="description">
-          <router-link :to="'/myProfile/' + targetAccount.id">
-            <p>アカウント名： {{ targetAccount.name }}</p>
+          <router-link
+            class="name-title"
+            :to="'/myProfile/' + targetAccount.id"
+          >
+            <p>{{ targetAccount.name }}</p>
           </router-link>
-          <p>自己紹介： {{ targetAccount.introduction }}</p>
+          <p>{{ targetAccount.introduction }}</p>
         </div>
       </div>
 
@@ -28,12 +31,16 @@
             />
           </router-link>
           <div>
-            <router-link :to="'/videoDetail/' + targetReview.videos.id">
-              <p>タイトル：{{ targetReview.videos.title }}</p>
+            <router-link
+              class="name-title"
+              :to="'/videoDetail/' + targetReview.videos.id"
+            >
+              <p>{{ targetReview.videos.title }}</p>
             </router-link>
-            <p>再生回数：{{ targetReview.videos.formatViewCount }}</p>
+            <p>再生回数：{{ targetReview.videos.formatViewCount }}回</p>
+            <p class="name-title">【{{ targetReview.videos.channelTitle }}】</p>
             <span class="movieDescription">
-              概要：{{ targetReview.videos.description }}
+              【概要欄】<br />{{ targetReview.videos.description }}
             </span>
             <p>投稿日：{{ targetReview.videos.formatPublishedAt }}</p>
           </div>
@@ -218,8 +225,9 @@ export default class XXXComponent extends Vue {
   overflow-x: hidden;
 }
 .account-img {
-  width: 300px;
-  height: 300px;
+  margin-top: 5px;
+  width: 150px;
+  height: 150px;
 }
 .movie-img {
   width: 300px;
@@ -236,6 +244,9 @@ export default class XXXComponent extends Vue {
   overflow-wrap: break-word;
   overflow-y: scroll;
   display: block;
+}
+.name-title {
+  font-weight: bold;
 }
 .star5_rating {
   position: relative;
