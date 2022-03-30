@@ -22,9 +22,10 @@
                       />
                     </router-link>
                   </div>
-                  <router-link :to="'/channelDetail/' + searchedChannel.id">{{
-                    searchedChannel.title
-                  }}</router-link
+                  <router-link
+                    class="name-title"
+                    :to="'/channelDetail/' + searchedChannel.id"
+                    >{{ searchedChannel.title }}</router-link
                   ><br />
 
                   <span class="title"
@@ -36,7 +37,7 @@
                     >総動画数：{{ searchedChannel.formatViewCount }}個</span
                   ><br />
                   <div class="channel-description">
-                    説明：{{ searchedChannel.description }}
+                    【概要欄】<br />{{ searchedChannel.description }}
                   </div>
                   <br />
                 </div>
@@ -69,21 +70,23 @@
                         ></iframe>
                       </div>
                       <router-link
+                        class="name-title"
                         v-bind:to="'/videoDetail/' + searchedVideo.id"
-                        >タイトル：{{ searchedVideo.title }}</router-link
+                        >{{ searchedVideo.title }}</router-link
                       ><br />
-
+                      <span class="name-title">{{
+                        searchedVideo.channelTitle
+                      }}</span
+                      ><br />
                       <span class="title"
-                        >再生回数：{{ searchedVideo.viewCount }}回</span
+                        >再生回数：{{ searchedVideo.formatViewCount }}回</span
                       ><br />
                       <span class="title"
                         >投稿日：{{ searchedVideo.formatPublishedAt }}</span
                       ><br />
-                      <span class="title"
-                        >チャンネル名：{{ searchedVideo.channelTitle }}</span
-                      ><br />
+
                       <div class="video-description">
-                        説明：{{ searchedVideo.description }}
+                        【概要欄】<br />{{ searchedVideo.description }}
                       </div>
                       <br />
                     </div>
@@ -113,6 +116,7 @@ export default class XXXComponent extends Vue {
   private searchedChannels = new Array<Channels>();
   // 検索されるチャンネルid
   private channelIdList = new Array<string>();
+
   // 外部APIキー
   private key = this.$store.getters.getApiKey;
   // 検索ワード
@@ -266,5 +270,8 @@ export default class XXXComponent extends Vue {
   /* flex: 0 0 320px; paddingやborder含むitem全体の横幅を320pxにする */
   padding: 20px;
   margin: 10px;
+}
+.name-title {
+  font-weight: bold;
 }
 </style>
