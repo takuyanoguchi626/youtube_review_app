@@ -75,22 +75,28 @@ export default class XXXComponent extends Vue {
 
   async created(): Promise<void> {
     const videoId = this.$route.params.id;
-    const key = this.$store.getters.getApiKey;
-    const responce = await axios.get(
-      `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&key=${key}&id=${videoId}`
-    );
-    const responceVideo = responce.data.items[0];
-    this.videoDetail = new Videos(
-      responceVideo.id,
-      responceVideo.snippet.publishedAt,
-      responceVideo.snippet.title,
-      responceVideo.snippet.description,
-      responceVideo.snippet.thumbnails.medium.url,
-      responceVideo.snippet.channelTitle,
-      responceVideo.tags,
-      responceVideo.statistics.viewCount
-    );
-    console.log(this.videoDetail);
+    const keys = this.$store.getters.getApiKey;
+    for (const key of keys) {
+      try {
+        const responce = await axios.get(
+          `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&key=${key}&id=${videoId}`
+        );
+        const responceVideo = responce.data.items[0];
+        this.videoDetail = new Videos(
+          responceVideo.id,
+          responceVideo.snippet.publishedAt,
+          responceVideo.snippet.title,
+          responceVideo.snippet.description,
+          responceVideo.snippet.thumbnails.medium.url,
+          responceVideo.snippet.channelTitle,
+          responceVideo.tags,
+          responceVideo.statistics.viewCount
+        );
+        return;
+      } catch (e) {
+        console.log("APIerror");
+      }
+    }
   }
 
   getDate(): string {

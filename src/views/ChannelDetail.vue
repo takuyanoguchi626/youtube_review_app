@@ -108,56 +108,63 @@ export default class XXXComponent extends Vue {
     }
 
     const channelId = this.$route.params.id;
-    const response = await axios.get(
-      `https://www.googleapis.com/youtube/v3/channels?id=${channelId}&key=${this.apiKey}&part=snippet,contentDetails,statistics,status`
-    );
-    const items = response.data.items[0];
-    this.currentChannel = new Channels(
-      items.id,
-      items.snippet.title,
-      items.snippet.description,
-      items.snippet.publishedAt,
-      items.snippet.thumbnails.high.url,
-      items.statistics.viewCount,
-      items.statistics.subscriberCount,
-      items.statistics.videoCount
-    );
-    const responseVideo = await axios.get(
-      `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&channelId=${this.currentChannel.id}&maxResults=10&regionCode=JP&key=${this.apiKey}&order=date`
-    );
-    const videoItems = responseVideo.data.items;
-    for (const videoitem of videoItems) {
-      const responceVideoDetail = await axios.get(
-        `https://www.googleapis.com/youtube/v3/videos?id=${videoitem.id.videoId}&part=snippet,statistics&regionCode=JP&key=${this.apiKey}`
-      );
-      const videoDetailItems = responceVideoDetail.data.items[0];
-      this.videoArr.push(
-        new Videos(
-          videoDetailItems.id,
-          videoDetailItems.snippet.publishedAt,
-          videoDetailItems.snippet.title,
-          videoDetailItems.snippet.description,
-          videoDetailItems.snippet.thumbnails.high.url,
-          videoDetailItems.snippet.channelTitle,
-          videoDetailItems.snippet.tags,
-          videoDetailItems.statistics.videoCount
-        )
-      );
-    }
-    // 概要欄がない場合の処理
-    if (this.currentChannel.description === "") {
-      this.currentChannel.description =
-        "このYoutuberの概要欄は見つかりませんでした";
-    }
+    for (const key of this.apiKey) {
+      try {
+        const response = await axios.get(
+          `https://www.googleapis.com/youtube/v3/channels?id=${channelId}&key=${key}&part=snippet,contentDetails,statistics,status`
+        );
+        const items = response.data.items[0];
+        this.currentChannel = new Channels(
+          items.id,
+          items.snippet.title,
+          items.snippet.description,
+          items.snippet.publishedAt,
+          items.snippet.thumbnails.high.url,
+          items.statistics.viewCount,
+          items.statistics.subscriberCount,
+          items.statistics.videoCount
+        );
+        const responseVideo = await axios.get(
+          `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&channelId=${this.currentChannel.id}&maxResults=10&regionCode=JP&key=${key}&order=date`
+        );
+        const videoItems = responseVideo.data.items;
+        for (const videoitem of videoItems) {
+          const responceVideoDetail = await axios.get(
+            `https://www.googleapis.com/youtube/v3/videos?id=${videoitem.id.videoId}&part=snippet,statistics&regionCode=JP&key=${key}`
+          );
+          const videoDetailItems = responceVideoDetail.data.items[0];
+          this.videoArr.push(
+            new Videos(
+              videoDetailItems.id,
+              videoDetailItems.snippet.publishedAt,
+              videoDetailItems.snippet.title,
+              videoDetailItems.snippet.description,
+              videoDetailItems.snippet.thumbnails.high.url,
+              videoDetailItems.snippet.channelTitle,
+              videoDetailItems.snippet.tags,
+              videoDetailItems.statistics.videoCount
+            )
+          );
+        }
+        // 概要欄がない場合の処理
+        if (this.currentChannel.description === "") {
+          this.currentChannel.description =
+            "このYoutuberの概要欄は見つかりませんでした";
+        }
 
-    // 既にお気に入り登録している場合を押せなくする
-    for (const account of this.$store.getters.getAccountList) {
-      if (this.currentUserId === account.id) {
-        for (const favoriteChannel of account.favoriteChannelList) {
-          if (channelId === favoriteChannel.id) {
-            this.favoriteFlag = true;
+        // 既にお気に入り登録している場合を押せなくする
+        for (const account of this.$store.getters.getAccountList) {
+          if (this.currentUserId === account.id) {
+            for (const favoriteChannel of account.favoriteChannelList) {
+              if (channelId === favoriteChannel.id) {
+                this.favoriteFlag = true;
+              }
+            }
           }
         }
+        return;
+      } catch (e) {
+        console.log("APIerror");
       }
     }
   }

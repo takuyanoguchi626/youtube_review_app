@@ -133,38 +133,45 @@ export default class XXXComponent extends Vue {
     }
 
     const videoId = this.$route.params.id;
-    const key = this.$store.getters.getApiKey;
-    const responce = await axios.get(
-      `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&key=${key}&id=${videoId}`
-    );
-    const responceVideo = responce.data.items[0];
-    this.videoDetail = new Videos(
-      responceVideo.id,
-      responceVideo.snippet.publishedAt,
-      responceVideo.snippet.title,
-      responceVideo.snippet.description,
-      responceVideo.snippet.thumbnails.high.url,
-      responceVideo.snippet.channelTitle,
-      responceVideo.tags,
-      responceVideo.statistics.viewCount
-    );
-    const responce2 = await axios.get(
-      `https://www.googleapis.com/youtube/v3/channels?key=${key}&part=snippet,contentDetails,statistics,status&id=${responceVideo.snippet.channelId}`
-    );
-    const responceChannel = responce2.data.items[0];
-    this.channelDetail = new Channels(
-      responceChannel.id,
-      responceChannel.snippet.title,
-      responceChannel.snippet.description,
-      responceChannel.snippet.publishedAt,
-      responceChannel.snippet.thumbnails.high.url,
-      responceChannel.statistics.viewCount,
-      responceChannel.statistics.subscriberCount,
-      responceChannel.statistics.videoCount
-    );
-    this.reviewList = this.$store.getters.getReviewListByVideoId(
-      this.videoDetail
-    );
+    const keys = this.$store.getters.getApiKey;
+    for (const key of keys) {
+      try {
+        const responce = await axios.get(
+          `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&key=${key}&id=${videoId}`
+        );
+        const responceVideo = responce.data.items[0];
+        this.videoDetail = new Videos(
+          responceVideo.id,
+          responceVideo.snippet.publishedAt,
+          responceVideo.snippet.title,
+          responceVideo.snippet.description,
+          responceVideo.snippet.thumbnails.high.url,
+          responceVideo.snippet.channelTitle,
+          responceVideo.tags,
+          responceVideo.statistics.viewCount
+        );
+        const responce2 = await axios.get(
+          `https://www.googleapis.com/youtube/v3/channels?key=${key}&part=snippet,contentDetails,statistics,status&id=${responceVideo.snippet.channelId}`
+        );
+        const responceChannel = responce2.data.items[0];
+        this.channelDetail = new Channels(
+          responceChannel.id,
+          responceChannel.snippet.title,
+          responceChannel.snippet.description,
+          responceChannel.snippet.publishedAt,
+          responceChannel.snippet.thumbnails.high.url,
+          responceChannel.statistics.viewCount,
+          responceChannel.statistics.subscriberCount,
+          responceChannel.statistics.videoCount
+        );
+        this.reviewList = this.$store.getters.getReviewListByVideoId(
+          this.videoDetail
+        );
+        return;
+      } catch (e) {
+        console.log("APIerror");
+      }
+    }
   } //end created
 
   getAccountById(id: number): Account {
