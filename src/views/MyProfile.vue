@@ -27,7 +27,7 @@
       </div>
     </div>
     <hr />
-    <h4 class="subtitle">お気に入りのCHANNEL</h4>
+    <h4 class="subtitle">FavoriteChannel</h4>
     <div class="channelList">
       <div
         v-for="favoriteChannel of currentAccount.favoriteChannelList"
@@ -45,6 +45,7 @@
       </div>
     </div>
     <hr />
+    <h4 class="subtitle">ReviewList</h4>
     <div class="reviewList">
       <div
         v-for="review of currentAccount.reviewList"
