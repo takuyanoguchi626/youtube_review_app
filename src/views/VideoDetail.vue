@@ -79,6 +79,11 @@
                       class="star5_rating"
                       :data-rate="review.evaluation"
                     ></span>
+                    <span class="iine"
+                      ><i class="material-icons">thumb_up</i>：{{
+                        review.favoriteCount.length
+                      }}</span
+                    >
                   </div>
                   <div>
                     <hr />
@@ -308,6 +313,10 @@ iframe {
 
 .col.offset-s1 {
   margin-left: 0px;
+}
+
+.iine {
+  margin-left: 30px;
 }
 
 .accountImage {

@@ -64,6 +64,11 @@
                   class="star5_rating"
                   :data-rate="review.evaluation"
                 ></span>
+                <span class="iine"
+                  ><i class="material-icons">thumb_up</i>：{{
+                    review.favoriteCount.length
+                  }}</span
+                >
               </div>
               <div class="reviewText2">
                 【{{ review.videos.channelTitle }}】
@@ -265,6 +270,10 @@ export default class XXXComponent extends Vue {
 .selfIntroductionChange {
   margin-top: 68px;
   /* margin-left: 600px; */
+}
+
+.iine {
+  margin-left: 10px;
 }
 
 .reviewList {

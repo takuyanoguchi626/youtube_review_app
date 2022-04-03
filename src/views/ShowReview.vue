@@ -62,9 +62,9 @@
               class="waves-effect waves-light btn"
               v-on:click="favoriteReview()"
               :disabled="flag"
-              ><i class="material-icons left">thumb_up</i>いいね</a
+              ><i class="material-icons left">thumb_up</i>いいね{{ count }}</a
             >
-            {{ count }}
+            <!-- {{ count }} -->
           </div>
         </div>
       </div>
