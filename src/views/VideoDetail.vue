@@ -60,10 +60,15 @@
             <div class="col s10 offset-s1">
               <div class="card content">
                 <div class="card-image">
-                  <img class="accountImage" :src="review.accountIcon" />
+                  <img
+                    class="accountImage"
+                    :src="getAccountById(review.accountId).img"
+                  />
                 </div>
                 <div class="card-content content">
-                  <div class="card-name">{{ review.accountName }}</div>
+                  <div class="card-name">
+                    {{ getAccountById(review.accountId).name }}
+                  </div>
                   <div class="card-evaluation evaluation">
                     評価：
                     <span
@@ -94,6 +99,7 @@ import axios from "axios";
 import { Videos } from "@/types/Videos";
 import { Channels } from "@/types/Channels";
 import { Review } from "@/types/Review";
+import { Account } from "@/types/Account";
 
 @Component({
   components: { AddReview },
@@ -160,6 +166,10 @@ export default class XXXComponent extends Vue {
       this.videoDetail
     );
   } //end created
+
+  getAccountById(id: number): Account {
+    return this.$store.getters.getAccountById(id);
+  }
 
   showDescription(): void {
     this.flag = true;

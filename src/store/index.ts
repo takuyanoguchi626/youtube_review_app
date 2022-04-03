@@ -237,8 +237,6 @@ export default new Vuex.Store({
             payload.date,
             state.lastReviewId,
             account.id,
-            account.name,
-            account.img,
             payload.video,
             payload.evaluation,
             payload.review,
