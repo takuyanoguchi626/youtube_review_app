@@ -64,7 +64,12 @@
               :disabled="flag"
               ><i class="material-icons left">thumb_up</i>いいね{{ count }}</a
             >
-            <!-- {{ count }} -->
+            <a
+              class="waves-effect waves-light btn edit"
+              v-on:click="transitionEdit()"
+              v-if="isMyAccount"
+              ><i class="material-icons left">build</i>編集</a
+            >
           </div>
         </div>
       </div>
@@ -110,6 +115,12 @@ export default class XXXComponent extends Vue {
   private flag = false;
   // ログイン中のユーザー
   private currentUserId = this.$store.getters.getCurrentUser.id;
+
+  //自分のアカウントのレビューかどうか
+  get isMyAccount(): boolean {
+    return this.currentUserId === this.reviewFavorite.accountId;
+  }
+
   // ステートから取得したレビュー
   get reviewFavorite(): Review {
     // URLから取得したid
@@ -127,6 +138,10 @@ export default class XXXComponent extends Vue {
   }
   // レビューのいいねカウント
   private count = this.reviewFavorite.favoriteCount.length;
+
+  transitionEdit(): void {
+    this.$router.push("/EditReview/" + this.targetReview.reviewId);
+  }
 
   created(): void {
     // スクロールトップボタン
@@ -229,6 +244,10 @@ export default class XXXComponent extends Vue {
   /* overflow-wrap: normal; */
   /* word-break: normal; */
   white-space: pre-wrap;
+}
+
+.edit {
+  margin-left: 20px;
 }
 
 .movieDescription {

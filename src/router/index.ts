@@ -50,6 +50,10 @@ const routes: Array<RouteConfig> = [
     component: () => import("../views/ShowReview.vue"),
   },
   {
+    path: "/editReview/:id",
+    component: () => import("../views/EditReview.vue"),
+  },
+  {
     path: "/2searchedList/:searchText",
     component: () => import("../views/SearchedList2.vue"),
   },
