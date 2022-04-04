@@ -55,20 +55,24 @@
               ></span>
             </p>
           </div>
+          <h6>Review</h6>
           <pre class="review300">{{ targetReview.review }}<br /></pre>
           <div class="review-data">
             <p>レビュー投稿日：{{ targetReview.reviewDate }}</p>
             <a
               class="waves-effect waves-light btn"
               v-on:click="favoriteReview()"
+              v-if="!isMyAccount"
               :disabled="flag"
               ><i class="material-icons left">thumb_up</i>いいね{{ count }}</a
             >
-            <a
-              class="waves-effect waves-light btn edit"
-              v-on:click="transitionEdit()"
-              v-if="isMyAccount"
+          </div>
+          <div>
+            <a class="btn" v-on:click="transitionEdit()" v-if="isMyAccount"
               ><i class="material-icons left">build</i>編集</a
+            >
+            <a class="btn delete" v-on:click="deleteReview()" v-if="isMyAccount"
+              ><i class="material-icons left">delete_forever</i>削除</a
             >
           </div>
         </div>
@@ -141,6 +145,16 @@ export default class XXXComponent extends Vue {
 
   transitionEdit(): void {
     this.$router.push("/EditReview/" + this.targetReview.reviewId);
+  }
+
+  deleteReview(): void {
+    const result = confirm("本当に削除しますか？");
+    if (result === true) {
+      this.$store.commit("deleteReview", {
+        reviewId: this.targetReview.reviewId,
+      });
+      this.$router.push("/videoDetail/" + this.targetReview.videos.id);
+    }
   }
 
   created(): void {
@@ -246,7 +260,7 @@ export default class XXXComponent extends Vue {
   white-space: pre-wrap;
 }
 
-.edit {
+.delete {
   margin-left: 20px;
 }
 

@@ -274,6 +274,18 @@ export default new Vuex.Store({
         }
       }
     },
+
+    deleteReview(state, payload) {
+      for (let i = 0; i < state.accountList.length; i++) {
+        for (let j = 0; j < state.accountList[i]?.reviewList.length; i++) {
+          if (
+            state.accountList[i].reviewList[j].reviewId === payload.reviewId
+          ) {
+            state.accountList[i].reviewList.splice(j, 1);
+          }
+        }
+      }
+    },
   },
   modules: {},
   getters: {
