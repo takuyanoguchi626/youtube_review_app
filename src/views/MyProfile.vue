@@ -65,9 +65,7 @@
                   :data-rate="review.evaluation"
                 ></span>
                 <span class="iine"
-                  ><i class="material-icons">thumb_up</i>：{{
-                    review.favoriteCount.length
-                  }}</span
+                  >いいね数：{{ review.favoriteCount.length }}</span
                 >
               </div>
               <div class="reviewText2">
