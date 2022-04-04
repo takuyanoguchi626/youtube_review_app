@@ -33,17 +33,17 @@ export default new Vuex.Store({
     ),
 
     apiKey: Array<string>(
-      "AIzaSyD0gPqZj2y8L2QVei5d4NUMsthKN3ltr1c",
-      "AIzaSyAzfoPPbpueXEcQypbLRLXXNCz5JQFDtlc",
-      "AIzaSyDH4tzh3tFM5Ok8Q5jSpPHxpcQZMnK4U9M",
-      "AIzaSyBOMUoWdabc9lzK4XQFop3x0dYtUeI6agU",
-      "AIzaSyAgRYbghnEpgHX9f980fKCzlTP6vESPkwo",
-      "AIzaSyByE-aaIhWOBWxX0MdlUN6szX6qMe7kX5s",
-      "AIzaSyAjmyhCg__LtgHseTa_w2NzZGdD_YLoVZY",
-      "AIzaSyDgB9MCfZvVqjzt_psZxNqxmdv06AJXDNg",
-      "AIzaSyD1hsARhNyLS07rUwz6fqrVp2pWnGvkWTQ",
+      // "AIzaSyD0gPqZj2y8L2QVei5d4NUMsthKN3ltr1c",
+      // "AIzaSyAzfoPPbpueXEcQypbLRLXXNCz5JQFDtlc",
+      // "AIzaSyDH4tzh3tFM5Ok8Q5jSpPHxpcQZMnK4U9M",
+      // "AIzaSyBOMUoWdabc9lzK4XQFop3x0dYtUeI6agU",
+      // "AIzaSyAgRYbghnEpgHX9f980fKCzlTP6vESPkwo",
+      // "AIzaSyByE-aaIhWOBWxX0MdlUN6szX6qMe7kX5s",
+      "AIzaSyAjmyhCg__LtgHseTa_w2NzZGdD_YLoVZY", //masamura
+      // "AIzaSyDgB9MCfZvVqjzt_psZxNqxmdv06AJXDNg",
+      "AIzaSyD1hsARhNyLS07rUwz6fqrVp2pWnGvkWTQ", //kawabata
       "AIzaSyChyFfGpQSYRhWTBuyeXTflkqTd4Sgc1HU",
-      "AIzaSyBaI5sqV11bUD-EzLC_lRmHBQztOctDwOc"
+      "AIzaSyBaI5sqV11bUD-EzLC_lRmHBQztOctDwOc" //noguchi
     ),
   },
   actions: {
@@ -52,21 +52,31 @@ export default new Vuex.Store({
      * @param context コンテキスト
      */
     async getSoaringVideos(context) {
-      const key = context.getters.getApiKey;
-      const responce = await axios.get(
-        `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&chart=mostPopular&regionCode=JP&maxResults=50&key=${key}`
-      );
-      const payload = responce.data.items;
-      const youtuberArray = [];
-      for (let i = 0; i <= 49; i++) {
-        const responce2 = await axios.get(
-          `https://www.googleapis.com/youtube/v3/channels?key=${key}&part=snippet,contentDetails,statistics,status&id=${payload[i].snippet.channelId}`
-        );
-        youtuberArray.push(responce2.data.items[0]);
+      const keys = context.getters.getApiKey;
+      for (const key of keys) {
+        try {
+          const responce = await axios.get(
+            `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&chart=mostPopular&regionCode=JP&maxResults=50&key=${key}`
+          );
+          // }
+          console.dir(JSON.stringify(responce));
+
+          const payload = responce.data.items;
+          const youtuberArray = [];
+          for (let i = 0; i <= 49; i++) {
+            const responce2 = await axios.get(
+              `https://www.googleapis.com/youtube/v3/channels?key=${key}&part=snippet,contentDetails,statistics,status&id=${payload[i].snippet.channelId}`
+            );
+            youtuberArray.push(responce2.data.items[0]);
+          }
+          const payload2 = youtuberArray;
+          context.commit("showSoaringVideos", payload);
+          context.commit("showYoutubersInfo", payload2);
+          return;
+        } catch (e) {
+          console.log("APIerror");
+        }
       }
-      const payload2 = youtuberArray;
-      context.commit("showSoaringVideos", payload);
-      context.commit("showYoutubersInfo", payload2);
     },
   },
   mutations: {
@@ -237,8 +247,6 @@ export default new Vuex.Store({
             payload.date,
             state.lastReviewId,
             account.id,
-            account.name,
-            account.img,
             payload.video,
             payload.evaluation,
             payload.review,
@@ -319,7 +327,8 @@ export default new Vuex.Store({
      * @returns APIキー
      */
     getApiKey(state) {
-      return state.apiKey[Math.floor(Math.random() * state.apiKey.length)];
+      return state.apiKey;
+      // return state.apiKey[Math.floor(Math.random() * state.apiKey.length)];
     },
     /**
      * 登録された最後のユーザーに使用されるIDを取得.

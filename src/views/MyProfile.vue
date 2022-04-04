@@ -27,7 +27,7 @@
       </div>
     </div>
     <hr />
-    <h4 class="subtitle">お気に入りのCHANNEL</h4>
+    <h4 class="subtitle">FavoriteChannel</h4>
     <div class="channelList">
       <div
         v-for="favoriteChannel of currentAccount.favoriteChannelList"
@@ -45,6 +45,7 @@
       </div>
     </div>
     <hr />
+    <h4 class="subtitle">ReviewList</h4>
     <div class="reviewList">
       <div
         v-for="review of currentAccount.reviewList"
@@ -63,6 +64,11 @@
                   class="star5_rating"
                   :data-rate="review.evaluation"
                 ></span>
+                <span class="iine"
+                  ><i class="material-icons">thumb_up</i>：{{
+                    review.favoriteCount.length
+                  }}</span
+                >
               </div>
               <div class="reviewText2">
                 【{{ review.videos.channelTitle }}】
@@ -102,8 +108,6 @@ export default class XXXComponent extends Vue {
         "",
         1,
         1,
-        "",
-        "",
         new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
         1,
         "レビューのプレビュー",
@@ -113,8 +117,6 @@ export default class XXXComponent extends Vue {
         "",
         1,
         1,
-        "",
-        "",
         new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
         1,
         "レビューのプレビュー",
@@ -124,9 +126,6 @@ export default class XXXComponent extends Vue {
         "",
         1,
         1,
-
-        "",
-        "",
         new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
         1,
         "レビューのプレビュー",
@@ -136,8 +135,6 @@ export default class XXXComponent extends Vue {
         "",
         1,
         1,
-        "",
-        "",
         new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", ""),
         1,
         "レビューのプレビュー",
@@ -273,6 +270,10 @@ export default class XXXComponent extends Vue {
 .selfIntroductionChange {
   margin-top: 68px;
   /* margin-left: 600px; */
+}
+
+.iine {
+  margin-left: 10px;
 }
 
 .reviewList {

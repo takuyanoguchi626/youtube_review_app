@@ -17,7 +17,7 @@
       <div>再生回数：{{ videoDetail.formatViewCount }}回</div>
       <br />
       <router-link :to="'/channelDetail/' + channelDetail.id">
-        <img :src="channelDetail.thumbnailsUrl" />
+        <img class="img" :src="channelDetail.thumbnailsUrl" />
       </router-link>
       <div>【{{ videoDetail.channelTitle }}】</div>
       <div>チャンネル設立日：{{ channelDetail.formatPublishedAt }}</div>
@@ -55,21 +55,35 @@
         <button class="btn" @click="postReview">レビューを投稿する</button>
       </div>
       <div class="reviewList300">
-        <div class="row" v-for="review of reviewList" :key="review.id">
+        <div class="noReviewList" v-if="reviewListLength === 0">
+          <img class="noReviewImage" src="/img/review.png" alt="" />
+          <h4>まだレビューがありません</h4>
+        </div>
+        <div class="row" v-for="review of reviewList" :key="review.id" v-else>
           <router-link :to="'/showReview/' + review.reviewId">
             <div class="col s10 offset-s1">
               <div class="card content">
                 <div class="card-image">
-                  <img class="accountImage" :src="review.accountIcon" />
+                  <img
+                    class="accountImage img"
+                    :src="getAccountById(review.accountId).img"
+                  />
                 </div>
                 <div class="card-content content">
-                  <div class="card-name">{{ review.accountName }}</div>
+                  <div class="card-name">
+                    {{ getAccountById(review.accountId).name }}
+                  </div>
                   <div class="card-evaluation evaluation">
                     評価：
                     <span
                       class="star5_rating"
                       :data-rate="review.evaluation"
                     ></span>
+                    <span class="iine"
+                      ><i class="material-icons">thumb_up</i>：{{
+                        review.favoriteCount.length
+                      }}</span
+                    >
                   </div>
                   <div>
                     <hr />
@@ -94,6 +108,7 @@ import axios from "axios";
 import { Videos } from "@/types/Videos";
 import { Channels } from "@/types/Channels";
 import { Review } from "@/types/Review";
+import { Account } from "@/types/Account";
 
 @Component({
   components: { AddReview },
@@ -104,6 +119,7 @@ export default class XXXComponent extends Vue {
   // チャンネル詳細
   private channelDetail = new Channels("", "", "", "", "", 0, 0, 0);
   private reviewList = new Array<Review>();
+  private reviewListLength = 0;
   private flag = false;
 
   async created(): Promise<void> {
@@ -127,39 +143,55 @@ export default class XXXComponent extends Vue {
     }
 
     const videoId = this.$route.params.id;
-    const key = this.$store.getters.getApiKey;
-    const responce = await axios.get(
-      `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&key=${key}&id=${videoId}`
-    );
-    const responceVideo = responce.data.items[0];
-    this.videoDetail = new Videos(
-      responceVideo.id,
-      responceVideo.snippet.publishedAt,
-      responceVideo.snippet.title,
-      responceVideo.snippet.description,
-      responceVideo.snippet.thumbnails.high.url,
-      responceVideo.snippet.channelTitle,
-      responceVideo.tags,
-      responceVideo.statistics.viewCount
-    );
-    const responce2 = await axios.get(
-      `https://www.googleapis.com/youtube/v3/channels?key=${key}&part=snippet,contentDetails,statistics,status&id=${responceVideo.snippet.channelId}`
-    );
-    const responceChannel = responce2.data.items[0];
-    this.channelDetail = new Channels(
-      responceChannel.id,
-      responceChannel.snippet.title,
-      responceChannel.snippet.description,
-      responceChannel.snippet.publishedAt,
-      responceChannel.snippet.thumbnails.high.url,
-      responceChannel.statistics.viewCount,
-      responceChannel.statistics.subscriberCount,
-      responceChannel.statistics.videoCount
-    );
-    this.reviewList = this.$store.getters.getReviewListByVideoId(
-      this.videoDetail
-    );
+    const keys = this.$store.getters.getApiKey;
+    for (const key of keys) {
+      try {
+        const responce = await axios.get(
+          `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&key=${key}&id=${videoId}`
+        );
+        const responceVideo = responce.data.items[0];
+        this.videoDetail = new Videos(
+          responceVideo.id,
+          responceVideo.snippet.publishedAt,
+          responceVideo.snippet.title,
+          responceVideo.snippet.description,
+          responceVideo.snippet.thumbnails.high.url,
+          responceVideo.snippet.channelTitle,
+          responceVideo.tags,
+          responceVideo.statistics.viewCount
+        );
+        const responce2 = await axios.get(
+          `https://www.googleapis.com/youtube/v3/channels?key=${key}&part=snippet,contentDetails,statistics,status&id=${responceVideo.snippet.channelId}`
+        );
+        const responceChannel = responce2.data.items[0];
+        this.channelDetail = new Channels(
+          responceChannel.id,
+          responceChannel.snippet.title,
+          responceChannel.snippet.description,
+          responceChannel.snippet.publishedAt,
+          responceChannel.snippet.thumbnails.high.url,
+          responceChannel.statistics.viewCount,
+          responceChannel.statistics.subscriberCount,
+          responceChannel.statistics.videoCount
+        );
+        this.reviewList = this.$store.getters.getReviewListByVideoId(
+          this.videoDetail
+        );
+        this.reviewListLength = this.reviewList.length;
+        return;
+      } catch (e) {
+        console.log("APIerror");
+      }
+    }
   } //end created
+
+  getReviewListLength(): number {
+    return this.reviewList.length;
+  }
+
+  getAccountById(id: number): Account {
+    return this.$store.getters.getAccountById(id);
+  }
 
   showDescription(): void {
     this.flag = true;
@@ -186,7 +218,7 @@ export default class XXXComponent extends Vue {
   justify-content: space-around;
 }
 
-img {
+.img {
   width: 200px;
   height: 150px;
   object-fit: cover;
@@ -196,9 +228,13 @@ img {
 }
 .card-content {
   flex-direction: column;
-  width: 300px;
+  width: 350px;
   height: 150px;
   padding: 0;
+}
+
+.card {
+  width: 500px;
 }
 
 .video {
@@ -253,12 +289,34 @@ iframe {
   overflow: hidden;
 }
 
+.noReviewList {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.noReviewImage {
+  margin-top: 130px;
+  width: 150px;
+}
+
 .reviewList300 {
   height: 520px;
   width: 550px;
   margin-left: 50px;
+  margin-top: 30px;
   overflow-y: scroll;
   padding: 0;
+  border: 2mm ridge grey;
+}
+
+.col.offset-s1 {
+  margin-left: 0px;
+}
+
+.iine {
+  margin-left: 30px;
 }
 
 .accountImage {

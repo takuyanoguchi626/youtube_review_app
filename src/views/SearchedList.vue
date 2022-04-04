@@ -118,7 +118,7 @@ export default class XXXComponent extends Vue {
   private channelIdList = new Array<string>();
 
   // 外部APIキー
-  private key = this.$store.getters.getApiKey;
+  private keys = this.$store.getters.getApiKey;
   // 検索ワード
   private searchText = "";
 
@@ -145,67 +145,74 @@ export default class XXXComponent extends Vue {
     // 検索ワードをURLより取得
     this.searchText = this.$route.params.searchText;
 
-    const response2 = await axios.get(
-      // チャンネルの検索APIでidを取得
-      `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=channel&maxResults=10&regionCode=JP&key=${this.key}&q=${this.searchText}`
-    );
-    const channel1Items = response2.data.items;
-
-    for (const item of channel1Items) {
-      this.channelIdList.push(item.snippet.channelId);
-    }
-
-    // 上で取得したidを使いチャンネルの情報をAPIで取得
-    for (let channelId of this.channelIdList) {
-      const response3 = await axios.get(
-        `https://www.googleapis.com/youtube/v3/channels?key=${this.key}&maxResults=10&part=snippet,contentDetails,statistics,status&id=${channelId}`
-      );
-      const channel2Items = response3.data.items;
-      for (let channel2Item of channel2Items) {
-        this.searchedChannels.push(
-          new Channels(
-            channel2Item.id,
-            channel2Item.snippet.title,
-            channel2Item.snippet.description,
-            channel2Item.snippet.publishedAt,
-            channel2Item.snippet.thumbnails.high.url,
-            channel2Item.statistics.viewCount,
-            channel2Item.statistics.subscriberCount,
-            channel2Item.statistics.videoCount
-          )
+    for (const key of this.keys) {
+      try {
+        const response2 = await axios.get(
+          // チャンネルの検索APIでidを取得
+          `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=channel&maxResults=10&regionCode=JP&key=${key}&q=${this.searchText}`
         );
+        const channel1Items = response2.data.items;
+
+        for (const item of channel1Items) {
+          this.channelIdList.push(item.snippet.channelId);
+        }
+
+        // 上で取得したidを使いチャンネルの情報をAPIで取得
+        for (let channelId of this.channelIdList) {
+          const response3 = await axios.get(
+            `https://www.googleapis.com/youtube/v3/channels?key=${key}&maxResults=10&part=snippet,contentDetails,statistics,status&id=${channelId}`
+          );
+          const channel2Items = response3.data.items;
+          for (let channel2Item of channel2Items) {
+            this.searchedChannels.push(
+              new Channels(
+                channel2Item.id,
+                channel2Item.snippet.title,
+                channel2Item.snippet.description,
+                channel2Item.snippet.publishedAt,
+                channel2Item.snippet.thumbnails.high.url,
+                channel2Item.statistics.viewCount,
+                channel2Item.statistics.subscriberCount,
+                channel2Item.statistics.videoCount
+              )
+            );
+          }
+        }
+
+        const response1 = await axios.get(
+          // ビデオの検索APIでidを取得
+          `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&maxResults=10&regionCode=JP&key=${key}&q=${this.searchText}`
+        );
+        const payload1 = response1.data.items;
+
+        for (let preVideo of payload1) {
+          this.videoIdList.push(preVideo.id.videoId);
+        }
+        // 上で取得したidを使いビデオの情報をAPIで取得
+        for (let videoId of this.videoIdList) {
+          const response3 = await axios.get(
+            `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet,statistics&regionCode=JP&key=${key}`
+          );
+          const video = response3.data.items[0];
+          this.searchedVideos.push(
+            new Videos(
+              video.id,
+              video.snippet.publishedAt,
+              video.snippet.title,
+              video.snippet.description,
+              video.snippet.thumbnails.high.url,
+              video.snippet.channelTitle,
+              video.snippet.tags,
+              video.statistics.viewCount
+            )
+          );
+        }
+        return;
+      } catch (e) {
+        console.log("APIerror");
       }
     }
-
-    const response1 = await axios.get(
-      // ビデオの検索APIでidを取得
-      `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&maxResults=10&regionCode=JP&key=${this.key}&q=${this.searchText}`
-    );
-    const payload1 = response1.data.items;
-
-    for (let preVideo of payload1) {
-      this.videoIdList.push(preVideo.id.videoId);
-    }
-    // 上で取得したidを使いビデオの情報をAPIで取得
-    for (let videoId of this.videoIdList) {
-      const response3 = await axios.get(
-        `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet,statistics&regionCode=JP&key=${this.key}`
-      );
-      const video = response3.data.items[0];
-      this.searchedVideos.push(
-        new Videos(
-          video.id,
-          video.snippet.publishedAt,
-          video.snippet.title,
-          video.snippet.description,
-          video.snippet.thumbnails.high.url,
-          video.snippet.channelTitle,
-          video.snippet.tags,
-          video.statistics.viewCount
-        )
-      );
-    }
-  }
+  } //end created
 }
 </script>
 

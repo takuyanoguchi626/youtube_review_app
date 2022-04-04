@@ -55,16 +55,16 @@
               ></span>
             </p>
           </div>
-          <p>{{ targetReview.review }}<br /></p>
+          <pre class="review300">{{ targetReview.review }}<br /></pre>
           <div class="review-data">
             <p>レビュー投稿日：{{ targetReview.reviewDate }}</p>
             <a
               class="waves-effect waves-light btn"
               v-on:click="favoriteReview()"
               :disabled="flag"
-              ><i class="material-icons left">thumb_up</i>いいね</a
+              ><i class="material-icons left">thumb_up</i>いいね{{ count }}</a
             >
-            {{ count }}
+            <!-- {{ count }} -->
           </div>
         </div>
       </div>
@@ -97,8 +97,6 @@ export default class XXXComponent extends Vue {
     "",
     0,
     0,
-    "",
-    "",
     new Videos(0, "", "", "", "", "", "", ""),
     0,
     "",
@@ -219,9 +217,18 @@ export default class XXXComponent extends Vue {
   width: 300px;
 }
 .review {
-  padding: 10px;
+  padding: 10px 0px 10px 20px;
   width: 350px;
   position: relative;
+}
+
+.review300 {
+  font-weight: bold;
+  text-align: left;
+  border: thick double;
+  /* overflow-wrap: normal; */
+  /* word-break: normal; */
+  white-space: pre-wrap;
 }
 
 .movieDescription {

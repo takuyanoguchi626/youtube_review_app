@@ -1,63 +1,76 @@
 <template>
   <div>
-    <div>
-      評価：
-      <label for="1">
-        <input
-          type="radio"
-          name="hyouka"
-          id="1"
-          v-model="evaluation"
-          value="1"
-        />
-        <span> 1</span>
-      </label>
-      <label for="2">
-        <input
-          type="radio"
-          name="hyouka"
-          id="2"
-          v-model="evaluation"
-          value="2"
-        />
-        <span> 2</span>
-      </label>
-      <label for="3">
-        <input
-          type="radio"
-          name="hyouka"
-          id="3"
-          v-model="evaluation"
-          value="3"
-        />
-        <span> 3</span>
-      </label>
-      <label for="4">
-        <input
-          type="radio"
-          name="hyouka"
-          id="4"
-          v-model="evaluation"
-          value="4"
-        />
-        <span> 4</span>
-      </label>
-      <label for="5">
-        <input
-          type="radio"
-          name="hyouka"
-          id="5"
-          v-model="evaluation"
-          value="5"
-        />
-        <span> 5</span>
-      </label>
-    </div>
-    <div>
-      <textarea name="" id="" cols="30" rows="10" v-model="review"></textarea>
-    </div>
-    <div>
-      <button @click="postReview()">レビューを投稿</button>
+    <div class="container">
+      <div class="row login-page">
+        <div class="col s12 z-depth-6 card-panel">
+          <h4 class="pageTitle">レビューを投稿する</h4>
+          <div class="login-form">
+            <div>
+              <img class="iconChange" :src="videoDetail.thumbnailsUrl" alt="" />
+            </div>
+            <div class="context">
+              <div class="stars hyouka">
+                <span>
+                  <input
+                    id="review01"
+                    type="radio"
+                    name="review"
+                    v-bind:value="5"
+                    v-model="evaluation"
+                  /><label for="review01">★</label>
+                  <input
+                    id="review02"
+                    type="radio"
+                    name="review"
+                    value="4"
+                    v-model="evaluation"
+                  /><label for="review02">★</label>
+                  <input
+                    id="review03"
+                    type="radio"
+                    name="review"
+                    value="3"
+                    v-model="evaluation"
+                  /><label for="review03">★</label>
+                  <input
+                    id="review04"
+                    type="radio"
+                    name="review"
+                    value="2"
+                    v-model="evaluation"
+                  /><label for="review04">★</label>
+                  <input
+                    id="review05"
+                    type="radio"
+                    name="review"
+                    value="1"
+                    v-model="evaluation"
+                  /><label for="review05">★</label>
+                </span>
+              </div>
+              <div class="row textarea">
+                <form class="col s12 offset-s1">
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <textarea
+                        v-model="review"
+                        id="textarea1"
+                        class="materialize-textarea"
+                      ></textarea>
+                      <label for="textarea1">Review</label>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="row login-btn">
+                <button class="btn" type="button" @click="postReview()">
+                  <span>レビューを投稿</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -75,22 +88,28 @@ export default class XXXComponent extends Vue {
 
   async created(): Promise<void> {
     const videoId = this.$route.params.id;
-    const key = this.$store.getters.getApiKey;
-    const responce = await axios.get(
-      `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&key=${key}&id=${videoId}`
-    );
-    const responceVideo = responce.data.items[0];
-    this.videoDetail = new Videos(
-      responceVideo.id,
-      responceVideo.snippet.publishedAt,
-      responceVideo.snippet.title,
-      responceVideo.snippet.description,
-      responceVideo.snippet.thumbnails.medium.url,
-      responceVideo.snippet.channelTitle,
-      responceVideo.tags,
-      responceVideo.statistics.viewCount
-    );
-    console.log(this.videoDetail);
+    const keys = this.$store.getters.getApiKey;
+    for (const key of keys) {
+      try {
+        const responce = await axios.get(
+          `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&key=${key}&id=${videoId}`
+        );
+        const responceVideo = responce.data.items[0];
+        this.videoDetail = new Videos(
+          responceVideo.id,
+          responceVideo.snippet.publishedAt,
+          responceVideo.snippet.title,
+          responceVideo.snippet.description,
+          responceVideo.snippet.thumbnails.medium.url,
+          responceVideo.snippet.channelTitle,
+          responceVideo.tags,
+          responceVideo.statistics.viewCount
+        );
+        return;
+      } catch (e) {
+        console.log("APIerror");
+      }
+    }
   }
 
   getDate(): string {
@@ -110,4 +129,51 @@ export default class XXXComponent extends Vue {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.textarea {
+  margin-right: 10px;
+}
+
+.context {
+  /* display: flex;
+  flex-direction: column; */
+  width: 600px;
+}
+.iconChange {
+  width: 300px;
+  /* height: 500px; */
+}
+.login-form {
+  display: flex;
+  /* flex-direction: column; */
+}
+
+.hyouka {
+  display: flex;
+  justify-content: center;
+}
+
+.stars span {
+  text-align: center;
+  display: flex; /* 要素をフレックスボックスにする */
+  flex-direction: row-reverse; /*星を逆順に並べる*/
+  justify-content: flex-end; /* 逆順なので、左寄せにする */
+}
+
+.stars input[type="radio"] {
+  display: none; /* デフォルトのラジオボタンを非表示にする */
+}
+
+.stars label {
+  color: #d2d2d2; /* 未選択の星をグレー色に指定 */
+  font-size: 30px; /* 星の大きさを30pxに指定 */
+  padding: 0 5px; /* 左右の余白を5pxに指定 */
+  cursor: pointer; /* カーソルが上に乗ったときに指の形にする */
+}
+
+.stars label:hover,
+.stars label:hover ~ label,
+.stars input[type="radio"]:checked ~ label {
+  color: #f8c601; /* 選択された星以降をすべて黄色にする */
+}
+</style>
