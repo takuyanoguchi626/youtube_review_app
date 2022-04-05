@@ -55,16 +55,25 @@
               ></span>
             </p>
           </div>
+          <h6>Review</h6>
           <pre class="review300">{{ targetReview.review }}<br /></pre>
           <div class="review-data">
             <p>レビュー投稿日：{{ targetReview.reviewDate }}</p>
             <a
               class="waves-effect waves-light btn"
               v-on:click="favoriteReview()"
+              v-if="!isMyAccount"
               :disabled="flag"
               ><i class="material-icons left">thumb_up</i>いいね{{ count }}</a
             >
-            <!-- {{ count }} -->
+          </div>
+          <div>
+            <a class="btn" v-on:click="transitionEdit()" v-if="isMyAccount"
+              ><i class="material-icons left">build</i>編集</a
+            >
+            <a class="btn delete" v-on:click="deleteReview()" v-if="isMyAccount"
+              ><i class="material-icons left">delete_forever</i>削除</a
+            >
           </div>
         </div>
       </div>
@@ -110,6 +119,12 @@ export default class XXXComponent extends Vue {
   private flag = false;
   // ログイン中のユーザー
   private currentUserId = this.$store.getters.getCurrentUser.id;
+
+  //自分のアカウントのレビューかどうか
+  get isMyAccount(): boolean {
+    return this.currentUserId === this.reviewFavorite.accountId;
+  }
+
   // ステートから取得したレビュー
   get reviewFavorite(): Review {
     // URLから取得したid
@@ -127,6 +142,20 @@ export default class XXXComponent extends Vue {
   }
   // レビューのいいねカウント
   private count = this.reviewFavorite.favoriteCount.length;
+
+  transitionEdit(): void {
+    this.$router.push("/EditReview/" + this.targetReview.reviewId);
+  }
+
+  deleteReview(): void {
+    const result = confirm("本当に削除しますか？");
+    if (result === true) {
+      this.$store.commit("deleteReview", {
+        reviewId: this.targetReview.reviewId,
+      });
+      this.$router.push("/videoDetail/" + this.targetReview.videos.id);
+    }
+  }
 
   created(): void {
     // スクロールトップボタン
@@ -229,6 +258,10 @@ export default class XXXComponent extends Vue {
   /* overflow-wrap: normal; */
   /* word-break: normal; */
   white-space: pre-wrap;
+}
+
+.delete {
+  margin-left: 20px;
 }
 
 .movieDescription {

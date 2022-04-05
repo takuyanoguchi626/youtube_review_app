@@ -257,6 +257,32 @@ export default new Vuex.Store({
         console.log("sss");
       }
     },
+
+    editReview(state, payload) {
+      for (let i = 0; i < state.accountList.length; i++) {
+        for (let j = 0; j < state.accountList[i]?.reviewList.length; i++) {
+          if (
+            state.accountList[i].reviewList[j].reviewId === payload.reviewId
+          ) {
+            state.accountList[i].reviewList[j].reviewDate = payload.date;
+            state.accountList[i].reviewList[j].review = payload.review;
+            state.accountList[i].reviewList[j].evaluation = payload.evaluation;
+          }
+        }
+      }
+    },
+
+    deleteReview(state, payload) {
+      for (let i = 0; i < state.accountList.length; i++) {
+        for (let j = 0; j < state.accountList[i]?.reviewList.length; i++) {
+          if (
+            state.accountList[i].reviewList[j].reviewId === payload.reviewId
+          ) {
+            state.accountList[i].reviewList.splice(j, 1);
+          }
+        }
+      }
+    },
   },
   modules: {},
   getters: {
@@ -318,6 +344,25 @@ export default new Vuex.Store({
         return reviewListByVideoId;
       };
     },
+
+    /**
+     * アカウントリストからレビューで絞り込んだ１レビューを取得.
+     *
+     * @param state - ステート
+     * @returns レビュー
+     */
+    getReviewByReviewId(state) {
+      return (reviewId: number) => {
+        for (const account of state.accountList) {
+          for (const review of account.reviewList) {
+            if (review.reviewId === Number(reviewId)) {
+              return review;
+            }
+          }
+        }
+      };
+    },
+
     /**
      * APIキーをランダムに取得.
      * @param state - ステート
