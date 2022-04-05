@@ -44,10 +44,23 @@ export default {
           }
         );
       console.log(this.userName + "/" + this.email + "/" + this.photoURL);
-      //   登録されているユーザー情報の取得
+      // 登録されているユーザー情報の取得
       const accountLastId = this.$store.getters.getLastUserId;
-      // 新たなユーザーに使用するID１
+      // 現在のアカウントリスト
+      const currentAccountList = this.$store.getters.getAccountList;
+      console.log(currentAccountList);
+      // 新たなユーザーに使用するID
       let newUserId = 0;
+      // 既にログインしたことのあるアカウントの判別
+      for (let i = 0; i < currentAccountList.length; i++) {
+        if (currentAccountList[i].mailaddless === this.email) {
+          newUserId = currentAccountList[i].id;
+          console.log(newUserId);
+          this.$router.push(`/myProfile/${newUserId}`);
+          this.$store.commit("addCurrentUser", currentAccountList[i]);
+          return;
+        }
+      }
       // idが既に存在する場合と存在しない場合で新たに付与するidを分ける
       if (accountLastId === 0) {
         this.newAccount = new Account(
@@ -56,12 +69,11 @@ export default {
           "",
           this.photoURL,
           this.email,
-          this.tel,
-          this.password,
+          "",
+          "",
           [],
           []
         );
-        console.log(this.newAccount);
         newUserId = this.newAccount.id;
         this.$store.commit("addUser", this.newAccount);
         this.$store.commit("addCurrentUser", this.newAccount);
@@ -73,8 +85,8 @@ export default {
           "",
           this.photoURL,
           this.email,
-          this.tel,
-          this.password,
+          "",
+          "",
           [],
           []
         );
