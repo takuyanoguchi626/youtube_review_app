@@ -28,11 +28,7 @@
             >
           </button>
           <p class="p2">外部サービスで登録する</p>
-          <button class="button2 btn" type="button">
-            <img class="button-icon" src="/img/google.png" /><span
-              >&nbsp;Googleで登録</span
-            >
-          </button>
+          <Google></Google>
           <button class="button3 btn" type="button">
             <img class="button-icon" src="/img/f_logo_RGB-White_58.png" /><span
               >&nbsp;Facebookで登録</span
@@ -123,8 +119,13 @@ import { Videos } from "@/types/Videos";
 import { Channels } from "@/types/Channels";
 import { Account } from "@/types/Account";
 import { Review } from "@/types/Review";
+import Google from "@/components/Google.vue";
 
-@Component
+@Component({
+  components: {
+    Google,
+  },
+})
 export default class XXXComponent extends Vue {
   // 急上昇動画50件分
   private soaringVideos: Array<Videos> = [];
@@ -304,15 +305,6 @@ i {
   font-size: 20px;
 }
 /* button2~4 */
-.top .button2 {
-  position: absolute;
-  top: 50%;
-  left: 72%;
-  -ms-transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  background-color: white;
-}
 .top .button3 {
   position: absolute;
   top: 60%;

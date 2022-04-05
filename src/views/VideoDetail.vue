@@ -373,4 +373,9 @@ iframe {
 .star5_rating[data-rate="0"]:after {
   width: 0%;
 } /* 星0 */
+
+.img:hover {
+  opacity: 0.6;
+  transition-duration: 0.3s;
+}
 </style>

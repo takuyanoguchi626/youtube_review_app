@@ -1,0 +1,118 @@
+<template>
+  <div>
+    <router-link to="/top">
+      <button class="button2 btn" type="button" v-on:click="onClick">
+        <img class="button-icon" src="/img/google.png" /><span
+          >&nbsp;Googleでログイン</span
+        >
+      </button>
+    </router-link>
+  </div>
+</template>
+
+<script>
+// import { Component, Vue } from "vue-property-decorator";
+import firebase from "firebase";
+import { Account } from "@/types/Account";
+// import { Channels } from "@/types/Channels";
+// import { Review } from "@/types/Review";
+export default {
+  name: "Google",
+  data() {
+    return {
+      userName: "",
+      email: "",
+      photoURL: "",
+      newAccount: [],
+    };
+  },
+  methods: {
+    onClick: async function () {
+      var provider = new firebase.auth.GoogleAuthProvider();
+      await firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then(
+          (result) => {
+            console.log(result);
+            this.userName = result.user.displayName;
+            this.email = result.user.email;
+            this.photoURL = result.user.photoURL;
+          },
+          (error) => {
+            alert("ログインに失敗しました");
+          }
+        );
+      console.log(this.userName + "/" + this.email + "/" + this.photoURL);
+      //   登録されているユーザー情報の取得
+      const accountLastId = this.$store.getters.getLastUserId;
+      // 新たなユーザーに使用するID１
+      let newUserId = 0;
+      // idが既に存在する場合と存在しない場合で新たに付与するidを分ける
+      if (accountLastId === 0) {
+        this.newAccount = new Account(
+          1,
+          this.userName,
+          "",
+          this.photoURL,
+          this.email,
+          this.tel,
+          this.password,
+          [],
+          []
+        );
+        console.log(this.newAccount);
+        newUserId = this.newAccount.id;
+        this.$store.commit("addUser", this.newAccount);
+        this.$store.commit("addCurrentUser", this.newAccount);
+        this.$store.commit("addLastUserId", newUserId);
+      } else {
+        this.newAccount = new Account(
+          accountLastId + 1,
+          this.userName,
+          "",
+          this.photoURL,
+          this.email,
+          this.tel,
+          this.password,
+          [],
+          []
+        );
+        newUserId = this.newAccount.id;
+        this.$store.commit("addUser", this.newAccount);
+        this.$store.commit("addCurrentUser", this.newAccount);
+        this.$store.commit("addLastUserId", newUserId);
+      }
+    },
+    // firebase.auth().signOut();
+  },
+};
+</script>
+
+<style scoped>
+.button2 {
+  position: absolute;
+  top: 50%;
+  left: 72%;
+  -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  background-color: white;
+}
+.button2:hover {
+  opacity: 0.6;
+  transition-duration: 0.3s;
+}
+.button2 span {
+  color: black;
+}
+.button-icon {
+  width: 15px;
+  height: 15px;
+}
+.top-image {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+}
+</style>
