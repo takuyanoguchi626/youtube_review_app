@@ -94,6 +94,10 @@ import { Component, Vue } from "vue-property-decorator";
 import { Account } from "@/types/Account";
 import { Channels } from "@/types/Channels";
 import { Review } from "@/types/Review";
+
+import db from "@/firebase";
+import { collection, doc, onSnapshot, setDoc } from "firebase/firestore";
+
 @Component
 export default class XXXComponent extends Vue {
   // 姓
@@ -122,6 +126,10 @@ export default class XXXComponent extends Vue {
   private passwordConfirmError = "";
   // エラーチェッカー
   private errorChecker = false;
+  //DBの中のアカウントリスト
+  private accountList = Array<Account>();
+  //最後に登録したアカウントのID
+  private accountLastId = 30;
 
   created(): void {
     // スクロールトップボタン
@@ -142,7 +150,32 @@ export default class XXXComponent extends Vue {
         }
       }
     }
-  }
+
+    const post = collection(db, "アカウント一覧");
+    onSnapshot(post, (post) => {
+      const accountListByDb = post.docs.map((doc) => ({ ...doc.data() }));
+      for (const account of accountListByDb) {
+        this.accountList.push(
+          new Account(
+            account.id,
+            account.name,
+            account.introduction,
+            account.img,
+            account.mailaddless,
+            account.telephone,
+            account.password,
+            account.favoriteChannelList,
+            account.reviewList
+          )
+        );
+      }
+    });
+
+    onSnapshot(doc(db, "アカウントラストID", "アカウントラストID"), (doc) => {
+      this.accountLastId = { ...doc.data() }.accountLastId;
+      console.log("created" + this.accountLastId);
+    });
+  } //end created
 
   /**
    * ユーザー登録情報をstoreに送る.
@@ -185,27 +218,39 @@ export default class XXXComponent extends Vue {
       this.passwordError = "パスワードと確認用パスワードが異なります";
       this.errorChecker = true;
     }
-    //既にの登録されているアカウント情報の取得
-    const accountList = this.$store.getters.getAccountList;
+
+    // const accountList = this.$store.getters.getAccountList;
     // 既に登録されたメールアドレスが入力された時にエラーを出す
-    for (let account of accountList) {
+    for (const account of this.accountList) {
       if (this.email === account.mailaddless) {
         this.emailError = "既に登録されたメールアドレスが入力されています";
         this.errorChecker = true;
       }
     }
+
     if (this.errorChecker === true) {
       this.errorChecker = false;
       return;
     }
 
     // 登録されているユーザー情報の取得
-    const accountLastId = this.$store.getters.getLastUserId;
+    // const accountLastId = this.$store.getters.getLastUserId;
     // 新たなユーザーに使用するID１
     let newUserId = 0;
+    let newAccount = new Account(
+      0,
+      this.lastName + this.firstName,
+      "",
+      "",
+      "",
+      "",
+      "",
+      new Array<Channels>(),
+      new Array<Review>()
+    );
     // idが既に存在する場合と存在しない場合で新たに付与するidを分ける
-    if (accountLastId === 0) {
-      const newAccount = new Account(
+    if (this.accountLastId === 0) {
+      newAccount = new Account(
         1,
         this.lastName + this.firstName,
         "",
@@ -216,13 +261,9 @@ export default class XXXComponent extends Vue {
         new Array<Channels>(),
         new Array<Review>()
       );
-      newUserId = newAccount.id;
-      this.$store.commit("addUser", newAccount);
-      this.$store.commit("addLastUserId", newUserId);
-      this.$router.push("/login");
     } else {
-      const newAccount = new Account(
-        accountLastId + 1,
+      newAccount = new Account(
+        this.accountLastId + 1,
         this.lastName + this.firstName,
         "",
         "/img/egg.png",
@@ -232,12 +273,41 @@ export default class XXXComponent extends Vue {
         new Array<Channels>(),
         new Array<Review>()
       );
-      newUserId = newAccount.id;
-      this.$store.commit("addUser", newAccount);
-      this.$store.commit("addLastUserId", newUserId);
-      this.$router.push("/login");
     }
-  }
+    newUserId = newAccount.id;
+    this.$store.commit("addUser", newAccount);
+    this.$store.commit("addLastUserId", newUserId);
+    this.$router.push("/login");
+
+    try {
+      setDoc(doc(db, "アカウントラストID", "アカウントラストID"), {
+        accountLastId: newUserId,
+      });
+      // console.log(docRef1);
+      // console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+
+    //dbに保存
+    try {
+      setDoc(doc(db, "アカウント一覧", newAccount.name), {
+        id: newAccount.id,
+        name: newAccount.name,
+        introduction: newAccount.introduction,
+        img: newAccount.img,
+        mailaddless: newAccount.mailaddless,
+        telephone: newAccount.telephone,
+        password: newAccount.password,
+        favoriteChannelList: newAccount.favoriteChannelList,
+        reviewList: newAccount.reviewList,
+      });
+      // console.log(docRef2);
+      // console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  } //end register
 }
 </script>
 
