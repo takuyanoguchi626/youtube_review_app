@@ -1,0 +1,188 @@
+<template>
+  <div>
+    <div class="container">
+      <div class="row login-page">
+        <div class="col s12 z-depth-6 card-panel">
+          <h4 class="pageTitle">レビューを編集する</h4>
+          <div class="login-form">
+            <div>
+              <img class="iconChange" :src="videoDetail.thumbnailsUrl" alt="" />
+            </div>
+            <div class="context">
+              <div class="stars hyouka">
+                <span>
+                  <input
+                    id="review01"
+                    type="radio"
+                    name="review"
+                    v-bind:value="5"
+                    v-model="evaluation"
+                  /><label for="review01">★</label>
+                  <input
+                    id="review02"
+                    type="radio"
+                    name="review"
+                    value="4"
+                    v-model="evaluation"
+                  /><label for="review02">★</label>
+                  <input
+                    id="review03"
+                    type="radio"
+                    name="review"
+                    value="3"
+                    v-model="evaluation"
+                  /><label for="review03">★</label>
+                  <input
+                    id="review04"
+                    type="radio"
+                    name="review"
+                    value="2"
+                    v-model="evaluation"
+                  /><label for="review04">★</label>
+                  <input
+                    id="review05"
+                    type="radio"
+                    name="review"
+                    value="1"
+                    v-model="evaluation"
+                  /><label for="review05">★</label>
+                </span>
+              </div>
+              <div class="row textarea">
+                <form class="col s12 offset-s1">
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <textarea
+                        v-model="review"
+                        id="textarea1"
+                        class="materialize-textarea"
+                      ></textarea>
+                      <label for="textarea1"></label>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="row login-btn">
+                <button class="btn" type="button" @click="editReview()">
+                  <span>編集</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+import { format } from "date-fns";
+import { Videos } from "@/types/Videos";
+import axios from "axios";
+@Component
+export default class XXXComponent extends Vue {
+  private evaluation = 0;
+  private review = "";
+  private reviewId = 0;
+  private videoDetail = new Videos(0, "", "", "", "", "", "", "");
+
+  async created(): Promise<void> {
+    console.log("start");
+
+    const reviewId = this.$route.params.id;
+    const review = this.$store.getters.getReviewByReviewId(reviewId);
+    console.log(review + " " + review.videos.id);
+    this.evaluation = review.evaluation;
+    this.review = review.review;
+    this.reviewId = review.reviewId;
+
+    const keys = this.$store.getters.getApiKey;
+    for (const key of keys) {
+      try {
+        const responce = await axios.get(
+          `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&key=${key}&id=${review.videos.id}`
+        );
+        const responceVideo = responce.data.items[0];
+        this.videoDetail = new Videos(
+          responceVideo.id,
+          responceVideo.snippet.publishedAt,
+          responceVideo.snippet.title,
+          responceVideo.snippet.description,
+          responceVideo.snippet.thumbnails.medium.url,
+          responceVideo.snippet.channelTitle,
+          responceVideo.tags,
+          responceVideo.statistics.viewCount
+        );
+        return;
+      } catch (e) {
+        console.log("APIerror");
+      }
+    }
+  }
+
+  getDate(): string {
+    const nowDate = format(new Date(), "yyyy年MM月dd日");
+    return nowDate;
+  }
+
+  editReview(): void {
+    this.$store.commit("editReview", {
+      date: this.getDate(),
+      evaluation: this.evaluation,
+      review: this.review,
+      reviewId: this.reviewId,
+    });
+    this.$router.push(`/showReview/${this.reviewId}`);
+  }
+}
+</script>
+
+<style scoped>
+.textarea {
+  margin-right: 10px;
+}
+
+.context {
+  /* display: flex;
+  flex-direction: column; */
+  width: 600px;
+}
+.iconChange {
+  width: 300px;
+  /* height: 500px; */
+}
+.login-form {
+  display: flex;
+  /* flex-direction: column; */
+}
+
+.hyouka {
+  display: flex;
+  justify-content: center;
+}
+
+.stars span {
+  text-align: center;
+  display: flex; /* 要素をフレックスボックスにする */
+  flex-direction: row-reverse; /*星を逆順に並べる*/
+  justify-content: flex-end; /* 逆順なので、左寄せにする */
+}
+
+.stars input[type="radio"] {
+  display: none; /* デフォルトのラジオボタンを非表示にする */
+}
+
+.stars label {
+  color: #d2d2d2; /* 未選択の星をグレー色に指定 */
+  font-size: 30px; /* 星の大きさを30pxに指定 */
+  padding: 0 5px; /* 左右の余白を5pxに指定 */
+  cursor: pointer; /* カーソルが上に乗ったときに指の形にする */
+}
+
+.stars label:hover,
+.stars label:hover ~ label,
+.stars input[type="radio"]:checked ~ label {
+  color: #f8c601; /* 選択された星以降をすべて黄色にする */
+}
+</style>

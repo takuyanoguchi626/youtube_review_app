@@ -88,17 +88,25 @@
                   >マイページ</router-link
                 >
               </li>
+
               <li class="icon">
+                <!-- <router-link
+                  v-if="currentUserId !== 0"
+                  :to="'/myProfile/' + currentUserId"
+                  aria-current="page"
+                > -->
                 <img
                   v-if="currentUserId !== 0"
-                  class="userIcon circle"
+                  class="userIcon circle myPageIcon"
                   :src="accountImg"
+                  @click="ToMyPage"
                 />
                 <img
                   v-if="currentUserId === 0"
                   class="userIcon circle"
                   src="/img/blank.png"
                 />
+                <!-- </router-link> -->
               </li>
             </ul>
           </div>
@@ -180,6 +188,9 @@ export default class XXXComponent extends Vue {
     this.$store.commit("removeUser");
     console.log(this.$store.state.currentUser);
   }
+  ToMyPage(): void {
+    this.$router.push("/myProfile/" + this.currentUserId);
+  }
 }
 </script>
 
@@ -211,6 +222,11 @@ textarea {
   width: 55px;
   height: 55px;
   object-fit: cover;
+}
+
+.myPageIcon:hover {
+  cursor: pointer;
+  opacity: 0.7;
 }
 
 .materialize-textarea {
