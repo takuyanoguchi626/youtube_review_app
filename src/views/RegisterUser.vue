@@ -291,7 +291,7 @@ export default class XXXComponent extends Vue {
 
     //dbに保存
     try {
-      setDoc(doc(db, "アカウント一覧", newAccount.name), {
+      setDoc(doc(db, "アカウント一覧", String(newAccount.id)), {
         id: newAccount.id,
         name: newAccount.name,
         introduction: newAccount.introduction,

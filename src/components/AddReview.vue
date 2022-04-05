@@ -80,13 +80,24 @@ import { Component, Vue } from "vue-property-decorator";
 import { format } from "date-fns";
 import { Videos } from "@/types/Videos";
 import axios from "axios";
+import { Account } from "@/types/Account";
+import db from "@/firebase";
+import { collection, doc, onSnapshot, setDoc } from "@firebase/firestore";
+import { Review } from "@/types/Review";
 @Component
 export default class XXXComponent extends Vue {
   private evaluation = 0;
   private review = "";
   private videoDetail = new Videos(0, "", "", "", "", "", "", "");
+  //DBの中のアカウントリスト
+  private accountList = Array<Account>();
+  //
+  private currentUserId = this.$store.getters.getCurrentUser.id;
+  //最後に投稿したレビューのID
+  private reviewLastId = 30;
 
   async created(): Promise<void> {
+    const currentUserId = this.$store.getters.getCurrentUser.id;
     const videoId = this.$route.params.id;
     const keys = this.$store.getters.getApiKey;
     for (const key of keys) {
@@ -105,6 +116,32 @@ export default class XXXComponent extends Vue {
           responceVideo.tags,
           responceVideo.statistics.viewCount
         );
+
+        const post = collection(db, "アカウント一覧");
+        onSnapshot(post, (post) => {
+          const accountListByDb = post.docs.map((doc) => ({ ...doc.data() }));
+          for (const account of accountListByDb) {
+            this.accountList.push(
+              new Account(
+                account.id,
+                account.name,
+                account.introduction,
+                account.img,
+                account.mailaddless,
+                account.telephone,
+                account.password,
+                account.favoriteChannelList,
+                account.reviewList
+              )
+            );
+          }
+        });
+
+        onSnapshot(doc(db, "レビューラストID", "レビューラストID"), (doc) => {
+          this.reviewLastId = { ...doc.data() }.reviewLastId;
+          console.log("created" + this.reviewLastId);
+        });
+
         return;
       } catch (e) {
         console.log("APIerror");
@@ -118,13 +155,58 @@ export default class XXXComponent extends Vue {
   }
 
   postReview(): void {
-    this.$store.commit("postReview", {
-      date: this.getDate(),
-      evaluation: this.evaluation,
-      review: this.review,
-      video: this.videoDetail,
-    });
-    this.$router.push(`/videoDetail/${this.videoDetail.id}`);
+    console.log("start");
+
+    const account = this.accountList.find(
+      (account) => Number(account.id) === Number(this.currentUserId)
+    );
+    console.log(account);
+    console.log(this.currentUserId);
+    console.log(this.accountList);
+
+    if (account !== undefined) {
+      account.reviewList.push(
+        new Review(
+          this.getDate(),
+          this.reviewLastId,
+          account.id,
+          this.videoDetail,
+          this.evaluation,
+          this.review,
+          new Array<number>()
+        )
+      );
+
+      try {
+        setDoc(doc(db, "レビューラストID", "レビューラストID"), {
+          reviewLastId: Number(this.reviewLastId++),
+        });
+        // console.log(docRef1);
+        // console.log("Document written with ID: ", docRef.id);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+
+      //dbに保存
+      try {
+        setDoc(doc(db, "アカウント一覧", String(account.id)), {
+          id: account.id,
+          name: account.name,
+          introduction: account.introduction,
+          img: account.img,
+          mailaddless: account.mailaddless,
+          telephone: account.telephone,
+          password: account.password,
+          favoriteChannelList: account.favoriteChannelList,
+          reviewList: account.reviewList,
+        });
+        // console.log(docRef2);
+        // console.log("Document written with ID: ", docRef.id);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+      this.$router.push(`/videoDetail/${this.videoDetail.id}`);
+    }
   }
 }
 </script>

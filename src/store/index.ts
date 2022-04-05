@@ -185,7 +185,17 @@ export default new Vuex.Store({
      * @param payload - ペイロード
      */
     addCurrentUser(state, payload) {
-      state.currentUser = payload;
+      state.currentUser = new Account(
+        payload.id,
+        payload.name,
+        payload.introduction,
+        payload.img,
+        payload.mailaddless,
+        payload.telephone,
+        payload.password,
+        payload.favoriteChannelList,
+        payload.reviewList
+      );
     },
     changeAccountIcon(state, payload) {
       const account = state.accountList.find(
