@@ -123,6 +123,8 @@ import { Videos } from "@/types/Videos";
 import { Channels } from "@/types/Channels";
 import { Account } from "@/types/Account";
 import { Review } from "@/types/Review";
+import { collection, onSnapshot } from "@firebase/firestore";
+import db from "@/firebase";
 
 @Component
 export default class XXXComponent extends Vue {
@@ -142,6 +144,8 @@ export default class XXXComponent extends Vue {
   private reviewCounts = 0;
   // 動画のサムネイル
   private videoThumnails = Array<Array<Review>>();
+  //DBの中のアカウントリスト
+  private accountList = Array<Account>();
 
   async created(): Promise<void> {
     /**
@@ -201,8 +205,46 @@ export default class XXXComponent extends Vue {
       }
     }
     // 人気アカウントとレビューした動画のサムネMAX3件表示
-    this.$store.commit("sortByReviewCount");
-    this.recommendationAccountList = this.$store.getters.getAccountList;
+    // this.$store.commit("sortByReviewCount");
+
+    const post = collection(db, "アカウント一覧");
+    onSnapshot(post, (post) => {
+      const accountListByDb = post.docs.map((doc) => ({ ...doc.data() }));
+      for (const account of accountListByDb) {
+        this.accountList.push(
+          new Account(
+            account.id,
+            account.name,
+            account.introduction,
+            account.img,
+            account.mailaddless,
+            account.telephone,
+            account.password,
+            account.favoriteChannelList,
+            account.reviewList
+          )
+        );
+      }
+    });
+  } //end created
+
+  mounted(): void {
+    this.accountList.sort(function (before: Account, after: Account) {
+      //ある順序の基準において a が b より小
+      if (after.reviewList.length < before.reviewList.length) {
+        return -1;
+      }
+      //その順序の基準において a が b より大
+      if (after.reviewList.length > before.reviewList.length) {
+        return 1;
+      }
+      // a と b が等しい場合
+      return 0;
+    });
+
+    this.recommendationAccountList = this.accountList;
+    console.log(this.recommendationAccountList);
+
     for (let i = 0; i <= 2; i++) {
       for (let j = 0; j <= 2; j++) {
         if (this.recommendationAccountList[i].reviewList[j] !== undefined) {

@@ -50,6 +50,8 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { Account } from "@/types/Account";
+import { collection, onSnapshot } from "@firebase/firestore";
+import db from "@/firebase";
 @Component
 export default class XXXComponent extends Vue {
   // メールアドレス
@@ -58,6 +60,8 @@ export default class XXXComponent extends Vue {
   private password = "";
   // エラー文
   private loginError = "";
+  //DBの中のアカウントリスト
+  private accountList = Array<Account>();
 
   created(): void {
     // スクロールトップボタン
@@ -78,6 +82,26 @@ export default class XXXComponent extends Vue {
         }
       }
     }
+
+    const post = collection(db, "アカウント一覧");
+    onSnapshot(post, (post) => {
+      const accountListByDb = post.docs.map((doc) => ({ ...doc.data() }));
+      for (const account of accountListByDb) {
+        this.accountList.push(
+          new Account(
+            account.id,
+            account.name,
+            account.introduction,
+            account.img,
+            account.mailaddless,
+            account.telephone,
+            account.password,
+            account.favoriteChannelList,
+            account.reviewList
+          )
+        );
+      }
+    });
   }
 
   /**
@@ -85,9 +109,9 @@ export default class XXXComponent extends Vue {
    */
   public login(): void {
     this.loginError = "";
-    const accountList = this.$store.getters.getAccountList;
+    // const accountList = this.$store.getters.getAccountList;
 
-    for (const account of accountList) {
+    for (const account of this.accountList) {
       if (
         account.mailaddless === this.email &&
         account.password === this.password
@@ -103,6 +127,7 @@ export default class XXXComponent extends Vue {
           account.favoriteChannelList,
           account.reviewList
         );
+        // console.log(currentAccount);
 
         this.$store.commit("addCurrentUser", currentAccount);
         this.$router.push("/top");
