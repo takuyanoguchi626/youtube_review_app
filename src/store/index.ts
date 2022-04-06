@@ -154,7 +154,6 @@ export default new Vuex.Store({
             soaringVideo.snippet.description,
             soaringVideo.snippet.thumbnails.high.url,
             soaringVideo.snippet.channelTitle,
-            soaringVideo.snippet.tags,
             soaringVideo.statistics.viewCount
           )
         );

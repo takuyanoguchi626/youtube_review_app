@@ -106,7 +106,7 @@ export default class XXXComponent extends Vue {
         "",
         1,
         1,
-        new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
+        new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
         1,
         "レビューのプレビュー",
         new Array<number>()
@@ -115,7 +115,7 @@ export default class XXXComponent extends Vue {
         "",
         1,
         1,
-        new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
+        new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
         1,
         "レビューのプレビュー",
         new Array<number>()
@@ -124,7 +124,7 @@ export default class XXXComponent extends Vue {
         "",
         1,
         1,
-        new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", "ss"),
+        new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
         1,
         "レビューのプレビュー",
         new Array<number>()
@@ -133,7 +133,7 @@ export default class XXXComponent extends Vue {
         "",
         1,
         1,
-        new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss", ""),
+        new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
         1,
         "レビューのプレビュー",
         new Array<number>()

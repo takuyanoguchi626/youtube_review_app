@@ -97,6 +97,7 @@ import { Review } from "@/types/Review";
 
 import db from "@/firebase";
 import { collection, doc, onSnapshot, setDoc } from "firebase/firestore";
+import { Videos } from "@/types/Videos";
 
 @Component
 export default class XXXComponent extends Vue {
@@ -155,6 +156,43 @@ export default class XXXComponent extends Vue {
     onSnapshot(post, (post) => {
       const accountListByDb = post.docs.map((doc) => ({ ...doc.data() }));
       for (const account of accountListByDb) {
+        const favoriteChannelList = Array<Channels>();
+        for (const channel of account.favoriteChannelList) {
+          favoriteChannelList.push(
+            new Channels(
+              channel.id,
+              channel.title,
+              channel.description,
+              channel.publishedAt,
+              channel.thumbnailsUrl,
+              channel.viewCount,
+              channel.subscriberCount,
+              channel.videoCount
+            )
+          );
+        }
+        const reviewList = Array<Review>();
+        for (const review of account.reviewList) {
+          reviewList.push(
+            new Review(
+              review.reviewDate,
+              review.reviewId,
+              review.accountId,
+              new Videos(
+                review.videos.id,
+                review.videos.publishedAt,
+                review.videos.title,
+                review.videos.description,
+                review.videos.thumbnailsUrl,
+                review.videos.channelTitle,
+                review.videos.viewCount
+              ),
+              review.evaluation,
+              review.review,
+              review.favoriteCount
+            )
+          );
+        }
         this.accountList.push(
           new Account(
             account.id,
@@ -164,8 +202,8 @@ export default class XXXComponent extends Vue {
             account.mailaddless,
             account.telephone,
             account.password,
-            account.favoriteChannelList,
-            account.reviewList
+            favoriteChannelList,
+            reviewList
           )
         );
       }

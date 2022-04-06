@@ -14,8 +14,6 @@ export class Videos {
     private _thumbnailsUrl: string,
     //チャンネル名
     private _channelTitle: string,
-    //タグ
-    private _tags: string,
     // 動画再生回数
     private _viewCount: string
   ) {}
@@ -75,13 +73,6 @@ export class Videos {
     this._channelTitle = channelTitle;
   }
 
-  public get tags(): string {
-    return this._tags;
-  }
-
-  public set tags(tags: string) {
-    this._tags = tags;
-  }
   public get viewCount(): string {
     return this._viewCount;
   }

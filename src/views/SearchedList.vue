@@ -202,7 +202,6 @@ export default class XXXComponent extends Vue {
               video.snippet.description,
               video.snippet.thumbnails.high.url,
               video.snippet.channelTitle,
-              video.snippet.tags,
               video.statistics.viewCount
             )
           );

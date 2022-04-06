@@ -88,7 +88,7 @@ import { Review } from "@/types/Review";
 export default class XXXComponent extends Vue {
   private evaluation = 0;
   private review = "";
-  private videoDetail = new Videos(0, "", "", "", "", "", "", "");
+  private videoDetail = new Videos(0, "", "", "", "", "", "");
   //DBの中のアカウントリスト
   private accountList = Array<Account>();
   //
@@ -113,7 +113,6 @@ export default class XXXComponent extends Vue {
           responceVideo.snippet.description,
           responceVideo.snippet.thumbnails.medium.url,
           responceVideo.snippet.channelTitle,
-          responceVideo.tags,
           responceVideo.statistics.viewCount
         );
 
@@ -247,6 +246,7 @@ export default class XXXComponent extends Vue {
           reviewList: reviewArr,
         });
         console.log("DBに保存");
+        console.log(docRef);
         // console.log("Document written with ID: ", docRef.id);
       } catch (e) {
         console.error("Error adding document: ", e);

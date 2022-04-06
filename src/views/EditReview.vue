@@ -85,7 +85,7 @@ export default class XXXComponent extends Vue {
   private evaluation = 0;
   private review = "";
   private reviewId = 0;
-  private videoDetail = new Videos(0, "", "", "", "", "", "", "");
+  private videoDetail = new Videos(0, "", "", "", "", "", "");
 
   async created(): Promise<void> {
     console.log("start");
@@ -111,7 +111,6 @@ export default class XXXComponent extends Vue {
           responceVideo.snippet.description,
           responceVideo.snippet.thumbnails.medium.url,
           responceVideo.snippet.channelTitle,
-          responceVideo.tags,
           responceVideo.statistics.viewCount
         );
         return;

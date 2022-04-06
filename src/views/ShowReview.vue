@@ -106,7 +106,7 @@ export default class XXXComponent extends Vue {
     "",
     0,
     0,
-    new Videos(0, "", "", "", "", "", "", ""),
+    new Videos(0, "", "", "", "", "", ""),
     0,
     "",
     new Array<number>()

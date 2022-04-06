@@ -113,7 +113,7 @@ import { Account } from "@/types/Account";
 })
 export default class XXXComponent extends Vue {
   // 動画詳細
-  private videoDetail = new Videos(0, "", "", "", "", "", "", "");
+  private videoDetail = new Videos(0, "", "", "", "", "", "");
   // チャンネル詳細
   private channelDetail = new Channels("", "", "", "", "", 0, 0, 0);
   private reviewList = new Array<Review>();
@@ -155,7 +155,6 @@ export default class XXXComponent extends Vue {
           responceVideo.snippet.description,
           responceVideo.snippet.thumbnails.high.url,
           responceVideo.snippet.channelTitle,
-          responceVideo.tags,
           responceVideo.statistics.viewCount
         );
         const responce2 = await axios.get(
