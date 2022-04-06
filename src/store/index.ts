@@ -196,6 +196,7 @@ export default new Vuex.Store({
         payload.favoriteChannelList,
         payload.reviewList
       );
+      console.log(state.currentUser);
     },
     changeAccountIcon(state, payload) {
       const account = state.accountList.find(

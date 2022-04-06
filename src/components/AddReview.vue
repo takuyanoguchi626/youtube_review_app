@@ -97,7 +97,7 @@ export default class XXXComponent extends Vue {
   private reviewLastId = 30;
 
   async created(): Promise<void> {
-    const currentUserId = this.$store.getters.getCurrentUser.id;
+    // const currentUserId = this.$store.getters.getCurrentUser.id;
     const videoId = this.$route.params.id;
     const keys = this.$store.getters.getApiKey;
     for (const key of keys) {
@@ -141,6 +141,7 @@ export default class XXXComponent extends Vue {
           this.reviewLastId = { ...doc.data() }.reviewLastId;
           console.log("created" + this.reviewLastId);
         });
+        console.log("createdlast");
 
         return;
       } catch (e) {
@@ -163,6 +164,7 @@ export default class XXXComponent extends Vue {
     console.log(account);
     console.log(this.currentUserId);
     console.log(this.accountList);
+    console.log(1111);
 
     if (account !== undefined) {
       account.reviewList.push(
@@ -179,17 +181,61 @@ export default class XXXComponent extends Vue {
 
       try {
         setDoc(doc(db, "レビューラストID", "レビューラストID"), {
-          reviewLastId: Number(this.reviewLastId++),
+          reviewLastId: Number(this.reviewLastId) + 1,
         });
         // console.log(docRef1);
         // console.log("Document written with ID: ", docRef.id);
-      } catch (e) {
-        console.error("Error adding document: ", e);
-      }
 
-      //dbに保存
-      try {
-        setDoc(doc(db, "アカウント一覧", String(account.id)), {
+        // const reviewMap = new Map();
+        const reviewArr = Array<any>();
+
+        for (const review of account.reviewList) {
+          if (review.favoriteCount === undefined) {
+            reviewArr.push({
+              reviewDate: review.reviewDate,
+              reviewId: review.reviewId,
+              accountId: review.accountId,
+              videos: {
+                id: review.videos.id,
+                publishedAt: review.videos.publishedAt,
+                title: review.videos.title,
+                description: review.videos.description,
+                thumbnailsUrl: review.videos.thumbnailsUrl,
+                channelTitle: review.videos.channelTitle,
+                // tags: review.videos.tags,
+                viewCount: review.videos.viewCount,
+              },
+              evaluation: review.evaluation,
+              review: review.review,
+              favoriteCount: [],
+            });
+          } else {
+            reviewArr.push({
+              reviewDate: review.reviewDate,
+              reviewId: review.reviewId,
+              accountId: review.accountId,
+              videos: {
+                id: review.videos.id,
+                publishedAt: review.videos.publishedAt,
+                title: review.videos.title,
+                description: review.videos.description,
+                thumbnailsUrl: review.videos.thumbnailsUrl,
+                channelTitle: review.videos.channelTitle,
+                // tags: review.videos.tags,
+                viewCount: review.videos.viewCount,
+              },
+              evaluation: review.evaluation,
+              review: review.review,
+              favoriteCount: review.favoriteCount,
+            });
+          }
+        }
+
+        console.log(reviewArr);
+
+        // dbに保存
+
+        const docRef = setDoc(doc(db, "アカウント一覧", String(account.id)), {
           id: account.id,
           name: account.name,
           introduction: account.introduction,
@@ -198,12 +244,13 @@ export default class XXXComponent extends Vue {
           telephone: account.telephone,
           password: account.password,
           favoriteChannelList: account.favoriteChannelList,
-          reviewList: account.reviewList,
+          reviewList: reviewArr,
         });
-        // console.log(docRef2);
+        console.log("DBに保存");
         // console.log("Document written with ID: ", docRef.id);
       } catch (e) {
         console.error("Error adding document: ", e);
+        console.log("Error adding document: ");
       }
       this.$router.push(`/videoDetail/${this.videoDetail.id}`);
     }

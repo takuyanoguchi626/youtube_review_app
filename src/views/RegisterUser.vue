@@ -275,8 +275,6 @@ export default class XXXComponent extends Vue {
       );
     }
     newUserId = newAccount.id;
-    this.$store.commit("addUser", newAccount);
-    this.$store.commit("addLastUserId", newUserId);
     this.$router.push("/login");
 
     try {
@@ -291,7 +289,7 @@ export default class XXXComponent extends Vue {
 
     //dbに保存
     try {
-      setDoc(doc(db, "アカウント一覧", String(newAccount.id)), {
+      setDoc(doc(db, "アカウント一覧", String(newUserId)), {
         id: newAccount.id,
         name: newAccount.name,
         introduction: newAccount.introduction,
