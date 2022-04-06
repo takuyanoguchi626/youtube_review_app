@@ -40,7 +40,19 @@
       <a
         class="waves-effect waves-light btn favorite favoriteBtn"
         v-on:click="favoriteChannel()"
-        :disabled="favoriteFlag"
+        v-if="currentUserId !== 0 && !flagState"
+        ><i class="material-icons left">star_border</i>お気に入り</a
+      >
+      <a
+        class="waves-effect waves-light btn favorite favoriteBtn remove-btn"
+        v-on:click="removeFavoriteChannel(currentChannel.id)"
+        v-if="currentUserId !== 0 && flagState"
+        ><i class="material-icons left">star_border</i>お気に入り</a
+      >
+      <a
+        class="waves-effect waves-light btn favorite favoriteBtn"
+        v-if="currentUserId === 0"
+        :disabled="true"
         ><i class="material-icons left">star_border</i>お気に入り</a
       >
     </div>
@@ -81,6 +93,12 @@ export default class XXXComponent extends Vue {
   private currentUserId = this.$store.getters.getCurrentUser.id;
   // APIキー
   private apiKey = this.$store.getters.getApiKey;
+  // ボタンの使用可否の取得
+  get flagState(): boolean {
+    return this.favoriteFlag;
+  }
+  // ログイン中のアカウントのお気に入りチャンネルリスト
+  private channelList = new Array<Channels>();
 
   async created(): Promise<void> {
     // スクロールトップボタン
@@ -162,6 +180,11 @@ export default class XXXComponent extends Vue {
             }
           }
         }
+        for (const account of this.$store.getters.getAccountList) {
+          if (this.currentUserId === account.id) {
+            this.channelList = account.favoriteChannelList;
+          }
+        }
         return;
       } catch (e) {
         console.log("APIerror");
@@ -183,6 +206,25 @@ export default class XXXComponent extends Vue {
   favoriteChannel(): void {
     this.$store.commit("addChannelData", this.currentChannel);
     this.favoriteFlag = true;
+    console.log(this.$store.state.accountList);
+  }
+  /**
+   * レビューのいいねを取り消す.
+   */
+  removeFavoriteChannel(currentChannelId: string): void {
+    const newChannelList = new Array<Channels>();
+    for (const channel of this.channelList) {
+      if (channel.id !== currentChannelId) {
+        newChannelList.push(channel);
+      }
+    }
+    console.log(this.channelList);
+
+    this.favoriteFlag = false;
+    this.$store.commit("removeFavoriteChannels", newChannelList);
+    console.log(newChannelList);
+
+    console.log(this.$store.state.accountList);
   }
 }
 </script>
@@ -239,6 +281,10 @@ export default class XXXComponent extends Vue {
 }
 .favoriteBtn {
   margin-bottom: 20px;
+}
+.remove-btn {
+  background-color: rgb(223, 223, 223);
+  color: rgb(159, 159, 159);
 }
 .channel-description {
   margin-top: 5px;

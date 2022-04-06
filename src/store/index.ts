@@ -163,6 +163,11 @@ export default new Vuex.Store({
         }
       }
     },
+    removeFavoriteChannels(state, payload) {
+      for (const account of state.accountList) {
+        account.favoriteChannelList = payload;
+      }
+    },
     removeFavoriteReview(state, payload) {
       for (const account of state.accountList) {
         for (const review of account.reviewList) {
