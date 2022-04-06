@@ -38,12 +38,7 @@
               >&nbsp;Facebookで登録</span
             >
           </button>
-          <button class="button4 btn" type="button">
-            <img
-              class="button-icon"
-              src="/img/2021 Twitter logo - white.png"
-            /><span>&nbsp;Twitterで登録</span>
-          </button>
+          <Twitter></Twitter>
         </div>
       </div>
 
@@ -123,8 +118,13 @@ import { Videos } from "@/types/Videos";
 import { Channels } from "@/types/Channels";
 import { Account } from "@/types/Account";
 import { Review } from "@/types/Review";
+import Twitter from "@/components/Twitter.vue";
 
-@Component
+@Component({
+  components: {
+    Twitter,
+  },
+})
 export default class XXXComponent extends Vue {
   // 急上昇動画50件分
   private soaringVideos: Array<Videos> = [];
