@@ -189,14 +189,14 @@ export default class XXXComponent extends Vue {
         }
       }
     }
-    // // ログインしていない、または投稿した本人だったらボタンを押せなくする
-    // if (
-    //   this.targetReview.accountId === this.currentUserId ||
-    //   this.currentUserId === 0 ||
-    //   this.reviewFavorite.favoriteCount.includes(this.currentUserId)
-    // ) {
-    //   this.flag = true;
-    // }
+    // ログインしていない、または投稿した本人だったらボタンを押せなくする
+    if (
+      this.targetReview.accountId === this.currentUserId ||
+      this.currentUserId === 0 ||
+      this.reviewFavorite.favoriteCount.includes(this.currentUserId)
+    ) {
+      this.flag = true;
+    }
   }
   /**
    * レビューにいいねをする.
