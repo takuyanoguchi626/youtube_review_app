@@ -62,8 +62,19 @@
             <a
               class="waves-effect waves-light btn"
               v-on:click="favoriteReview()"
-              v-if="!isMyAccount"
-              :disabled="flag"
+              v-if="currentUserId !== 0 && !isMyAccount && !flagState"
+              ><i class="material-icons left">thumb_up</i>いいね{{ count }}</a
+            >
+            <a
+              class="waves-effect waves-light btn remove-btn"
+              v-on:click="removeFavoriteReview(currentUserId)"
+              v-if="currentUserId !== 0 && !isMyAccount && flagState"
+              ><i class="material-icons left">thumb_up</i>いいね{{ count }}</a
+            >
+            <a
+              class="waves-effect waves-light btn disable-btn"
+              :disabled="true"
+              v-if="currentUserId === 0 || isMyAccount"
               ><i class="material-icons left">thumb_up</i>いいね{{ count }}</a
             >
           </div>
@@ -119,7 +130,8 @@ export default class XXXComponent extends Vue {
   private flag = false;
   // ログイン中のユーザー
   private currentUserId = this.$store.getters.getCurrentUser.id;
-
+  // URLから取得したレビューID
+  private reviewParamsId = this.$route.params.id;
   //自分のアカウントのレビューかどうか
   get isMyAccount(): boolean {
     return this.currentUserId === this.reviewFavorite.accountId;
@@ -128,34 +140,23 @@ export default class XXXComponent extends Vue {
   // ステートから取得したレビュー
   get reviewFavorite(): Review {
     // URLから取得したid
-    const reviewParamsId = this.$route.params.id;
 
     // ステートの情報の中からURLで付与されたものと同一の一意のidのレビューを取得する
     for (const account of this.accountList) {
       for (const review of account.reviewList) {
-        if (Number(reviewParamsId) === review.reviewId) {
+        if (Number(this.reviewParamsId) === review.reviewId) {
           this.targetReview = review;
         }
       }
     }
     return this.targetReview;
   }
+  // ボタンの使用可否の取得
+  get flagState(): boolean {
+    return this.flag;
+  }
   // レビューのいいねカウント
   private count = this.reviewFavorite.favoriteCount.length;
-
-  transitionEdit(): void {
-    this.$router.push("/EditReview/" + this.targetReview.reviewId);
-  }
-
-  deleteReview(): void {
-    const result = confirm("本当に削除しますか？");
-    if (result === true) {
-      this.$store.commit("deleteReview", {
-        reviewId: this.targetReview.reviewId,
-      });
-      this.$router.push("/videoDetail/" + this.targetReview.videos.id);
-    }
-  }
 
   created(): void {
     // スクロールトップボタン
@@ -179,27 +180,23 @@ export default class XXXComponent extends Vue {
       }
     }
 
-    // URLから取得したid
-
-    const reviewParamsId = this.$route.params.id;
-
     // ステートの情報の中からURLで付与されたものと同一の一意のidのレビューを取得する
     for (const account of this.accountList) {
       for (const review of account.reviewList) {
-        if (Number(reviewParamsId) === review.reviewId) {
+        if (Number(this.reviewParamsId) === review.reviewId) {
           this.targetReview = review;
           this.targetAccount = account;
         }
       }
     }
-    // ログインしていない、または投稿した本人だったらボタンを押せなくする
-    if (
-      this.targetReview.accountId === this.currentUserId ||
-      this.currentUserId === 0 ||
-      this.reviewFavorite.favoriteCount.includes(this.currentUserId)
-    ) {
-      this.flag = true;
-    }
+    // // ログインしていない、または投稿した本人だったらボタンを押せなくする
+    // if (
+    //   this.targetReview.accountId === this.currentUserId ||
+    //   this.currentUserId === 0 ||
+    //   this.reviewFavorite.favoriteCount.includes(this.currentUserId)
+    // ) {
+    //   this.flag = true;
+    // }
   }
   /**
    * レビューにいいねをする.
@@ -214,7 +211,32 @@ export default class XXXComponent extends Vue {
       this.flag = true;
     }
 
-    this.$store.commit("addFavorite", this.reviewFavorite.favoriteCount);
+    this.$store.commit("addFavorite", this.currentUserId);
+    console.log(this.$store.state.accountList);
+  }
+  /**
+   * レビューのいいねを取り消す.
+   */
+  removeFavoriteReview(currentUserId: number): void {
+    this.count = this.count - 1;
+    this.reviewFavorite.favoriteCount =
+      this.reviewFavorite.favoriteCount.filter((num) => num !== currentUserId);
+    this.flag = false;
+    this.$store.commit("removeFavoriteReview", this.currentUserId);
+    console.log(this.$store.state.accountList);
+  }
+  transitionEdit(): void {
+    this.$router.push("/EditReview/" + this.targetReview.reviewId);
+  }
+
+  deleteReview(): void {
+    const result = confirm("本当に削除しますか？");
+    if (result === true) {
+      this.$store.commit("deleteReview", {
+        reviewId: this.targetReview.reviewId,
+      });
+      this.$router.push("/videoDetail/" + this.targetReview.videos.id);
+    }
   }
 }
 </script>
@@ -262,6 +284,14 @@ export default class XXXComponent extends Vue {
 
 .delete {
   margin-left: 20px;
+}
+.remove-btn {
+  margin-bottom: 5px;
+  background-color: rgb(223, 223, 223);
+  color: rgb(159, 159, 159);
+}
+.disable-btn {
+  margin-bottom: 5px;
 }
 
 .movieDescription {

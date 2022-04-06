@@ -18,16 +18,39 @@ export default new Vuex.Store({
     // Youtuber情報
     youtubersInfo: Array<Channels>(),
     // ユーザー情報
-    accountList: Array<Account>(),
+    accountList: Array<Account>(
+      new Account(
+        1,
+        "",
+        "",
+        "",
+        "a",
+        "",
+        "a",
+        new Array<Channels>(),
+        new Array<Review>()
+      ),
+      new Account(
+        2,
+        "",
+        "",
+        "",
+        "b",
+        "",
+        "b",
+        new Array<Channels>(),
+        new Array<Review>()
+      )
+    ),
     soaringVideos: Array<Videos>(),
     currentUser: new Account(
-      0,
+      2,
       "",
       "",
       "",
+      "b",
       "",
-      "",
-      "",
+      "b",
       new Array<Channels>(),
       new Array<Review>()
     ),
@@ -135,8 +158,17 @@ export default new Vuex.Store({
       for (const account of state.accountList) {
         for (const review of account.reviewList) {
           if (payload.reviewId === review.reviewId) {
-            review.favoriteCount.push(payload.favoriteCount);
+            review.favoriteCount.push(payload);
           }
+        }
+      }
+    },
+    removeFavoriteReview(state, payload) {
+      for (const account of state.accountList) {
+        for (const review of account.reviewList) {
+          review.favoriteCount = review.favoriteCount.filter(
+            (num) => num !== payload
+          );
         }
       }
     },
