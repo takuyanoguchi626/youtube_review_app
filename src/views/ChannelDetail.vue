@@ -119,13 +119,23 @@ export default class XXXComponent extends Vue {
         }
       }
     }
+    const channelId = this.$route.params.id;
 
     // ログインしていない場合を押せなくする
     if (this.currentUserId === 0) {
       this.favoriteFlag = true;
     }
+    // 既にお気に入り登録している場合を押せなくする
+    for (const account of this.$store.getters.getAccountList) {
+      if (this.currentUserId === account.id) {
+        for (const favoriteChannel of account.favoriteChannelList) {
+          if (channelId === favoriteChannel.id) {
+            this.favoriteFlag = true;
+          }
+        }
+      }
+    }
 
-    const channelId = this.$route.params.id;
     for (const key of this.apiKey) {
       try {
         const response = await axios.get(
@@ -170,16 +180,6 @@ export default class XXXComponent extends Vue {
             "このYoutuberの概要欄は見つかりませんでした";
         }
 
-        // 既にお気に入り登録している場合を押せなくする
-        for (const account of this.$store.getters.getAccountList) {
-          if (this.currentUserId === account.id) {
-            for (const favoriteChannel of account.favoriteChannelList) {
-              if (channelId === favoriteChannel.id) {
-                this.favoriteFlag = true;
-              }
-            }
-          }
-        }
         for (const account of this.$store.getters.getAccountList) {
           if (this.currentUserId === account.id) {
             this.channelList = account.favoriteChannelList;
