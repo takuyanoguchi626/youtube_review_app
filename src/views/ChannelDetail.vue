@@ -158,17 +158,6 @@ export default class XXXComponent extends Vue {
             "このYoutuberの概要欄は見つかりませんでした";
         }
 
-        // 既にお気に入り登録している場合を押せなくする
-        for (const account of this.$store.getters.getAccountList) {
-          if (this.currentUserId === account.id) {
-            for (const favoriteChannel of account.favoriteChannelList) {
-              if (channelId === favoriteChannel.id) {
-                this.favoriteFlag = true;
-              }
-            }
-          }
-        }
-
         const post = collection(db, "アカウント一覧");
         onSnapshot(post, (post) => {
           const accountListByDb = post.docs.map((doc) => ({ ...doc.data() }));
@@ -225,6 +214,17 @@ export default class XXXComponent extends Vue {
             );
           }
           console.log(this.accountList);
+
+          // 既にお気に入り登録している場合を押せなくする
+          for (const account of this.accountList) {
+            if (this.currentUser.id === account.id) {
+              for (const favoriteChannel of account.favoriteChannelList) {
+                if (channelId === favoriteChannel.id) {
+                  this.favoriteFlag = true;
+                }
+              }
+            }
+          }
         });
 
         return;
@@ -312,7 +312,7 @@ export default class XXXComponent extends Vue {
           });
         }
         // dbに保存
-        const docRef = setDoc(doc(db, "アカウント一覧", String(account.id)), {
+        setDoc(doc(db, "アカウント一覧", String(account.id)), {
           id: account.id,
           name: account.name,
           introduction: account.introduction,
