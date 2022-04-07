@@ -90,6 +90,8 @@ import { Account } from "@/types/Account";
 import { Channels } from "@/types/Channels";
 import { Review } from "@/types/Review";
 import { Videos } from "@/types/Videos";
+import { collection, onSnapshot } from "@firebase/firestore";
+import db from "@/firebase";
 @Component
 export default class XXXComponent extends Vue {
   private currentAccount = new Account(
@@ -141,6 +143,8 @@ export default class XXXComponent extends Vue {
     ]
   );
   private myAccountFlag = false;
+  //DBの中のアカウントリスト
+  private accountList = Array<Account>();
 
   created(): void {
     // スクロールトップボタン
@@ -164,22 +168,89 @@ export default class XXXComponent extends Vue {
       }
     }
 
-    console.log(this.$route.params.id);
-    const accountId = Number(this.$route.params.id);
-    const account = this.$store.getters.getAccountById(accountId);
-    this.currentAccount = new Account(
-      account.id,
-      account.name,
-      account.introduction,
-      account.img,
-      account.mailaddless,
-      account.telephone,
-      account.password,
-      account.favoriteChannelList,
-      account.reviewList
-    );
+    const post = collection(db, "アカウント一覧");
+    onSnapshot(post, (post) => {
+      const accountListByDb = post.docs.map((doc) => ({ ...doc.data() }));
+      for (const account of accountListByDb) {
+        const favoriteChannelList = Array<Channels>();
+        for (const channel of account.favoriteChannelList) {
+          favoriteChannelList.push(
+            new Channels(
+              channel.id,
+              channel.title,
+              channel.description,
+              channel.publishedAt,
+              channel.thumbnailsUrl,
+              channel.viewCount,
+              channel.subscriberCount,
+              channel.videoCount
+            )
+          );
+        }
+        const reviewList = Array<Review>();
+        for (const review of account.reviewList) {
+          reviewList.push(
+            new Review(
+              review.reviewDate,
+              review.reviewId,
+              review.accountId,
+              new Videos(
+                review.videos.id,
+                review.videos.publishedAt,
+                review.videos.title,
+                review.videos.description,
+                review.videos.thumbnailsUrl,
+                review.videos.channelTitle,
+                review.videos.viewCount
+              ),
+              review.evaluation,
+              review.review,
+              review.favoriteCount
+            )
+          );
+        }
+        this.accountList.push(
+          new Account(
+            account.id,
+            account.name,
+            account.introduction,
+            account.img,
+            account.mailaddless,
+            account.telephone,
+            account.password,
+            favoriteChannelList,
+            reviewList
+          )
+        );
+      }
+      console.dir(JSON.stringify(accountListByDb));
 
-    this.myAccountFlag = this.$store.getters.getMyAccountFlag(account);
+      const accountId = Number(this.$route.params.id);
+      const account = this.accountList.find(
+        (account) => Number(account.id) === accountId
+      );
+
+      // const account = this.$store.getters.getAccountById(accountId);
+      if (account !== undefined) {
+        this.currentAccount = new Account(
+          account.id,
+          account.name,
+          account.introduction,
+          account.img,
+          account.mailaddless,
+          account.telephone,
+          account.password,
+          account.favoriteChannelList,
+          account.reviewList
+        );
+      }
+
+      this.myAccountFlag = this.$store.getters.getMyAccountFlag(account);
+    });
+  } //end created
+
+  mounted(): void {
+    console.log(this.accountList);
   }
 
   selfIntroductionChange(): void {

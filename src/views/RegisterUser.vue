@@ -211,7 +211,7 @@ export default class XXXComponent extends Vue {
 
     onSnapshot(doc(db, "アカウントラストID", "アカウントラストID"), (doc) => {
       this.accountLastId = { ...doc.data() }.accountLastId;
-      console.log("created" + this.accountLastId);
+      console.log("createdアカウントラストID" + this.accountLastId);
     });
   } //end created
 
@@ -313,14 +313,11 @@ export default class XXXComponent extends Vue {
       );
     }
     newUserId = newAccount.id;
-    this.$router.push("/login");
 
     try {
       setDoc(doc(db, "アカウントラストID", "アカウントラストID"), {
-        accountLastId: newUserId,
+        accountLastId: Number(newUserId),
       });
-      // console.log(docRef1);
-      // console.log("Document written with ID: ", docRef.id);
     } catch (e) {
       console.error("Error adding document: ", e);
     }
@@ -343,6 +340,7 @@ export default class XXXComponent extends Vue {
     } catch (e) {
       console.error("Error adding document: ", e);
     }
+    this.$router.push("/login");
   } //end register
 }
 </script>

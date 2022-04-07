@@ -59,19 +59,20 @@
           <pre class="review300">{{ targetReview.review }}<br /></pre>
           <div class="review-data">
             <p>レビュー投稿日：{{ targetReview.reviewDate }}</p>
+          </div>
+          <div>
             <a
               class="waves-effect waves-light btn"
               v-on:click="favoriteReview()"
-              v-if="!isMyAccount"
-              :disabled="flag"
+              disabled="!flag"
               ><i class="material-icons left">thumb_up</i>いいね{{ count }}</a
             >
           </div>
-          <div>
-            <a class="btn" v-on:click="transitionEdit()" v-if="isMyAccount"
+          <div v-if="isMyAccount">
+            <a class="btn" v-on:click="transitionEdit()"
               ><i class="material-icons left">build</i>編集</a
             >
-            <a class="btn delete" v-on:click="deleteReview()" v-if="isMyAccount"
+            <a class="btn delete" v-on:click="deleteReview()"
               ><i class="material-icons left">delete_forever</i>削除</a
             >
           </div>
@@ -87,6 +88,8 @@ import { Account } from "@/types/Account";
 import { Videos } from "@/types/Videos";
 import { Channels } from "@/types/Channels";
 import { Component, Vue } from "vue-property-decorator";
+import db from "@/firebase";
+import { collection, onSnapshot } from "@firebase/firestore";
 @Component
 export default class XXXComponent extends Vue {
   // ステートから取得したユーザー情報
@@ -111,19 +114,16 @@ export default class XXXComponent extends Vue {
     "",
     new Array<number>()
   );
-  // ステートの全ユーザー情報
-  private accountList = this.$store.getters.getAccountList;
+  //DBの中のアカウントリスト
+  private accountList = Array<Account>();
   // 取得したレビューのいいねカウント
   private favoriteCount = this.targetReview.favoriteCount;
   // ボタンの使用可否
   private flag = false;
   // ログイン中のユーザー
   private currentUserId = this.$store.getters.getCurrentUser.id;
-
-  //自分のアカウントのレビューかどうか
-  get isMyAccount(): boolean {
-    return this.currentUserId === this.reviewFavorite.accountId;
-  }
+  //本人かの識別
+  private isMyAccount = false;
 
   // ステートから取得したレビュー
   get reviewFavorite(): Review {
@@ -179,28 +179,89 @@ export default class XXXComponent extends Vue {
       }
     }
 
-    // URLから取得したid
+    const post = collection(db, "アカウント一覧");
+    onSnapshot(post, (post) => {
+      const accountListByDb = post.docs.map((doc) => ({ ...doc.data() }));
+      for (const account of accountListByDb) {
+        const favoriteChannelList = Array<Channels>();
+        for (const channel of account.favoriteChannelList) {
+          favoriteChannelList.push(
+            new Channels(
+              channel.id,
+              channel.title,
+              channel.description,
+              channel.publishedAt,
+              channel.thumbnailsUrl,
+              channel.viewCount,
+              channel.subscriberCount,
+              channel.videoCount
+            )
+          );
+        }
+        const reviewList = Array<Review>();
+        for (const review of account.reviewList) {
+          reviewList.push(
+            new Review(
+              review.reviewDate,
+              review.reviewId,
+              review.accountId,
+              new Videos(
+                review.videos.id,
+                review.videos.publishedAt,
+                review.videos.title,
+                review.videos.description,
+                review.videos.thumbnailsUrl,
+                review.videos.channelTitle,
+                review.videos.viewCount
+              ),
+              review.evaluation,
+              review.review,
+              review.favoriteCount
+            )
+          );
+        }
+        this.accountList.push(
+          new Account(
+            account.id,
+            account.name,
+            account.introduction,
+            account.img,
+            account.mailaddless,
+            account.telephone,
+            account.password,
+            favoriteChannelList,
+            reviewList
+          )
+        );
+      }
 
-    const reviewParamsId = this.$route.params.id;
+      // URLから取得したid
+      const reviewParamsId = this.$route.params.id;
 
-    // ステートの情報の中からURLで付与されたものと同一の一意のidのレビューを取得する
-    for (const account of this.accountList) {
-      for (const review of account.reviewList) {
-        if (Number(reviewParamsId) === review.reviewId) {
-          this.targetReview = review;
-          this.targetAccount = account;
+      // ステートの情報の中からURLで付与されたものと同一の一意のidのレビューを取得する
+      for (const account of this.accountList) {
+        for (const review of account.reviewList) {
+          if (Number(reviewParamsId) === review.reviewId) {
+            this.targetReview = review;
+            this.targetAccount = account;
+          }
         }
       }
-    }
-    // ログインしていない、または投稿した本人だったらボタンを押せなくする
-    if (
-      this.targetReview.accountId === this.currentUserId ||
-      this.currentUserId === 0 ||
-      this.reviewFavorite.favoriteCount.includes(this.currentUserId)
-    ) {
-      this.flag = true;
-    }
-  }
+      // ログインしていない、または投稿した本人だったらボタンを押せなくする
+      if (
+        this.targetReview.accountId === this.currentUserId ||
+        this.currentUserId === 0 ||
+        this.reviewFavorite.favoriteCount.includes(this.currentUserId)
+      ) {
+        this.flag = true;
+      }
+      //本人のレビューだったら編集・削除できるようにする
+      if (this.targetReview.accountId === this.currentUserId) {
+        this.isMyAccount = true;
+      }
+    });
+  } //end created
+
   /**
    * レビューにいいねをする.
    */

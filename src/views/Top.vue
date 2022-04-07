@@ -211,6 +211,43 @@ export default class XXXComponent extends Vue {
     onSnapshot(post, (post) => {
       const accountListByDb = post.docs.map((doc) => ({ ...doc.data() }));
       for (const account of accountListByDb) {
+        const favoriteChannelList = Array<Channels>();
+        for (const channel of account.favoriteChannelList) {
+          favoriteChannelList.push(
+            new Channels(
+              channel.id,
+              channel.title,
+              channel.description,
+              channel.publishedAt,
+              channel.thumbnailsUrl,
+              channel.viewCount,
+              channel.subscriberCount,
+              channel.videoCount
+            )
+          );
+        }
+        const reviewList = Array<Review>();
+        for (const review of account.reviewList) {
+          reviewList.push(
+            new Review(
+              review.reviewDate,
+              review.reviewId,
+              review.accountId,
+              new Videos(
+                review.videos.id,
+                review.videos.publishedAt,
+                review.videos.title,
+                review.videos.description,
+                review.videos.thumbnailsUrl,
+                review.videos.channelTitle,
+                review.videos.viewCount
+              ),
+              review.evaluation,
+              review.review,
+              review.favoriteCount
+            )
+          );
+        }
         this.accountList.push(
           new Account(
             account.id,
@@ -220,47 +257,47 @@ export default class XXXComponent extends Vue {
             account.mailaddless,
             account.telephone,
             account.password,
-            account.favoriteChannelList,
-            account.reviewList
+            favoriteChannelList,
+            reviewList
           )
         );
+      }
+
+      this.accountList.sort(function (before: Account, after: Account) {
+        //ある順序の基準において a が b より小
+        if (after.reviewList.length < before.reviewList.length) {
+          return -1;
+        }
+        //その順序の基準において a が b より大
+        if (after.reviewList.length > before.reviewList.length) {
+          return 1;
+        }
+        // a と b が等しい場合
+        return 0;
+      });
+
+      this.recommendationAccountList = this.accountList;
+      console.log(this.recommendationAccountList);
+
+      for (let i = 0; i <= 2; i++) {
+        for (let j = 0; j <= 2; j++) {
+          if (this.recommendationAccountList[i].reviewList[j] !== undefined) {
+            if (this.videoThumnails[i] === undefined) {
+              this.videoThumnails.push([
+                this.recommendationAccountList[i].reviewList[j],
+              ]);
+            } else {
+              this.videoThumnails[i]
+                .push
+                // this.recommendationAccountList[i].reviewList[j]
+                ();
+            }
+          }
+        }
       }
     });
   } //end created
 
-  mounted(): void {
-    this.accountList.sort(function (before: Account, after: Account) {
-      //ある順序の基準において a が b より小
-      if (after.reviewList.length < before.reviewList.length) {
-        return -1;
-      }
-      //その順序の基準において a が b より大
-      if (after.reviewList.length > before.reviewList.length) {
-        return 1;
-      }
-      // a と b が等しい場合
-      return 0;
-    });
-
-    this.recommendationAccountList = this.accountList;
-    console.log(this.recommendationAccountList);
-
-    for (let i = 0; i <= 2; i++) {
-      for (let j = 0; j <= 2; j++) {
-        if (this.recommendationAccountList[i].reviewList[j] !== undefined) {
-          if (this.videoThumnails[i] === undefined) {
-            this.videoThumnails.push([
-              this.recommendationAccountList[i].reviewList[j],
-            ]);
-          } else {
-            this.videoThumnails[i].push(
-              this.recommendationAccountList[i].reviewList[j]
-            );
-          }
-        }
-      }
-    }
-  }
   /**
    *ユーザー登録画面に遷移する.
    */

@@ -59,7 +59,7 @@ export default new Vuex.Store({
             `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&chart=mostPopular&regionCode=JP&maxResults=50&key=${key}`
           );
           // }
-          console.dir(JSON.stringify(responce));
+          // console.dir(JSON.stringify(responce));
 
           const payload = responce.data.items;
           const youtuberArray = [];

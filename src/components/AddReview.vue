@@ -84,6 +84,7 @@ import { Account } from "@/types/Account";
 import db from "@/firebase";
 import { collection, doc, onSnapshot, setDoc } from "@firebase/firestore";
 import { Review } from "@/types/Review";
+import { Channels } from "@/types/Channels";
 @Component
 export default class XXXComponent extends Vue {
   private evaluation = 0;
@@ -120,6 +121,43 @@ export default class XXXComponent extends Vue {
         onSnapshot(post, (post) => {
           const accountListByDb = post.docs.map((doc) => ({ ...doc.data() }));
           for (const account of accountListByDb) {
+            const favoriteChannelList = Array<Channels>();
+            for (const channel of account.favoriteChannelList) {
+              favoriteChannelList.push(
+                new Channels(
+                  channel.id,
+                  channel.title,
+                  channel.description,
+                  channel.publishedAt,
+                  channel.thumbnailsUrl,
+                  channel.viewCount,
+                  channel.subscriberCount,
+                  channel.videoCount
+                )
+              );
+            }
+            const reviewList = Array<Review>();
+            for (const review of account.reviewList) {
+              reviewList.push(
+                new Review(
+                  review.reviewDate,
+                  review.reviewId,
+                  review.accountId,
+                  new Videos(
+                    review.videos.id,
+                    review.videos.publishedAt,
+                    review.videos.title,
+                    review.videos.description,
+                    review.videos.thumbnailsUrl,
+                    review.videos.channelTitle,
+                    review.videos.viewCount
+                  ),
+                  review.evaluation,
+                  review.review,
+                  review.favoriteCount
+                )
+              );
+            }
             this.accountList.push(
               new Account(
                 account.id,
@@ -129,8 +167,8 @@ export default class XXXComponent extends Vue {
                 account.mailaddless,
                 account.telephone,
                 account.password,
-                account.favoriteChannelList,
-                account.reviewList
+                favoriteChannelList,
+                reviewList
               )
             );
           }
@@ -138,7 +176,7 @@ export default class XXXComponent extends Vue {
 
         onSnapshot(doc(db, "レビューラストID", "レビューラストID"), (doc) => {
           this.reviewLastId = { ...doc.data() }.reviewLastId;
-          console.log("created" + this.reviewLastId);
+          console.log("createdレビューラストID" + this.reviewLastId);
         });
         console.log("createdlast");
 
@@ -155,15 +193,14 @@ export default class XXXComponent extends Vue {
   }
 
   postReview(): void {
-    console.log("start");
+    console.log("postStart");
 
     const account = this.accountList.find(
       (account) => Number(account.id) === Number(this.currentUserId)
     );
-    console.log(account);
-    console.log(this.currentUserId);
-    console.log(this.accountList);
-    console.log(1111);
+    // console.log(account);
+    // console.log(this.currentUserId);
+    // console.log(this.accountList);
 
     if (account !== undefined) {
       account.reviewList.push(
@@ -201,7 +238,6 @@ export default class XXXComponent extends Vue {
                 description: review.videos.description,
                 thumbnailsUrl: review.videos.thumbnailsUrl,
                 channelTitle: review.videos.channelTitle,
-                // tags: review.videos.tags,
                 viewCount: review.videos.viewCount,
               },
               evaluation: review.evaluation,
@@ -220,7 +256,6 @@ export default class XXXComponent extends Vue {
                 description: review.videos.description,
                 thumbnailsUrl: review.videos.thumbnailsUrl,
                 channelTitle: review.videos.channelTitle,
-                // tags: review.videos.tags,
                 viewCount: review.videos.viewCount,
               },
               evaluation: review.evaluation,
