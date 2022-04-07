@@ -80,44 +80,125 @@ import { Component, Vue } from "vue-property-decorator";
 import { format } from "date-fns";
 import { Videos } from "@/types/Videos";
 import axios from "axios";
+import { Account } from "@/types/Account";
+import db from "@/firebase";
+import { collection, doc, onSnapshot, setDoc } from "@firebase/firestore";
+import { Channels } from "@/types/Channels";
+import { Review } from "@/types/Review";
 @Component
 export default class XXXComponent extends Vue {
   private evaluation = 0;
   private review = "";
   private reviewId = 0;
   private videoDetail = new Videos(0, "", "", "", "", "", "");
+  //DBの中のアカウントリスト
+  private accountList = Array<Account>();
+  private reviewVideosId = "";
 
   async created(): Promise<void> {
     console.log("start");
 
-    const reviewId = this.$route.params.id;
-    const review = this.$store.getters.getReviewByReviewId(reviewId);
-    console.log(review + " " + review.videos.id);
-    this.evaluation = review.evaluation;
-    this.review = review.review;
-    this.reviewId = review.reviewId;
-
-    const keys = this.$store.getters.getApiKey;
-    for (const key of keys) {
-      try {
-        const responce = await axios.get(
-          `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&key=${key}&id=${review.videos.id}`
+    const post = collection(db, "アカウント一覧");
+    onSnapshot(post, async (post) => {
+      const accountListByDb = post.docs.map((doc) => ({ ...doc.data() }));
+      for (const account of accountListByDb) {
+        const favoriteChannelList = Array<Channels>();
+        for (const channel of account.favoriteChannelList) {
+          favoriteChannelList.push(
+            new Channels(
+              channel.id,
+              channel.title,
+              channel.description,
+              channel.publishedAt,
+              channel.thumbnailsUrl,
+              channel.viewCount,
+              channel.subscriberCount,
+              channel.videoCount
+            )
+          );
+        }
+        const reviewList = Array<Review>();
+        for (const review of account.reviewList) {
+          reviewList.push(
+            new Review(
+              review.reviewDate,
+              review.reviewId,
+              review.accountId,
+              new Videos(
+                review.videos.id,
+                review.videos.publishedAt,
+                review.videos.title,
+                review.videos.description,
+                review.videos.thumbnailsUrl,
+                review.videos.channelTitle,
+                review.videos.viewCount
+              ),
+              review.evaluation,
+              review.review,
+              review.favoriteCount
+            )
+          );
+        }
+        this.accountList.push(
+          new Account(
+            account.id,
+            account.name,
+            account.introduction,
+            account.img,
+            account.mailaddless,
+            account.telephone,
+            account.password,
+            favoriteChannelList,
+            reviewList
+          )
         );
-        const responceVideo = responce.data.items[0];
-        this.videoDetail = new Videos(
-          responceVideo.id,
-          responceVideo.snippet.publishedAt,
-          responceVideo.snippet.title,
-          responceVideo.snippet.description,
-          responceVideo.snippet.thumbnails.medium.url,
-          responceVideo.snippet.channelTitle,
-          responceVideo.statistics.viewCount
-        );
-        return;
-      } catch (e) {
-        console.log("APIerror");
       }
-    }
+
+      const reviewId = this.$route.params.id;
+      // const review = this.$store.getters.getReviewByReviewId(reviewId);
+      // let review = new Review(
+      //   "",
+      //   0,
+      //   0,
+      //   new Videos(0, "", "", "", "", "", ""),
+      //   0,
+      //   "",
+      //   new Array<number>()
+      // );
+      for (const account of this.accountList) {
+        for (const review of account.reviewList) {
+          if (review.reviewId === Number(reviewId)) {
+            console.log(review + " " + review.videos.id);
+            this.evaluation = review.evaluation;
+            this.review = review.review;
+            this.reviewId = review.reviewId;
+            this.reviewVideosId = String(review.videos.id);
+          }
+        }
+      }
+
+      const keys = this.$store.getters.getApiKey;
+      for (const key of keys) {
+        try {
+          const responce = await axios.get(
+            `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&key=${key}&id=${this.reviewVideosId}`
+          );
+          const responceVideo = responce.data.items[0];
+          this.videoDetail = new Videos(
+            responceVideo.id,
+            responceVideo.snippet.publishedAt,
+            responceVideo.snippet.title,
+            responceVideo.snippet.description,
+            responceVideo.snippet.thumbnails.medium.url,
+            responceVideo.snippet.channelTitle,
+            responceVideo.statistics.viewCount
+          );
+          return;
+        } catch (e) {
+          console.log("APIerror");
+        }
+      }
+    });
   }
 
   getDate(): string {
@@ -126,12 +207,101 @@ export default class XXXComponent extends Vue {
   }
 
   editReview(): void {
-    this.$store.commit("editReview", {
-      date: this.getDate(),
-      evaluation: this.evaluation,
-      review: this.review,
-      reviewId: this.reviewId,
-    });
+    // this.$store.commit("editReview", {
+    //   date: this.getDate(),
+    //   evaluation: this.evaluation,
+    //   review: this.review,
+    //   reviewId: this.reviewId,
+    // });
+    for (const account of this.accountList) {
+      for (const review of account.reviewList) {
+        if (review.reviewId === this.reviewId) {
+          review.evaluation = this.evaluation;
+          review.review = this.review;
+          review.reviewDate = this.getDate();
+
+          try {
+            const reviewArr = Array<any>();
+            for (const review of account.reviewList) {
+              if (review.favoriteCount === undefined) {
+                reviewArr.push({
+                  reviewDate: review.reviewDate,
+                  reviewId: review.reviewId,
+                  accountId: review.accountId,
+                  videos: {
+                    id: review.videos.id,
+                    publishedAt: review.videos.publishedAt,
+                    title: review.videos.title,
+                    description: review.videos.description,
+                    thumbnailsUrl: review.videos.thumbnailsUrl,
+                    channelTitle: review.videos.channelTitle,
+                    viewCount: review.videos.viewCount,
+                  },
+                  evaluation: review.evaluation,
+                  review: review.review,
+                  favoriteCount: [],
+                });
+              } else {
+                reviewArr.push({
+                  reviewDate: review.reviewDate,
+                  reviewId: review.reviewId,
+                  accountId: review.accountId,
+                  videos: {
+                    id: review.videos.id,
+                    publishedAt: review.videos.publishedAt,
+                    title: review.videos.title,
+                    description: review.videos.description,
+                    thumbnailsUrl: review.videos.thumbnailsUrl,
+                    channelTitle: review.videos.channelTitle,
+                    viewCount: review.videos.viewCount,
+                  },
+                  evaluation: review.evaluation,
+                  review: review.review,
+                  favoriteCount: review.favoriteCount,
+                });
+              }
+            }
+
+            const channelArr = Array<any>();
+
+            for (const channel of account.favoriteChannelList) {
+              channelArr.push({
+                id: channel.id,
+                title: channel.title,
+                description: channel.description,
+                publishedAt: channel.publishedAt,
+                thumbnailsUrl: channel.thumbnailsUrl,
+                viewCount: channel.viewCount,
+                subscriberCount: channel.subscriberCount,
+                videoCount: channel.videoCount,
+              });
+            }
+
+            // dbに保存
+            const docRef = setDoc(
+              doc(db, "アカウント一覧", String(account.id)),
+              {
+                id: account.id,
+                name: account.name,
+                introduction: account.introduction,
+                img: account.img,
+                mailaddless: account.mailaddless,
+                telephone: account.telephone,
+                password: account.password,
+                favoriteChannelList: channelArr,
+                reviewList: reviewArr,
+              }
+            );
+            console.log("DBに保存");
+            console.log(docRef);
+            // console.log("Document written with ID: ", docRef.id);
+          } catch (e) {
+            console.error("Error adding document: ", e);
+            console.log("Error adding document: ");
+          }
+        }
+      }
+    }
     this.$router.push(`/showReview/${this.reviewId}`);
   }
 }
