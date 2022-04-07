@@ -92,7 +92,7 @@ export default class XXXComponent extends Vue {
   private videoDetail = new Videos(0, "", "", "", "", "", "");
   //DBの中のアカウントリスト
   private accountList = Array<Account>();
-  //
+  //ログインしているユーザーのID
   private currentUserId = this.$store.getters.getCurrentUser.id;
   //最後に投稿したレビューのID
   private reviewLastId = 30;
@@ -185,7 +185,7 @@ export default class XXXComponent extends Vue {
         console.log("APIerror");
       }
     }
-  }
+  } //end created
 
   getDate(): string {
     const nowDate = format(new Date(), "yyyy年MM月dd日");
@@ -198,9 +198,6 @@ export default class XXXComponent extends Vue {
     const account = this.accountList.find(
       (account) => Number(account.id) === Number(this.currentUserId)
     );
-    // console.log(account);
-    // console.log(this.currentUserId);
-    // console.log(this.accountList);
 
     if (account !== undefined) {
       account.reviewList.push(
@@ -219,10 +216,7 @@ export default class XXXComponent extends Vue {
         setDoc(doc(db, "レビューラストID", "レビューラストID"), {
           reviewLastId: Number(this.reviewLastId) + 1,
         });
-        // console.log(docRef1);
-        // console.log("Document written with ID: ", docRef.id);
 
-        // const reviewMap = new Map();
         const reviewArr = Array<any>();
 
         for (const review of account.reviewList) {
@@ -265,10 +259,22 @@ export default class XXXComponent extends Vue {
           }
         }
 
-        console.log(reviewArr);
+        const channelArr = Array<any>();
+
+        for (const channel of account.favoriteChannelList) {
+          channelArr.push({
+            id: channel.id,
+            title: channel.title,
+            description: channel.description,
+            publishedAt: channel.publishedAt,
+            thumbnailsUrl: channel.thumbnailsUrl,
+            viewCount: channel.viewCount,
+            subscriberCount: channel.subscriberCount,
+            videoCount: channel.videoCount,
+          });
+        }
 
         // dbに保存
-
         const docRef = setDoc(doc(db, "アカウント一覧", String(account.id)), {
           id: account.id,
           name: account.name,
@@ -277,7 +283,7 @@ export default class XXXComponent extends Vue {
           mailaddless: account.mailaddless,
           telephone: account.telephone,
           password: account.password,
-          favoriteChannelList: account.favoriteChannelList,
+          favoriteChannelList: channelArr,
           reviewList: reviewArr,
         });
         console.log("DBに保存");

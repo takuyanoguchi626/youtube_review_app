@@ -39,7 +39,7 @@
       </div>
       <a
         class="waves-effect waves-light btn favorite favoriteBtn"
-        v-on:click="favoriteChannel()"
+        v-on:click="favoriteChannel"
         :disabled="favoriteFlag"
         ><i class="material-icons left">star_border</i>お気に入り</a
       >
@@ -65,15 +65,18 @@
 </template>
 
 <script lang="ts">
+import db from "@/firebase";
+import { Account } from "@/types/Account";
 import { Channels } from "@/types/Channels";
+import { Review } from "@/types/Review";
 import { Videos } from "@/types/Videos";
+import { collection, doc, onSnapshot, setDoc } from "@firebase/firestore";
 import axios from "axios";
 import { Component, Vue } from "vue-property-decorator";
 @Component
 export default class XXXComponent extends Vue {
   private currentChannel = new Channels("", "", "", "", "", 1, 1, 1);
   private videoArr = new Array<Videos>();
-
   private flag = false;
   // チャンネルお気に入りボタンのフラグ
   private favoriteFlag = false;
@@ -81,6 +84,10 @@ export default class XXXComponent extends Vue {
   private currentUserId = this.$store.getters.getCurrentUser.id;
   // APIキー
   private apiKey = this.$store.getters.getApiKey;
+  //DBの中のアカウントリスト
+  private accountList = Array<Account>();
+  //ログインしているユーザーのID
+  private currentUser = this.$store.getters.getCurrentUser;
 
   async created(): Promise<void> {
     // スクロールトップボタン
@@ -161,12 +168,71 @@ export default class XXXComponent extends Vue {
             }
           }
         }
+
+        const post = collection(db, "アカウント一覧");
+        onSnapshot(post, (post) => {
+          const accountListByDb = post.docs.map((doc) => ({ ...doc.data() }));
+          for (const account of accountListByDb) {
+            const favoriteChannelList = Array<Channels>();
+            for (const channel of account.favoriteChannelList) {
+              favoriteChannelList.push(
+                new Channels(
+                  channel.id,
+                  channel.title,
+                  channel.description,
+                  channel.publishedAt,
+                  channel.thumbnailsUrl,
+                  channel.viewCount,
+                  channel.subscriberCount,
+                  channel.videoCount
+                )
+              );
+            }
+            const reviewList = Array<Review>();
+            for (const review of account.reviewList) {
+              reviewList.push(
+                new Review(
+                  review.reviewDate,
+                  review.reviewId,
+                  review.accountId,
+                  new Videos(
+                    review.videos.id,
+                    review.videos.publishedAt,
+                    review.videos.title,
+                    review.videos.description,
+                    review.videos.thumbnailsUrl,
+                    review.videos.channelTitle,
+                    review.videos.viewCount
+                  ),
+                  review.evaluation,
+                  review.review,
+                  review.favoriteCount
+                )
+              );
+            }
+            this.accountList.push(
+              new Account(
+                account.id,
+                account.name,
+                account.introduction,
+                account.img,
+                account.mailaddless,
+                account.telephone,
+                account.password,
+                favoriteChannelList,
+                reviewList
+              )
+            );
+          }
+          console.log(this.accountList);
+        });
+
         return;
       } catch (e) {
         console.log("APIerror");
       }
     }
-  }
+  } //end created
   /**
    * 概要欄を表示する.
    */
@@ -180,8 +246,91 @@ export default class XXXComponent extends Vue {
    * チャンネル情報をfavoriteListに入れる.
    */
   favoriteChannel(): void {
-    this.$store.commit("addChannelData", this.currentChannel);
+    console.log("buttonPush");
+
+    // this.$store.commit("addChannelData", this.currentChannel);
     this.favoriteFlag = true;
+
+    const account = this.accountList.find(
+      (account) => Number(account.id) === Number(this.currentUser.id)
+    );
+
+    if (account !== undefined) {
+      account.favoriteChannelList.push(this.currentChannel);
+      try {
+        const reviewArr = Array<any>();
+        for (const review of account.reviewList) {
+          if (review.favoriteCount === undefined) {
+            reviewArr.push({
+              reviewDate: review.reviewDate,
+              reviewId: review.reviewId,
+              accountId: review.accountId,
+              videos: {
+                id: review.videos.id,
+                publishedAt: review.videos.publishedAt,
+                title: review.videos.title,
+                description: review.videos.description,
+                thumbnailsUrl: review.videos.thumbnailsUrl,
+                channelTitle: review.videos.channelTitle,
+                viewCount: review.videos.viewCount,
+              },
+              evaluation: review.evaluation,
+              review: review.review,
+              favoriteCount: [],
+            });
+          } else {
+            reviewArr.push({
+              reviewDate: review.reviewDate,
+              reviewId: review.reviewId,
+              accountId: review.accountId,
+              videos: {
+                id: review.videos.id,
+                publishedAt: review.videos.publishedAt,
+                title: review.videos.title,
+                description: review.videos.description,
+                thumbnailsUrl: review.videos.thumbnailsUrl,
+                channelTitle: review.videos.channelTitle,
+                viewCount: review.videos.viewCount,
+              },
+              evaluation: review.evaluation,
+              review: review.review,
+              favoriteCount: review.favoriteCount,
+            });
+          }
+        }
+        const channelArr = Array<any>();
+        for (const channel of account.favoriteChannelList) {
+          channelArr.push({
+            id: channel.id,
+            title: channel.title,
+            description: channel.description,
+            publishedAt: channel.publishedAt,
+            thumbnailsUrl: channel.thumbnailsUrl,
+            viewCount: channel.viewCount,
+            subscriberCount: channel.subscriberCount,
+            videoCount: channel.videoCount,
+          });
+        }
+        // dbに保存
+        const docRef = setDoc(doc(db, "アカウント一覧", String(account.id)), {
+          id: account.id,
+          name: account.name,
+          introduction: account.introduction,
+          img: account.img,
+          mailaddless: account.mailaddless,
+          telephone: account.telephone,
+          password: account.password,
+          favoriteChannelList: channelArr,
+          reviewList: reviewArr,
+        });
+        console.log("DBに保存");
+        // console.log(docRef);
+        // console.log("Document written with ID: ", docRef.id);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+        console.log("Error adding document: ");
+      }
+    }
   }
 }
 </script>
