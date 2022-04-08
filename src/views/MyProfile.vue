@@ -249,10 +249,6 @@ export default class XXXComponent extends Vue {
     });
   } //end created
 
-  mounted(): void {
-    console.log(this.accountList);
-  }
-
   selfIntroductionChange(): void {
     this.$router.push(`/selfIntroductionChange/${this.currentAccount.id}`);
   }

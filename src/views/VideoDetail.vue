@@ -55,7 +55,7 @@
         <button class="btn" @click="postReview">レビューを投稿する</button>
       </div>
       <div class="reviewList300">
-        <div class="noReviewList" v-if="reviewListLength === 0">
+        <div class="noReviewList" v-if="!isReviewList">
           <img class="noReviewImage" src="/img/review.png" alt="" />
           <h4>まだレビューがありません</h4>
         </div>
@@ -107,6 +107,8 @@ import { Videos } from "@/types/Videos";
 import { Channels } from "@/types/Channels";
 import { Review } from "@/types/Review";
 import { Account } from "@/types/Account";
+import db from "@/firebase";
+import { collection, onSnapshot } from "@firebase/firestore";
 
 @Component({
   components: { AddReview },
@@ -117,8 +119,10 @@ export default class XXXComponent extends Vue {
   // チャンネル詳細
   private channelDetail = new Channels("", "", "", "", "", 0, 0, 0);
   private reviewList = new Array<Review>();
-  private reviewListLength = 0;
+  private isReviewList = false;
   private flag = false;
+  //DBの中のアカウントリスト
+  private accountList = Array<Account>();
 
   async created(): Promise<void> {
     // スクロールトップボタン
@@ -171,10 +175,101 @@ export default class XXXComponent extends Vue {
           responceChannel.statistics.subscriberCount,
           responceChannel.statistics.videoCount
         );
-        this.reviewList = this.$store.getters.getReviewListByVideoId(
-          this.videoDetail
-        );
-        this.reviewListLength = this.reviewList.length;
+
+        const post = collection(db, "アカウント一覧");
+        onSnapshot(post, (post) => {
+          const accountListByDb = post.docs.map((doc) => ({ ...doc.data() }));
+          for (const account of accountListByDb) {
+            const favoriteChannelList = Array<Channels>();
+            for (const channel of account.favoriteChannelList) {
+              favoriteChannelList.push(
+                new Channels(
+                  channel.id,
+                  channel.title,
+                  channel.description,
+                  channel.publishedAt,
+                  channel.thumbnailsUrl,
+                  channel.viewCount,
+                  channel.subscriberCount,
+                  channel.videoCount
+                )
+              );
+            }
+            const reviewList = Array<Review>();
+            for (const review of account.reviewList) {
+              reviewList.push(
+                new Review(
+                  review.reviewDate,
+                  review.reviewId,
+                  review.accountId,
+                  new Videos(
+                    review.videos.id,
+                    review.videos.publishedAt,
+                    review.videos.title,
+                    review.videos.description,
+                    review.videos.thumbnailsUrl,
+                    review.videos.channelTitle,
+                    review.videos.viewCount
+                  ),
+                  review.evaluation,
+                  review.review,
+                  review.favoriteCount
+                )
+              );
+            }
+            this.accountList.push(
+              new Account(
+                account.id,
+                account.name,
+                account.introduction,
+                account.img,
+                account.mailaddless,
+                account.telephone,
+                account.password,
+                favoriteChannelList,
+                reviewList
+              )
+            );
+          }
+
+          const reviewListByVideoId = new Array<Review>();
+          for (const account of this.accountList) {
+            for (const review of account.reviewList) {
+              if (review.videos.id === this.videoDetail.id) {
+                console.log("if文");
+                reviewListByVideoId.push(review);
+              }
+            }
+          }
+          // this.reviewList = reviewListByVideoId;
+          for (const review of reviewListByVideoId) {
+            this.reviewList.push(
+              new Review(
+                review.reviewDate,
+                review.reviewId,
+                review.accountId,
+                new Videos(
+                  review.videos.id,
+                  review.videos.publishedAt,
+                  review.videos.title,
+                  review.videos.description,
+                  review.videos.thumbnailsUrl,
+                  review.videos.channelTitle,
+                  review.videos.viewCount
+                ),
+                review.evaluation,
+                review.review,
+                review.favoriteCount
+              )
+            );
+          }
+          if (this.reviewList.length !== 0) {
+            this.isReviewList = true;
+          }
+        });
+        console.log(this.reviewList);
+        console.log(this.accountList);
+
         return;
       } catch (e) {
         console.log("APIerror");
@@ -187,7 +282,8 @@ export default class XXXComponent extends Vue {
   }
 
   getAccountById(id: number): Account {
-    return this.$store.getters.getAccountById(id);
+    // return this.$store.getters.getAccountById(id);
+    return this.accountList.filter((account) => account.id === id)[0];
   }
 
   showDescription(): void {
