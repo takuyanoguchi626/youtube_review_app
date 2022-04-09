@@ -71,58 +71,17 @@ export default new Vuex.Store({
   },
   mutations: {
     /**
-     * 急上昇動画を表示する.
-     * @param state - ステート
-     * @param payload - ペイロード
-     */
-    addUser(state, payload) {
-      state.accountList.push(payload);
-    },
-    /**
-     * カレントユーザーにからのアカウントオブジェクトを代入し、ログアウトする.
+     * ステートのカレントユーザーIDを０にするログアウト処理.
      * @param state - ステート
      */
     removeUser(state) {
       state.currentUserId = 0;
     },
     /**
-     * stateのユーザーリスト中のレビュー情報にいいねカウントを入れる.
+     * 急上昇動画を表示する.
      * @param state - ステート
      * @param payload - ペイロード
      */
-    addFavoriteCount(state, payload) {
-      for (const account of state.accountList) {
-        for (let review of account.reviewList) {
-          if (payload.reviewId === review.reviewId) {
-            review = payload;
-          }
-        }
-      }
-    },
-    /**
-     * ユーザー登録時のIDの更新.
-     * @param state - ステート
-     * @param payload - ペイロード
-     */
-    addLastUserId(state, payload) {
-      state.lastUserId = payload;
-    },
-    addChannelData(state, payload) {
-      for (const account of state.accountList) {
-        if (account.id === state.currentUser.id) {
-          account.favoriteChannelList.push(payload);
-        }
-      }
-    },
-    addFavorite(state, payload) {
-      for (const account of state.accountList) {
-        for (const review of account.reviewList) {
-          if (payload.reviewId === review.reviewId) {
-            review.favoriteCount.push(payload.favoriteCount);
-          }
-        }
-      }
-    },
     showSoaringVideos(state, payload) {
       state.soaringVideos = new Array<Videos>();
       for (const soaringVideo of payload) {
@@ -165,7 +124,6 @@ export default new Vuex.Store({
      */
     addCurrentUserId(state, payload) {
       state.currentUserId = payload.id;
-      // console.log(state.currentUserId);
     },
     changeAccountIcon(state, payload) {
       const account = state.accountList.find(
@@ -197,75 +155,6 @@ export default new Vuex.Store({
         state.accountList.push(account);
       }
     },
-
-    sortByReviewCount(state) {
-      state.accountList.sort(function (before: Account, after: Account) {
-        //ある順序の基準において a が b より小
-        if (after.reviewList.length < before.reviewList.length) {
-          return -1;
-        }
-        //その順序の基準において a が b より大
-        if (after.reviewList.length > before.reviewList.length) {
-          return 1;
-        }
-        // a と b が等しい場合
-        return 0;
-      });
-    },
-    postReview(state, payload) {
-      const account = state.accountList.find(
-        (account) => account.id === state.currentUser.id
-      );
-      for (let i = 0; i < state.accountList.length; i++) {
-        if (state.accountList[i].id === state.currentUser.id) {
-          state.accountList.splice(i, 1);
-        }
-      }
-      if (account !== undefined) {
-        account.reviewList.push(
-          new Review(
-            payload.date,
-            state.lastReviewId,
-            account.id,
-            payload.video,
-            payload.evaluation,
-            payload.review,
-            new Array<number>()
-          )
-        );
-        state.lastReviewId++;
-        console.log(account);
-
-        state.accountList.push(account);
-        console.log("sss");
-      }
-    },
-
-    editReview(state, payload) {
-      for (let i = 0; i < state.accountList.length; i++) {
-        for (let j = 0; j < state.accountList[i]?.reviewList.length; i++) {
-          if (
-            state.accountList[i].reviewList[j].reviewId === payload.reviewId
-          ) {
-            state.accountList[i].reviewList[j].reviewDate = payload.date;
-            state.accountList[i].reviewList[j].review = payload.review;
-            state.accountList[i].reviewList[j].evaluation = payload.evaluation;
-          }
-        }
-      }
-    },
-
-    deleteReview(state, payload) {
-      for (let i = 0; i < state.accountList.length; i++) {
-        for (let j = 0; j < state.accountList[i]?.reviewList.length; i++) {
-          if (
-            state.accountList[i].reviewList[j].reviewId === payload.reviewId
-          ) {
-            state.accountList[i].reviewList.splice(j, 1);
-          }
-        }
-      }
-    },
   },
   modules: {},
   getters: {
@@ -285,28 +174,9 @@ export default new Vuex.Store({
     getYoutubersInfo(state) {
       return state.youtubersInfo;
     },
-    /**
-     * 全てのアカウント情報を返す.
-     * @param state - ステート
-     * @returns - 全てのアカウント情報
-     */
-    getAccountList(state) {
-      return state.accountList;
-    },
+
     getCurrentUserId(state) {
       return state.currentUserId;
-    },
-    getReviewCounts(state) {
-      let reviewCounts = 0;
-      for (let i = 0; i < state.accountList.length; i++) {
-        reviewCounts += state.accountList[i].reviewList.length;
-      }
-      return reviewCounts;
-    },
-    getAccountById(state) {
-      return (id: number) => {
-        return state.accountList.filter((account) => account.id === id)[0];
-      };
     },
 
     getMyAccountFlag(state) {
@@ -314,55 +184,14 @@ export default new Vuex.Store({
         return state.currentUserId === account.id;
       };
     },
-    getReviewListByVideoId(state) {
-      return (video: Videos) => {
-        const reviewListByVideoId = new Array<Review>();
-        for (const account of state.accountList) {
-          for (const review of account.reviewList) {
-            if (review.videos.id === video.id) {
-              reviewListByVideoId.push(review);
-            }
-          }
-        }
-        return reviewListByVideoId;
-      };
-    },
-
     /**
-     * アカウントリストからレビューで絞り込んだ１レビューを取得.
-     *
-     * @param state - ステート
-     * @returns レビュー
-     */
-    getReviewByReviewId(state) {
-      return (reviewId: number) => {
-        for (const account of state.accountList) {
-          for (const review of account.reviewList) {
-            if (review.reviewId === Number(reviewId)) {
-              return review;
-            }
-          }
-        }
-      };
-    },
-
-    /**
-     * APIキーをランダムに取得.
+     * APIキー配列を取得.
      * @param state - ステート
      * @returns APIキー
      */
     getApiKey(state) {
       return state.apiKey;
       // return state.apiKey[Math.floor(Math.random() * state.apiKey.length)];
-    },
-    /**
-     * 登録された最後のユーザーに使用されるIDを取得.
-     *
-     * @param state -ステート
-     * @returns 登録された最後のユーザーに使用されるID
-     */
-    getLastUserId(state) {
-      return state.lastUserId;
     },
   },
 });
