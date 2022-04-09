@@ -86,8 +86,6 @@ export default class XXXComponent extends Vue {
   private apiKey = this.$store.getters.getApiKey;
   //DBの中のアカウントリスト
   private accountList = Array<Account>();
-  //ログインしているユーザーのID
-  private currentUser = this.$store.getters.getCurrentUser;
 
   async created(): Promise<void> {
     // スクロールトップボタン
@@ -115,6 +113,83 @@ export default class XXXComponent extends Vue {
     }
 
     const channelId = this.$route.params.id;
+
+    // 概要欄がない場合の処理
+    if (this.currentChannel.description === "") {
+      this.currentChannel.description =
+        "このYoutuberの概要欄は見つかりませんでした";
+    }
+
+    //DBからアカウント一覧を取得
+    const post = collection(db, "アカウント一覧");
+    onSnapshot(post, (post) => {
+      const accountListByDb = post.docs.map((doc) => ({ ...doc.data() }));
+      for (const account of accountListByDb) {
+        const favoriteChannelList = Array<Channels>();
+        for (const channel of account.favoriteChannelList) {
+          favoriteChannelList.push(
+            new Channels(
+              channel.id,
+              channel.title,
+              channel.description,
+              channel.publishedAt,
+              channel.thumbnailsUrl,
+              channel.viewCount,
+              channel.subscriberCount,
+              channel.videoCount
+            )
+          );
+        }
+        const reviewList = Array<Review>();
+        for (const review of account.reviewList) {
+          reviewList.push(
+            new Review(
+              review.reviewDate,
+              review.reviewId,
+              review.accountId,
+              new Videos(
+                review.videos.id,
+                review.videos.publishedAt,
+                review.videos.title,
+                review.videos.description,
+                review.videos.thumbnailsUrl,
+                review.videos.channelTitle,
+                review.videos.viewCount
+              ),
+              review.evaluation,
+              review.review,
+              review.favoriteCount
+            )
+          );
+        }
+        this.accountList.push(
+          new Account(
+            account.id,
+            account.name,
+            account.introduction,
+            account.img,
+            account.mailaddless,
+            account.telephone,
+            account.password,
+            favoriteChannelList,
+            reviewList
+          )
+        );
+      }
+      // console.log(this.accountList);
+
+      // 既にお気に入り登録している場合を押せなくする
+      for (const account of this.accountList) {
+        if (this.currentUserId === account.id) {
+          for (const favoriteChannel of account.favoriteChannelList) {
+            if (channelId === favoriteChannel.id) {
+              this.favoriteFlag = true;
+            }
+          }
+        }
+      }
+    });
+
     for (const key of this.apiKey) {
       try {
         const response = await axios.get(
@@ -152,80 +227,6 @@ export default class XXXComponent extends Vue {
             )
           );
         }
-        // 概要欄がない場合の処理
-        if (this.currentChannel.description === "") {
-          this.currentChannel.description =
-            "このYoutuberの概要欄は見つかりませんでした";
-        }
-
-        const post = collection(db, "アカウント一覧");
-        onSnapshot(post, (post) => {
-          const accountListByDb = post.docs.map((doc) => ({ ...doc.data() }));
-          for (const account of accountListByDb) {
-            const favoriteChannelList = Array<Channels>();
-            for (const channel of account.favoriteChannelList) {
-              favoriteChannelList.push(
-                new Channels(
-                  channel.id,
-                  channel.title,
-                  channel.description,
-                  channel.publishedAt,
-                  channel.thumbnailsUrl,
-                  channel.viewCount,
-                  channel.subscriberCount,
-                  channel.videoCount
-                )
-              );
-            }
-            const reviewList = Array<Review>();
-            for (const review of account.reviewList) {
-              reviewList.push(
-                new Review(
-                  review.reviewDate,
-                  review.reviewId,
-                  review.accountId,
-                  new Videos(
-                    review.videos.id,
-                    review.videos.publishedAt,
-                    review.videos.title,
-                    review.videos.description,
-                    review.videos.thumbnailsUrl,
-                    review.videos.channelTitle,
-                    review.videos.viewCount
-                  ),
-                  review.evaluation,
-                  review.review,
-                  review.favoriteCount
-                )
-              );
-            }
-            this.accountList.push(
-              new Account(
-                account.id,
-                account.name,
-                account.introduction,
-                account.img,
-                account.mailaddless,
-                account.telephone,
-                account.password,
-                favoriteChannelList,
-                reviewList
-              )
-            );
-          }
-          console.log(this.accountList);
-
-          // 既にお気に入り登録している場合を押せなくする
-          for (const account of this.accountList) {
-            if (this.currentUser.id === account.id) {
-              for (const favoriteChannel of account.favoriteChannelList) {
-                if (channelId === favoriteChannel.id) {
-                  this.favoriteFlag = true;
-                }
-              }
-            }
-          }
-        });
 
         return;
       } catch (e) {
@@ -252,7 +253,7 @@ export default class XXXComponent extends Vue {
     this.favoriteFlag = true;
 
     const account = this.accountList.find(
-      (account) => Number(account.id) === Number(this.currentUser.id)
+      (account) => Number(account.id) === Number(this.currentUserId)
     );
 
     if (account !== undefined) {

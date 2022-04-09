@@ -98,6 +98,7 @@ export default class XXXComponent extends Vue {
   async created(): Promise<void> {
     console.log("start");
 
+    //DBからアカウント一覧を取得
     const post = collection(db, "アカウント一覧");
     onSnapshot(post, async (post) => {
       const accountListByDb = post.docs.map((doc) => ({ ...doc.data() }));
@@ -154,7 +155,7 @@ export default class XXXComponent extends Vue {
         );
       }
 
-      const reviewId = this.$route.params.id;
+      const reviewId = Number(this.$route.params.id);
       // const review = this.$store.getters.getReviewByReviewId(reviewId);
       // let review = new Review(
       //   "",
@@ -167,8 +168,7 @@ export default class XXXComponent extends Vue {
       // );
       for (const account of this.accountList) {
         for (const review of account.reviewList) {
-          if (review.reviewId === Number(reviewId)) {
-            console.log(review + " " + review.videos.id);
+          if (review.reviewId === reviewId) {
             this.evaluation = review.evaluation;
             this.review = review.review;
             this.reviewId = review.reviewId;
@@ -261,9 +261,7 @@ export default class XXXComponent extends Vue {
                 });
               }
             }
-
             const channelArr = Array<any>();
-
             for (const channel of account.favoriteChannelList) {
               channelArr.push({
                 id: channel.id,
@@ -276,7 +274,6 @@ export default class XXXComponent extends Vue {
                 videoCount: channel.videoCount,
               });
             }
-
             // dbに保存
             const docRef = setDoc(
               doc(db, "アカウント一覧", String(account.id)),

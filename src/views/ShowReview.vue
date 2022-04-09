@@ -141,7 +141,7 @@ export default class XXXComponent extends Vue {
   //   return this.targetReview;
   // }
   // レビューのいいねカウント
-  private count = this.targetReview.favoriteCount.length;
+  private count = 0;
 
   transitionEdit(): void {
     this.$router.push("/EditReview/" + this.targetReview.reviewId);
@@ -334,6 +334,7 @@ export default class XXXComponent extends Vue {
           if (reviewParamsId === review.reviewId) {
             this.targetReview = review;
             this.targetAccount = account;
+            this.count = review.favoriteCount.length;
           }
         }
       }
