@@ -248,7 +248,11 @@ export default class XXXComponent extends Vue {
         );
       }
       //アカウントがログインしているアカウントと一致すればtrueにする
-      this.myAccountFlag = this.$store.getters.getMyAccountFlag(account);
+      const currentAccountId = this.$store.getters.getCurrentUserId;
+
+      if (account !== undefined) {
+        this.myAccountFlag = account.id === currentAccountId;
+      }
     });
   } //end created
 

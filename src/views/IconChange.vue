@@ -10,7 +10,9 @@
       ref="newImage"
       v-on:change="iconChange"
     />
-    <button class="btn" @click="iconChangeButton()">画像を変更</button>
+    <button type="button" class="btn" @click="iconChangeButton()">
+      画像を変更
+    </button>
     <div>
       {{ this.message }}
     </div>
@@ -32,49 +34,142 @@ export default {
       message: "",
       //DBの中のアカウントリスト
       accountList: [],
+      account: new Account(0, "", "", "", "", "", "", [], []),
     };
   },
   methods: {
     iconChange() {
       const image = this.$refs.newImage.files[0];
       this.image = URL.createObjectURL(image);
+      console.log(this.image);
     },
+
     iconChangeButton() {
-      const id = Number(this.$route.params.id);
+      this.$emit("my-click", this.image);
+      // const id = Number(this.$route.params.id);
       // let DbImg = "";
-      let DbIntroduction = "";
-      let DbMailaddless = "";
-      let DbName = "";
-      let DbPassword = "";
-      let DbTelephone = "";
+      // let DbIntroduction = "";
+      // let DbMailaddless = "";
+      // let DbName = "";
+      // let DbPassword = "";
+      // let DbTelephone = "";
 
       //DBからデータを取得
-      onSnapshot(doc(db, "アカウント一覧", String(id)), (doc) => {
-        console.log({ ...doc.data() });
-        // DbImg = this.img;
-        DbIntroduction = { ...doc.data() }.introduction;
-        DbMailaddless = { ...doc.data() }.mailaddless;
-        DbName = { ...doc.data() }.name;
-        DbPassword = { ...doc.data() }.password;
-        DbTelephone = { ...doc.data() }.telephone;
-      });
+      // onSnapshot(doc(db, "アカウント一覧", String(id)), (doc) => {
+      //   console.log({ ...doc.data() });
+      //   // DbImg = this.img;
+      //   DbIntroduction = { ...doc.data() }.introduction;
+      //   DbMailaddless = { ...doc.data() }.mailaddless;
+      //   DbName = { ...doc.data() }.name;
+      //   DbPassword = { ...doc.data() }.password;
+      //   DbTelephone = { ...doc.data() }.telephone;
+      // });
 
-      console.log(DbIntroduction);
+      // console.log(DbIntroduction);
 
       //DBへデータを格納
+      // try {
+      //   const docRef = setDoc(doc(db, "アカウント一覧", String(id)), {
+      //     id: id,
+      //     img: this.image,
+      //     introduction: DbIntroduction,
+      //     mailaddless: DbMailaddless,
+      //     name: DbName,
+      //     password: DbPassword,
+      //     telephone: DbTelephone,
+      //   });
+      //   console.log(docRef);
+      // } catch (e) {
+      //   console.error("Error adding document: ", e);
+      // }
+
       try {
-        const docRef = setDoc(doc(db, "アカウント一覧", String(id)), {
-          id: id,
-          img: this.image,
-          introduction: DbIntroduction,
-          mailaddless: DbMailaddless,
-          name: DbName,
-          password: DbPassword,
-          telephone: DbTelephone,
-        });
+        const reviewArr = [];
+        for (const review of this.account.reviewList) {
+          if (review.favoriteCount === undefined) {
+            reviewArr.push({
+              reviewDate: review.reviewDate,
+              reviewId: review.reviewId,
+              accountId: review.accountId,
+              videos: {
+                id: review.videos.id,
+                publishedAt: review.videos.publishedAt,
+                title: review.videos.title,
+                description: review.videos.description,
+                thumbnailsUrl: review.videos.thumbnailsUrl,
+                channelTitle: review.videos.channelTitle,
+                viewCount: review.videos.viewCount,
+              },
+              evaluation: review.evaluation,
+              review: review.review,
+              favoriteCount: [],
+            });
+          } else {
+            reviewArr.push({
+              reviewDate: review.reviewDate,
+              reviewId: review.reviewId,
+              accountId: review.accountId,
+              videos: {
+                id: review.videos.id,
+                publishedAt: review.videos.publishedAt,
+                title: review.videos.title,
+                description: review.videos.description,
+                thumbnailsUrl: review.videos.thumbnailsUrl,
+                channelTitle: review.videos.channelTitle,
+                viewCount: review.videos.viewCount,
+              },
+              evaluation: review.evaluation,
+              review: review.review,
+              favoriteCount: review.favoriteCount,
+            });
+          }
+        }
+
+        const channelArr = [];
+        for (const channel of this.account.favoriteChannelList) {
+          channelArr.push({
+            id: channel.id,
+            title: channel.title,
+            description: channel.description,
+            publishedAt: channel.publishedAt,
+            thumbnailsUrl: channel.thumbnailsUrl,
+            viewCount: channel.viewCount,
+            subscriberCount: channel.subscriberCount,
+            videoCount: channel.videoCount,
+          });
+        }
+
+        // dbに保存
+        const docRef = setDoc(
+          doc(db, "アカウント一覧", String(this.account.id)),
+          {
+            id: this.account.id,
+            name: this.account.name,
+            introduction: this.account.introduction,
+            img: this.image,
+            mailaddless: this.account.mailaddless,
+            telephone: this.account.telephone,
+            password: this.account.password,
+            favoriteChannelList: channelArr,
+            reviewList: reviewArr,
+          }
+        );
+        console.log("DBに保存");
         console.log(docRef);
+        console.log(this.account);
+
+        onSnapshot(
+          doc(db, "アカウント一覧", String(this.account.id)),
+          (doc) => {
+            this.image = { ...doc.data() }.img;
+            console.log("image" + this.image);
+          }
+        );
+
+        // console.log("Document written with ID: ", docRef.id);
       } catch (e) {
         console.error("Error adding document: ", e);
+        console.log("Error adding document: ");
       }
 
       // this.$store.commit("changeAccountIcon", {
@@ -143,16 +238,17 @@ export default {
         );
       }
 
-      const account = this.accountList.filter(
-        (account) => account.id === id
+      this.account = this.accountList.filter(
+        (account) => Number(account.id) === id
       )[0];
-      console.log(account);
-      const currentUser = this.$store.getters.getCurrentUser;
-      if (account === undefined || account.id !== currentUser.id) {
+      console.log(this.account.img);
+      const currentUserId = this.$store.getters.getCurrentUserId;
+      if (this.account === undefined || this.account.id !== currentUserId) {
         this.$router.push("/404");
       }
-      console.log(account.img);
-      this.image = account.img;
+      this.image = this.account.img;
+      console.log(this.image);
+      // this.$emit("aaa", this.image);
     });
   },
 };
