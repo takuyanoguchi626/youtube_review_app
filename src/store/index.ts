@@ -83,17 +83,7 @@ export default new Vuex.Store({
      * @param state - ステート
      */
     removeUser(state) {
-      state.currentUser = new Account(
-        0,
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        new Array<Channels>(),
-        new Array<Review>()
-      );
+      state.currentUserId = 0;
     },
     /**
      * stateのユーザーリスト中のレビュー情報にいいねカウントを入れる.
