@@ -81,7 +81,7 @@ export default class XXXComponent extends Vue {
   // チャンネルお気に入りボタンのフラグ
   private favoriteFlag = false;
   // ログイン中のユーザーのID
-  private currentUserId = this.$store.getters.getCurrentUser.id;
+  private currentUserId = this.$store.getters.getCurrentUserId;
   // APIキー
   private apiKey = this.$store.getters.getApiKey;
   //DBの中のアカウントリスト

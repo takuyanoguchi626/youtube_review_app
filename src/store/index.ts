@@ -12,25 +12,15 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     //最後のレビューID
-    lastReviewId: 1,
+    // lastReviewId: 1,
     // 登録された最後のユーザーID
-    lastUserId: 0,
+    // lastUserId: 0,
     // Youtuber情報
     youtubersInfo: Array<Channels>(),
     // ユーザー情報
-    accountList: Array<Account>(),
+    // accountList: Array<Account>(),
     soaringVideos: Array<Videos>(),
-    currentUser: new Account(
-      0,
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      new Array<Channels>(),
-      new Array<Review>()
-    ),
+    currentUserId: 0,
 
     apiKey: Array<string>(
       // "AIzaSyD0gPqZj2y8L2QVei5d4NUMsthKN3ltr1c",
@@ -183,19 +173,9 @@ export default new Vuex.Store({
      * @param state - ステート
      * @param payload - ペイロード
      */
-    addCurrentUser(state, payload) {
-      state.currentUser = new Account(
-        payload.id,
-        payload.name,
-        payload.introduction,
-        payload.img,
-        payload.mailaddless,
-        payload.telephone,
-        payload.password,
-        payload.favoriteChannelList,
-        payload.reviewList
-      );
-      console.log(state.currentUser);
+    addCurrentUserId(state, payload) {
+      state.currentUserId = payload.id;
+      // console.log(state.currentUserId);
     },
     changeAccountIcon(state, payload) {
       const account = state.accountList.find(
@@ -323,8 +303,8 @@ export default new Vuex.Store({
     getAccountList(state) {
       return state.accountList;
     },
-    getCurrentUser(state) {
-      return state.currentUser;
+    getCurrentUserId(state) {
+      return state.currentUserId;
     },
     getReviewCounts(state) {
       let reviewCounts = 0;
@@ -341,7 +321,7 @@ export default new Vuex.Store({
 
     getMyAccountFlag(state) {
       return (account: Account) => {
-        return state.currentUser.id === account.id;
+        return state.currentUserId === account.id;
       };
     },
     getReviewListByVideoId(state) {

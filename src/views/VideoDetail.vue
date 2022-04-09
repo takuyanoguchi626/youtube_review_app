@@ -176,6 +176,7 @@ export default class XXXComponent extends Vue {
           responceChannel.statistics.videoCount
         );
 
+        //DBからアカウント一覧を取得
         const post = collection(db, "アカウント一覧");
         onSnapshot(post, (post) => {
           const accountListByDb = post.docs.map((doc) => ({ ...doc.data() }));
@@ -294,9 +295,9 @@ export default class XXXComponent extends Vue {
   }
 
   postReview(): void {
-    const user = this.$store.getters.getCurrentUser;
+    const currentUserId = this.$store.getters.getCurrentUserId;
 
-    if (user.id === 0) {
+    if (currentUserId === 0) {
       this.$router.push("/login");
       return;
     }

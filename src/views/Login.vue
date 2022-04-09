@@ -142,7 +142,7 @@ export default class XXXComponent extends Vue {
         );
       }
     });
-  }
+  } //end created
 
   /**
    * ログイン.
@@ -156,20 +156,10 @@ export default class XXXComponent extends Vue {
         account.mailaddless === this.email &&
         account.password === this.password
       ) {
-        const currentAccount = new Account(
-          account.id,
-          account.name,
-          account.introduction,
-          account.img,
-          account.mailaddless,
-          account.telephone,
-          account.password,
-          account.favoriteChannelList,
-          account.reviewList
-        );
+        const currentAccountId = account.id;
         // console.log(currentAccount);
 
-        this.$store.commit("addCurrentUser", currentAccount);
+        this.$store.commit("addCurrentUserId", { id: currentAccountId });
         this.$router.push("/top");
         return;
       }

@@ -148,10 +148,6 @@ export default class XXXComponent extends Vue {
   private accountList = Array<Account>();
 
   async created(): Promise<void> {
-    /**
-     * 総レビュー数を取得する.
-     */
-    this.reviewCounts = this.$store.getters.getReviewCounts;
     // スクロールトップボタン
     scrollTop(1); // 遅すぎるとガクガクになるので注意
     function scrollTop(duration: number) {
@@ -204,8 +200,6 @@ export default class XXXComponent extends Vue {
         }
       }
     }
-    // 人気アカウントとレビューした動画のサムネMAX3件表示
-    // this.$store.commit("sortByReviewCount");
 
     const post = collection(db, "アカウント一覧");
     onSnapshot(post, (post) => {
@@ -262,6 +256,19 @@ export default class XXXComponent extends Vue {
           )
         );
       }
+
+      /**
+       * 総レビュー数を取得する.
+       */
+      // this.reviewCounts = this.$store.getters.getReviewCounts;
+      let reviewCounts = 0;
+      for (let i = 0; i < this.accountList.length; i++) {
+        reviewCounts += this.accountList[i].reviewList.length;
+      }
+      this.reviewCounts = reviewCounts;
+
+      // 人気アカウントとレビューした動画のサムネMAX3件表示
+      // this.$store.commit("sortByReviewCount");
 
       this.accountList.sort(function (before: Account, after: Account) {
         //ある順序の基準において a が b より小

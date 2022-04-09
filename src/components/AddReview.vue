@@ -93,12 +93,13 @@ export default class XXXComponent extends Vue {
   //DBの中のアカウントリスト
   private accountList = Array<Account>();
   //ログインしているユーザーのID
-  private currentUserId = this.$store.getters.getCurrentUser.id;
+  private currentUserId = this.$store.getters.getCurrentUserId;
   //最後に投稿したレビューのID
   private reviewLastId = 30;
 
   async created(): Promise<void> {
     // const currentUserId = this.$store.getters.getCurrentUser.id;
+    //URLから受け取ったvideoID
     const videoId = this.$route.params.id;
     const keys = this.$store.getters.getApiKey;
     for (const key of keys) {
@@ -117,6 +118,7 @@ export default class XXXComponent extends Vue {
           responceVideo.statistics.viewCount
         );
 
+        //DBからアカウント一覧を取得
         const post = collection(db, "アカウント一覧");
         onSnapshot(post, (post) => {
           const accountListByDb = post.docs.map((doc) => ({ ...doc.data() }));
@@ -173,18 +175,17 @@ export default class XXXComponent extends Vue {
             );
           }
         });
-
+        //DBからレビューラストIDを取得
         onSnapshot(doc(db, "レビューラストID", "レビューラストID"), (doc) => {
           this.reviewLastId = { ...doc.data() }.reviewLastId;
           console.log("createdレビューラストID" + this.reviewLastId);
         });
         console.log("createdlast");
-
         return;
       } catch (e) {
         console.log("APIerror");
       }
-    }
+    } //APIのtry,chatch
   } //end created
 
   getDate(): string {
@@ -192,13 +193,15 @@ export default class XXXComponent extends Vue {
     return nowDate;
   }
 
+  //レビュー投稿ボタンを押したときのメソッド
   postReview(): void {
     console.log("postStart");
 
+    //DBのアカウント一覧から、今ログイン中のアカウント情報を取得
     const account = this.accountList.find(
       (account) => Number(account.id) === Number(this.currentUserId)
     );
-
+    //
     if (account !== undefined) {
       account.reviewList.push(
         new Review(
@@ -213,12 +216,12 @@ export default class XXXComponent extends Vue {
       );
 
       try {
+        //DBのレビューラストIDを一つプラスする
         setDoc(doc(db, "レビューラストID", "レビューラストID"), {
           reviewLastId: Number(this.reviewLastId) + 1,
         });
 
         const reviewArr = Array<any>();
-
         for (const review of account.reviewList) {
           if (review.favoriteCount === undefined) {
             reviewArr.push({
@@ -260,7 +263,6 @@ export default class XXXComponent extends Vue {
         }
 
         const channelArr = Array<any>();
-
         for (const channel of account.favoriteChannelList) {
           channelArr.push({
             id: channel.id,

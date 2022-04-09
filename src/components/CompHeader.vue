@@ -117,6 +117,12 @@
 </template>
 
 <script lang="ts">
+import db from "@/firebase";
+import { Account } from "@/types/Account";
+import { Channels } from "@/types/Channels";
+import { Review } from "@/types/Review";
+import { Videos } from "@/types/Videos";
+import { collection, onSnapshot } from "@firebase/firestore";
 import { Component, Vue } from "vue-property-decorator";
 
 @Component
@@ -127,13 +133,77 @@ export default class XXXComponent extends Vue {
   private path = "";
 
   private imgSource = "";
+  //DBの中のアカウントリスト
+  private accountList = Array<Account>();
+
+  created(): void {
+    //DBからデータを取得
+    const post = collection(db, "アカウント一覧");
+    onSnapshot(post, (post) => {
+      const accountListByDb = post.docs.map((doc) => ({ ...doc.data() }));
+      console.log(accountListByDb);
+      for (const account of accountListByDb) {
+        const favoriteChannelList = Array<Channels>();
+        for (const channel of account.favoriteChannelList) {
+          favoriteChannelList.push(
+            new Channels(
+              channel.id,
+              channel.title,
+              channel.description,
+              channel.publishedAt,
+              channel.thumbnailsUrl,
+              channel.viewCount,
+              channel.subscriberCount,
+              channel.videoCount
+            )
+          );
+        }
+        const reviewList = Array<Review>();
+        for (const review of account.reviewList) {
+          reviewList.push(
+            new Review(
+              review.reviewDate,
+              review.reviewId,
+              review.accountId,
+              new Videos(
+                review.videos.id,
+                review.videos.publishedAt,
+                review.videos.title,
+                review.videos.description,
+                review.videos.thumbnailsUrl,
+                review.videos.channelTitle,
+                review.videos.viewCount
+              ),
+              review.evaluation,
+              review.review,
+              review.favoriteCount
+            )
+          );
+        }
+        this.accountList.push(
+          new Account(
+            account.id,
+            account.name,
+            account.introduction,
+            account.img,
+            account.mailaddless,
+            account.telephone,
+            account.password,
+            favoriteChannelList,
+            reviewList
+          )
+        );
+      }
+    });
+  }
+
   /**
    * ログイン中のユーザーのID取得.
    * @returns - ログイン中のユーザーのID
    */
   get currentUserId(): number {
-    const currentUser = this.$store.getters.getCurrentUser;
-    return currentUser.id;
+    const currentUserId = this.$store.getters.getCurrentUserId;
+    return currentUserId;
   }
 
   /**
@@ -141,9 +211,9 @@ export default class XXXComponent extends Vue {
    * @returns - ログイン中のユーザーのアイコン
    */
   get accountImg(): string {
-    const accountList = this.$store.getters.getAccountList;
+    // const accountList = this.$store.getters.getAccountList;
 
-    for (const account of accountList) {
+    for (const account of this.accountList) {
       if (this.currentUserId === account.id) {
         this.imgSource = account.img;
       }

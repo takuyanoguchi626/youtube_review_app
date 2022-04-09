@@ -167,10 +167,11 @@ export default class XXXComponent extends Vue {
         }
       }
     }
-
+    //DBからデータを取得
     const post = collection(db, "アカウント一覧");
     onSnapshot(post, (post) => {
       const accountListByDb = post.docs.map((doc) => ({ ...doc.data() }));
+      console.log(accountListByDb);
       for (const account of accountListByDb) {
         const favoriteChannelList = Array<Channels>();
         for (const channel of account.favoriteChannelList) {
@@ -223,14 +224,16 @@ export default class XXXComponent extends Vue {
           )
         );
       }
-      console.dir(JSON.stringify(accountListByDb));
+      // console.dir(JSON.stringify(accountListByDb));
 
       const accountId = Number(this.$route.params.id);
+      //URLで受け取ったIDがDBのアカウント一覧に存在すればそのアカウントを取得する
       const account = this.accountList.find(
         (account) => Number(account.id) === accountId
       );
 
       // const account = this.$store.getters.getAccountById(accountId);
+
       if (account !== undefined) {
         this.currentAccount = new Account(
           account.id,
@@ -244,12 +247,14 @@ export default class XXXComponent extends Vue {
           account.reviewList
         );
       }
-
+      //アカウントがログインしているアカウントと一致すればtrueにする
       this.myAccountFlag = this.$store.getters.getMyAccountFlag(account);
     });
   } //end created
 
   selfIntroductionChange(): void {
+    console.log(this.currentAccount.id);
+
     this.$router.push(`/selfIntroductionChange/${this.currentAccount.id}`);
   }
 }

@@ -150,8 +150,9 @@ export default class XXXComponent extends Vue {
           scrollBy(0, -step); // step分上へスクロール
         }
       }
-    }
+    } //end scrollTop
 
+    //DBからアカウント一覧を取得
     const post = collection(db, "アカウント一覧");
     onSnapshot(post, (post) => {
       const accountListByDb = post.docs.map((doc) => ({ ...doc.data() }));
@@ -206,9 +207,10 @@ export default class XXXComponent extends Vue {
             reviewList
           )
         );
-      }
+      } //end for accountListByDb
     });
 
+    //DBからアカウントラストＩＤを取得
     onSnapshot(doc(db, "アカウントラストID", "アカウントラストID"), (doc) => {
       this.accountLastId = { ...doc.data() }.accountLastId;
       console.log("createdアカウントラストID" + this.accountLastId);
@@ -314,6 +316,7 @@ export default class XXXComponent extends Vue {
     }
     newUserId = newAccount.id;
 
+    //DBのアカウントラストIDを更新する
     try {
       setDoc(doc(db, "アカウントラストID", "アカウントラストID"), {
         accountLastId: Number(newUserId),
@@ -332,8 +335,8 @@ export default class XXXComponent extends Vue {
         mailaddless: newAccount.mailaddless,
         telephone: newAccount.telephone,
         password: newAccount.password,
-        favoriteChannelList: newAccount.favoriteChannelList,
-        reviewList: newAccount.reviewList,
+        favoriteChannelList: [],
+        reviewList: [],
       });
       // console.log(docRef2);
       // console.log("Document written with ID: ", docRef.id);
