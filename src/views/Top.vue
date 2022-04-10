@@ -200,7 +200,7 @@ export default class XXXComponent extends Vue {
         }
       }
     }
-
+    //DBからアカウント一覧を取得
     const post = collection(db, "アカウント一覧");
     onSnapshot(post, (post) => {
       const accountListByDb = post.docs.map((doc) => ({ ...doc.data() }));
@@ -256,11 +256,9 @@ export default class XXXComponent extends Vue {
           )
         );
       }
-
       /**
        * 総レビュー数を取得する.
        */
-      // this.reviewCounts = this.$store.getters.getReviewCounts;
       let reviewCounts = 0;
       for (let i = 0; i < this.accountList.length; i++) {
         reviewCounts += this.accountList[i].reviewList.length;
@@ -270,6 +268,7 @@ export default class XXXComponent extends Vue {
       // 人気アカウントとレビューした動画のサムネMAX3件表示
       // this.$store.commit("sortByReviewCount");
 
+      //アカウント一覧をレビュー投稿の多い順にソート
       this.accountList.sort(function (before: Account, after: Account) {
         //ある順序の基準において a が b より小
         if (after.reviewList.length < before.reviewList.length) {
@@ -288,16 +287,18 @@ export default class XXXComponent extends Vue {
 
       for (let i = 0; i <= 2; i++) {
         for (let j = 0; j <= 2; j++) {
-          if (this.recommendationAccountList[i].reviewList[j] !== undefined) {
-            if (this.videoThumnails[i] === undefined) {
-              this.videoThumnails.push([
-                this.recommendationAccountList[i].reviewList[j],
-              ]);
-            } else {
-              this.videoThumnails[i]
-                .push
+          if (this.recommendationAccountList[i] !== undefined) {
+            if (this.recommendationAccountList[i].reviewList[j] !== undefined) {
+              if (this.videoThumnails[i] === undefined) {
+                this.videoThumnails.push([
+                  this.recommendationAccountList[i].reviewList[j],
+                ]);
+              } else {
+                this.videoThumnails[i].push(
+                  this.recommendationAccountList[i].reviewList[j]
+                );
                 // this.recommendationAccountList[i].reviewList[j]
-                ();
+              }
             }
           }
         }

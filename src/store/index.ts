@@ -1,27 +1,23 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import createPersistedState from "vuex-persistedstate";
 
 import axios from "axios";
 import { Account } from "@/types/Account";
 import { Videos } from "@/types/Videos";
 import { Channels } from "@/types/Channels";
-import { Review } from "@/types/Review";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    //最後のレビューID
-    // lastReviewId: 1,
-    // 登録された最後のユーザーID
-    // lastUserId: 0,
-    // Youtuber情報
-    youtubersInfo: Array<Channels>(),
-    // ユーザー情報
-    // accountList: Array<Account>(),
+    //急上昇動画の一覧
     soaringVideos: Array<Videos>(),
+    // 急上昇動画の50位までのチャンネル情報
+    youtubersInfo: Array<Channels>(),
+    //ログインしているアカウントのID
     currentUserId: 0,
-
+    //APIKeyの一覧
     apiKey: Array<string>(
       // "AIzaSyD0gPqZj2y8L2QVei5d4NUMsthKN3ltr1c",
       // "AIzaSyAzfoPPbpueXEcQypbLRLXXNCz5JQFDtlc",
@@ -48,9 +44,6 @@ export default new Vuex.Store({
           const responce = await axios.get(
             `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&chart=mostPopular&regionCode=JP&maxResults=50&key=${key}`
           );
-          // }
-          // console.dir(JSON.stringify(responce));
-
           const payload = responce.data.items;
           const youtuberArray = [];
           for (let i = 0; i <= 49; i++) {
@@ -71,14 +64,7 @@ export default new Vuex.Store({
   },
   mutations: {
     /**
-     * ステートのカレントユーザーIDを０にするログアウト処理.
-     * @param state - ステート
-     */
-    removeUser(state) {
-      state.currentUserId = 0;
-    },
-    /**
-     * 急上昇動画を表示する.
+     * 急上昇動画をステートに格納する.
      * @param state - ステート
      * @param payload - ペイロード
      */
@@ -98,6 +84,12 @@ export default new Vuex.Store({
         );
       }
     },
+    /**
+     * 急上昇動画の50位までのチャンネル情報をステートに格納する.
+     *
+     * @param state - ステート
+     * @param payload - 急上昇動画の50位までのチャンネル情報
+     */
     showYoutubersInfo(state, payload) {
       state.youtubersInfo = new Array<Channels>();
       for (const youtuberInfo of payload) {
@@ -115,7 +107,6 @@ export default new Vuex.Store({
         );
       }
     },
-
     /**
      * ログインしたユーザー情報をstateに保存する.
      *
@@ -125,35 +116,12 @@ export default new Vuex.Store({
     addCurrentUserId(state, payload) {
       state.currentUserId = payload.id;
     },
-    changeAccountIcon(state, payload) {
-      const account = state.accountList.find(
-        (account) => account.id === payload.id
-      );
-      for (let i = 0; i < state.accountList.length; i++) {
-        if (state.accountList[i].id === payload.id) {
-          state.accountList.splice(i, 1);
-        }
-      }
-      if (account !== undefined) {
-        account.img = payload.img;
-        state.accountList.push(account);
-      }
-    },
-
-    changeSelfIntroduction(state, payload) {
-      const account = state.accountList.find(
-        (account) => account.id === payload.id
-      );
-      for (let i = 0; i < state.accountList.length; i++) {
-        if (state.accountList[i].id === payload.id) {
-          state.accountList.splice(i, 1);
-        }
-      }
-      if (account !== undefined) {
-        account.name = payload.name;
-        account.introduction = payload.introduction;
-        state.accountList.push(account);
-      }
+    /**
+     * ステートのカレントユーザーIDを０にするログアウト処理.
+     * @param state - ステート
+     */
+    removeUser(state) {
+      state.currentUserId = 0;
     },
   },
   modules: {},
@@ -174,11 +142,21 @@ export default new Vuex.Store({
     getYoutubersInfo(state) {
       return state.youtubersInfo;
     },
-
+    /**
+     *
+     *
+     * @param state
+     * @returns
+     */
     getCurrentUserId(state) {
       return state.currentUserId;
     },
-
+    /**
+     *
+     *
+     * @param state
+     * @returns
+     */
     getMyAccountFlag(state) {
       return (account: Account) => {
         return state.currentUserId === account.id;
@@ -191,7 +169,15 @@ export default new Vuex.Store({
      */
     getApiKey(state) {
       return state.apiKey;
-      // return state.apiKey[Math.floor(Math.random() * state.apiKey.length)];
     },
   },
+  plugins: [
+    createPersistedState({
+      // ストレージのキーを指定
+      key: "youtube_review_app",
+      paths: ["currentUserId"],
+      // ストレージの種類を指定
+      storage: window.sessionStorage,
+    }),
+  ],
 });
