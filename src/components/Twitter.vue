@@ -13,13 +13,21 @@
 
 <script>
 import firebase from "firebase";
+import { Account } from "@/types/Account";
 
 export default {
   name: "Signin",
+  data() {
+    return {
+      userName: "",
+      photoURL: "",
+      newAccount: [],
+    };
+  },
   methods: {
-    onClick: function () {
+    onClick: async function () {
       var provider = new firebase.auth.TwitterAuthProvider();
-      firebase
+      await firebase
         .auth()
         .signInWithPopup(provider)
         .then(
@@ -28,7 +36,9 @@ export default {
             var secret = result.credential.secret;
             var user = result.user;
             if (user) {
-              alert("成功");
+              console.log(result.user);
+              this.userName = result.user.displayName;
+              this.photoURL = result.user.photoURL;
             } else {
               alert("有効なアカウントではありません");
             }
@@ -37,7 +47,59 @@ export default {
             alert(err.message);
           }
         );
+      // 登録されているユーザー情報の取得
+      const accountLastId = this.$store.getters.getLastUserId;
+      // 現在のアカウントリスト
+      const currentAccountList = this.$store.getters.getAccountList;
+      console.log(currentAccountList);
+      // 新たなユーザーに使用するID
+      let newUserId = 0;
+      // 既にログインしたことのあるアカウントの判別
+      for (let i = 0; i < currentAccountList.length; i++) {
+        if (currentAccountList[i].mailaddless === this.email) {
+          newUserId = currentAccountList[i].id;
+          console.log(newUserId);
+          this.$router.push(`/myProfile/${newUserId}`);
+          this.$store.commit("addCurrentUser", currentAccountList[i]);
+          return;
+        }
+      }
+      // idが既に存在する場合と存在しない場合で新たに付与するidを分ける
+      if (accountLastId === 0) {
+        this.newAccount = new Account(
+          1,
+          this.userName,
+          "",
+          this.photoURL,
+          this.email,
+          "",
+          "",
+          [],
+          []
+        );
+        newUserId = this.newAccount.id;
+        this.$store.commit("addUser", this.newAccount);
+        this.$store.commit("addCurrentUser", this.newAccount);
+        this.$store.commit("addLastUserId", newUserId);
+      } else {
+        this.newAccount = new Account(
+          accountLastId + 1,
+          this.userName,
+          "",
+          this.photoURL,
+          this.email,
+          "",
+          "",
+          [],
+          []
+        );
+        newUserId = this.newAccount.id;
+        this.$store.commit("addUser", this.newAccount);
+        this.$store.commit("addCurrentUser", this.newAccount);
+        this.$store.commit("addLastUserId", newUserId);
+      }
     },
+    // firebase.auth().signOut();
   },
 };
 </script>
