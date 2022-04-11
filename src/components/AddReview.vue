@@ -87,20 +87,24 @@ import { Review } from "@/types/Review";
 import { Channels } from "@/types/Channels";
 @Component
 export default class XXXComponent extends Vue {
+  /* eslint @typescript-eslint/no-explicit-any: 0 */
+  //5段階評価
   private evaluation = 0;
+  //レビュー内容
   private review = "";
+  //レビューをする動画の情報
   private videoDetail = new Videos(0, "", "", "", "", "", "");
   //DBの中のアカウントリスト
   private accountList = Array<Account>();
   //ログインしているユーザーのID
   private currentUserId = this.$store.getters.getCurrentUserId;
-  //最後に投稿したレビューのID
-  private reviewLastId = 30;
+  //最後に投稿したレビューのID(DBから持ってきて入れる)
+  private reviewLastId = 0;
 
   async created(): Promise<void> {
-    // const currentUserId = this.$store.getters.getCurrentUser.id;
     //URLから受け取ったvideoID
     const videoId = this.$route.params.id;
+    //APIKeyの配列
     const keys = this.$store.getters.getApiKey;
     for (const key of keys) {
       try {
@@ -117,7 +121,6 @@ export default class XXXComponent extends Vue {
           responceVideo.snippet.channelTitle,
           responceVideo.statistics.viewCount
         );
-
         //DBからアカウント一覧を取得
         const post = collection(db, "アカウント一覧");
         onSnapshot(post, (post) => {
@@ -178,30 +181,30 @@ export default class XXXComponent extends Vue {
         //DBからレビューラストIDを取得
         onSnapshot(doc(db, "レビューラストID", "レビューラストID"), (doc) => {
           this.reviewLastId = { ...doc.data() }.reviewLastId;
-          console.log("createdレビューラストID" + this.reviewLastId);
         });
-        console.log("createdlast");
         return;
       } catch (e) {
         console.log("APIerror");
       }
-    } //APIのtry,chatch
+    } //end APIのtry,chatch
   } //end created
-
+  /**
+   * 現在時刻をフォーマット化して取得.
+   *
+   * @returns フォーマット化された現在時刻
+   */
   getDate(): string {
     const nowDate = format(new Date(), "yyyy年MM月dd日");
     return nowDate;
   }
-
-  //レビュー投稿ボタンを押したときのメソッド
+  /**
+   * レビューを投稿、DBに格納する.
+   */
   postReview(): void {
-    console.log("postStart");
-
     //DBのアカウント一覧から、今ログイン中のアカウント情報を取得
     const account = this.accountList.find(
       (account) => Number(account.id) === Number(this.currentUserId)
     );
-    //
     if (account !== undefined) {
       account.reviewList.push(
         new Review(
@@ -214,13 +217,12 @@ export default class XXXComponent extends Vue {
           new Array<number>()
         )
       );
-
       try {
         //DBのレビューラストIDを一つプラスする
         setDoc(doc(db, "レビューラストID", "レビューラストID"), {
           reviewLastId: Number(this.reviewLastId) + 1,
         });
-
+        //インスタンス化されたものをDBに格納するために連想配列の形に変える
         const reviewArr = Array<any>();
         for (const review of account.reviewList) {
           if (review.favoriteCount === undefined) {
@@ -261,7 +263,6 @@ export default class XXXComponent extends Vue {
             });
           }
         }
-
         const channelArr = Array<any>();
         for (const channel of account.favoriteChannelList) {
           channelArr.push({
@@ -275,8 +276,7 @@ export default class XXXComponent extends Vue {
             videoCount: channel.videoCount,
           });
         }
-
-        // dbに保存
+        // レビューをDBに保存
         const docRef = setDoc(doc(db, "アカウント一覧", String(account.id)), {
           id: account.id,
           name: account.name,
@@ -288,12 +288,9 @@ export default class XXXComponent extends Vue {
           favoriteChannelList: channelArr,
           reviewList: reviewArr,
         });
-        console.log("DBに保存");
         console.log(docRef);
-        // console.log("Document written with ID: ", docRef.id);
       } catch (e) {
         console.error("Error adding document: ", e);
-        console.log("Error adding document: ");
       }
       this.$router.push(`/videoDetail/${this.videoDetail.id}`);
     }
