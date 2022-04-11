@@ -94,6 +94,7 @@ import { collection, onSnapshot } from "@firebase/firestore";
 import db from "@/firebase";
 @Component
 export default class XXXComponent extends Vue {
+  //アカウント情報（DBから取得する）
   private currentAccount = new Account(
     1,
     "aaa",
@@ -113,35 +114,9 @@ export default class XXXComponent extends Vue {
         "レビューのプレビュー",
         new Array<number>()
       ),
-      new Review(
-        "",
-        1,
-        1,
-        new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
-        1,
-        "レビューのプレビュー",
-        new Array<number>()
-      ),
-      new Review(
-        "",
-        1,
-        1,
-        new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
-        1,
-        "レビューのプレビュー",
-        new Array<number>()
-      ),
-      new Review(
-        "",
-        1,
-        1,
-        new Videos(1, "ss", "ss", "ss", "/img/pagu.jpg", "ss", "ss"),
-        1,
-        "レビューのプレビュー",
-        new Array<number>()
-      ),
     ]
   );
+  //ログイン中のアカウントかのflag
   private myAccountFlag = false;
   //DBの中のアカウントリスト
   private accountList = Array<Account>();
@@ -149,7 +124,6 @@ export default class XXXComponent extends Vue {
   created(): void {
     // スクロールトップボタン
     scrollTop(1); // 遅すぎるとガクガクになるので注意
-
     function scrollTop(duration: number) {
       let currentY = window.pageYOffset; // 現在のスクロール位置を取得
       let step = duration / currentY > 1 ? 10 : 100; // 三項演算子
@@ -157,7 +131,6 @@ export default class XXXComponent extends Vue {
       let intervalId = setInterval(scrollUp, timeStep);
       // timeStepの間隔でscrollUpを繰り返す。
       // clearItervalのために返り値intervalIdを定義する。
-
       function scrollUp() {
         currentY = window.pageYOffset;
         if (currentY === 0) {
@@ -224,16 +197,11 @@ export default class XXXComponent extends Vue {
           )
         );
       }
-      // console.dir(JSON.stringify(accountListByDb));
-
       const accountId = Number(this.$route.params.id);
       //URLで受け取ったIDがDBのアカウント一覧に存在すればそのアカウントを取得する
       const account = this.accountList.find(
         (account) => Number(account.id) === accountId
       );
-
-      // const account = this.$store.getters.getAccountById(accountId);
-
       if (account !== undefined) {
         this.currentAccount = new Account(
           account.id,
@@ -249,16 +217,15 @@ export default class XXXComponent extends Vue {
       }
       //アカウントがログインしているアカウントと一致すればtrueにする
       const currentAccountId = this.$store.getters.getCurrentUserId;
-
       if (account !== undefined) {
         this.myAccountFlag = account.id === currentAccountId;
       }
     });
   } //end created
-
+  /**
+   * プロフィール編集画面へ遷移.
+   */
   selfIntroductionChange(): void {
-    console.log(this.currentAccount.id);
-
     this.$router.push(`/selfIntroductionChange/${this.currentAccount.id}`);
   }
 }

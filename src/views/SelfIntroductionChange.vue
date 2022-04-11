@@ -52,28 +52,30 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import IconChange from "@/views/IconChange.vue";
-import { collection, doc, onSnapshot, setDoc } from "@firebase/firestore";
-import db from "@/firebase";
 import { Account } from "@/types/Account";
 import { Channels } from "@/types/Channels";
 import { Review } from "@/types/Review";
 import { Videos } from "@/types/Videos";
-
+import db from "@/firebase";
+import { collection, doc, onSnapshot, setDoc } from "@firebase/firestore";
 @Component({
   components: { IconChange },
 })
 export default class XXXComponent extends Vue {
+  /* eslint @typescript-eslint/no-explicit-any: 0 */
+  //名前
   private name = "";
+  //自己紹介文
   private introduction = "";
   //DBの中のアカウントリスト
   private accountList = Array<Account>();
-  //
+  //URLから受け取ったアカウントID
   private accountIdByURL = 0;
-  //
+  //アカウント情報（DBから取得する）
   private account = new Account(0, "", "", "", "", "", "", [], []);
-  //
+  //IconChangeから取得したアイコンのURL
   private iconImage = "";
-  //
+  //DBに格納するアイコンのURL
   private forDbImage = "";
 
   created(): void {
@@ -135,7 +137,6 @@ export default class XXXComponent extends Vue {
           )
         );
       }
-
       //URLから受け取ったIDと一致するアカウントをDBアカウント一覧から取得
       this.account = this.accountList.filter(
         (account) => account.id === this.accountIdByURL
@@ -152,8 +153,6 @@ export default class XXXComponent extends Vue {
 
   //変更ボタンをクリックしたときのメソッド
   selfIntroductionChange(): void {
-    // const id = Number(this.$route.params.id);
-
     try {
       const reviewArr = Array<any>();
       for (const review of this.account.reviewList) {
@@ -195,7 +194,6 @@ export default class XXXComponent extends Vue {
           });
         }
       }
-
       const channelArr = Array<any>();
       for (const channel of this.account.favoriteChannelList) {
         channelArr.push({
@@ -209,13 +207,11 @@ export default class XXXComponent extends Vue {
           videoCount: channel.videoCount,
         });
       }
-
       if (this.iconImage === "") {
         this.forDbImage = this.account.img;
       } else {
         this.forDbImage = this.iconImage;
       }
-
       // dbに保存
       const docRef = setDoc(
         doc(db, "アカウント一覧", String(this.account.id)),
@@ -231,47 +227,10 @@ export default class XXXComponent extends Vue {
           reviewList: reviewArr,
         }
       );
-      console.log("DBに保存");
       console.log(docRef);
-      // console.log("Document written with ID: ", docRef.id);
     } catch (e) {
       console.error("Error adding document: ", e);
-      console.log("Error adding document: ");
     }
-
-    // let DbFavoriteChannelList = Array<any>();
-    // let DbId = 0;
-    // let DbImg = "";
-    // let DbIntroduction = "";
-    // let DbMailaddless = "";
-    // let DbName = "";
-    // let DbPassword = "";
-    // let DbReviewList = Array<any>();
-    // let DbTelephone = "";
-
-    // try {
-    //   const docRef = setDoc(doc(db, "アカウント一覧", String(id)), {
-    //     id: id,
-    //     img: DbImg,
-    //     introduction: DbIntroduction,
-    //     mailaddless: DbMailaddless,
-    //     name: this.name,
-    //     password: DbPassword,
-    //     telephone: DbTelephone,
-    //     favoriteChannelList: DbFavoriteChannelList,
-    //     reviewList: DbReviewList,
-    //   });
-    //   console.log(docRef);
-    //   // console.log("Document written with ID: ", docRef.id);
-    // } catch (e) {
-    //   console.error("Error adding document: ", e);
-    // }
-
-    // this.$store.commit("changeSelfIntroduction", {
-    //   id: id,
-    //   name: this.name,
-    //   introduction: this.introduction,
-    // });
     this.$router.push(`/myProfile/${this.accountIdByURL}`);
   }
 }

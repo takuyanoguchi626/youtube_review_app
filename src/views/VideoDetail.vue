@@ -15,12 +15,6 @@
       <div>{{ videoDetail.title }}</div>
       <div>動画投稿日：{{ videoDetail.formatPublishedAt }}</div>
       <div>再生回数：{{ videoDetail.formatViewCount }}回</div>
-      <br />
-      <router-link :to="'/channelDetail/' + channelDetail.id">
-        <img class="img" :src="channelDetail.thumbnailsUrl" />
-      </router-link>
-      <div>【{{ videoDetail.channelTitle }}】</div>
-      <div>チャンネル設立日：{{ channelDetail.formatPublishedAt }}</div>
       <button
         class="btn"
         type="button"
@@ -42,14 +36,18 @@
         <h7>【概要欄】</h7>
       </div>
       <div v-if="flag" class="description">
-        {{ channelDetail.description }}
+        {{ videoDetail.description }}
       </div>
       <hr v-if="flag" />
+      <router-link :to="'/channelDetail/' + channelDetail.id">
+        <img class="img" :src="channelDetail.thumbnailsUrl" />
+      </router-link>
+      <div>【{{ videoDetail.channelTitle }}】</div>
+      <div>チャンネル設立日：{{ channelDetail.formatPublishedAt }}</div>
       <div>総再生回数：{{ channelDetail.formatViewCount }}回</div>
       <div>チャンネル登録者数：{{ channelDetail.formatSubscriberCount }}人</div>
       <div>総動画数：{{ channelDetail.formatVideoCount }}個</div>
     </div>
-
     <div class="review">
       <div>
         <button class="btn" @click="postReview">レビューを投稿する</button>
@@ -109,7 +107,6 @@ import { Review } from "@/types/Review";
 import { Account } from "@/types/Account";
 import db from "@/firebase";
 import { collection, onSnapshot } from "@firebase/firestore";
-
 @Component({
   components: { AddReview },
 })
@@ -118,8 +115,11 @@ export default class XXXComponent extends Vue {
   private videoDetail = new Videos(0, "", "", "", "", "", "");
   // チャンネル詳細
   private channelDetail = new Channels("", "", "", "", "", 0, 0, 0);
+  //動画に投稿されたレビュー一覧
   private reviewList = new Array<Review>();
+  //動画に投稿されたレビューが存在するかのflag
   private isReviewList = false;
+  //概要欄を表示するflag
   private flag = false;
   //DBの中のアカウントリスト
   private accountList = Array<Account>();
@@ -143,7 +143,6 @@ export default class XXXComponent extends Vue {
         }
       }
     }
-
     const videoId = this.$route.params.id;
     const keys = this.$store.getters.getApiKey;
     for (const key of keys) {
@@ -175,7 +174,6 @@ export default class XXXComponent extends Vue {
           responceChannel.statistics.subscriberCount,
           responceChannel.statistics.videoCount
         );
-
         //DBからアカウント一覧を取得
         const post = collection(db, "アカウント一覧");
         onSnapshot(post, (post) => {
@@ -232,17 +230,14 @@ export default class XXXComponent extends Vue {
               )
             );
           }
-
           const reviewListByVideoId = new Array<Review>();
           for (const account of this.accountList) {
             for (const review of account.reviewList) {
               if (review.videos.id === this.videoDetail.id) {
-                console.log("if文");
                 reviewListByVideoId.push(review);
               }
             }
           }
-          // this.reviewList = reviewListByVideoId;
           for (const review of reviewListByVideoId) {
             this.reviewList.push(
               new Review(
@@ -268,35 +263,36 @@ export default class XXXComponent extends Vue {
             this.isReviewList = true;
           }
         });
-        console.log(this.reviewList);
-        console.log(this.accountList);
-
         return;
       } catch (e) {
         console.log("APIerror");
       }
     }
   } //end created
-
-  getReviewListLength(): number {
-    return this.reviewList.length;
-  }
-
+  /**
+   * レビューのアカウントIDからアカウントを取得する.
+   */
   getAccountById(id: number): Account {
     // return this.$store.getters.getAccountById(id);
     return this.accountList.filter((account) => account.id === id)[0];
   }
-
+  /**
+   * 概要欄を表示する.
+   */
   showDescription(): void {
     this.flag = true;
   }
+  /**
+   * 概要欄を非表示にする.
+   */
   hiddenDescription(): void {
     this.flag = false;
   }
-
+  /**
+   * レビュー投稿画面へ遷移する.
+   */
   postReview(): void {
     const currentUserId = this.$store.getters.getCurrentUserId;
-
     if (currentUserId === 0) {
       this.$router.push("/login");
       return;

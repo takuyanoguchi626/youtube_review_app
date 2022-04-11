@@ -74,10 +74,14 @@ import axios from "axios";
 import { Component, Vue } from "vue-property-decorator";
 @Component
 export default class XXXComponent extends Vue {
+  /* eslint @typescript-eslint/no-explicit-any: 0 */
+  //チャンネル情報
   private currentChannel = new Channels("", "", "", "", "", 1, 1, 1);
+  //チャンネルの動画一覧
   private videoArr = new Array<Videos>();
+  //概要欄の表示flag
   private flag = false;
-  // チャンネルお気に入りボタンのフラグ
+  // チャンネルお気に入りボタンのflag
   private favoriteFlag = false;
   // ログイン中のユーザーのID
   private currentUserId = this.$store.getters.getCurrentUserId;
@@ -105,20 +109,16 @@ export default class XXXComponent extends Vue {
         }
       }
     }
-
     // ログインしていない場合を押せなくする
     if (this.currentUserId === 0) {
       this.favoriteFlag = true;
     }
-
     const channelId = this.$route.params.id;
-
     // 概要欄がない場合の処理
     if (this.currentChannel.description === "") {
       this.currentChannel.description =
         "このYoutuberの概要欄は見つかりませんでした";
     }
-
     //DBからアカウント一覧を取得
     const post = collection(db, "アカウント一覧");
     onSnapshot(post, (post) => {
@@ -175,8 +175,6 @@ export default class XXXComponent extends Vue {
           )
         );
       }
-      // console.log(this.accountList);
-
       // 既にお気に入り登録している場合を押せなくする
       for (const account of this.accountList) {
         if (this.currentUserId === account.id) {
@@ -188,7 +186,6 @@ export default class XXXComponent extends Vue {
         }
       }
     });
-
     for (const key of this.apiKey) {
       try {
         const response = await axios.get(
@@ -226,7 +223,6 @@ export default class XXXComponent extends Vue {
             )
           );
         }
-
         return;
       } catch (e) {
         console.log("APIerror");
@@ -239,6 +235,9 @@ export default class XXXComponent extends Vue {
   showDescription(): void {
     this.flag = true;
   }
+  /**
+   * 概要欄を非表示にする.
+   */
   hiddenDescription(): void {
     this.flag = false;
   }
@@ -246,16 +245,14 @@ export default class XXXComponent extends Vue {
    * チャンネル情報をfavoriteListに入れる.
    */
   favoriteChannel(): void {
-    console.log("buttonPush");
-
-    // this.$store.commit("addChannelData", this.currentChannel);
+    //お気に入りボタンを押せなくする
     this.favoriteFlag = true;
-
+    //アカウント一覧からログイン中のアカウントを取得する
     const account = this.accountList.find(
       (account) => Number(account.id) === Number(this.currentUserId)
     );
-
     if (account !== undefined) {
+      //アカウントのお気に入りチャンネル一覧に現在表示されているチャンネルを追加
       account.favoriteChannelList.push(this.currentChannel);
       try {
         const reviewArr = Array<any>();
@@ -311,7 +308,7 @@ export default class XXXComponent extends Vue {
             videoCount: channel.videoCount,
           });
         }
-        // dbに保存
+        // DBに保存
         setDoc(doc(db, "アカウント一覧", String(account.id)), {
           id: account.id,
           name: account.name,
@@ -323,12 +320,8 @@ export default class XXXComponent extends Vue {
           favoriteChannelList: channelArr,
           reviewList: reviewArr,
         });
-        console.log("DBに保存");
-        // console.log(docRef);
-        // console.log("Document written with ID: ", docRef.id);
       } catch (e) {
         console.error("Error adding document: ", e);
-        console.log("Error adding document: ");
       }
     }
   }

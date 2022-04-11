@@ -50,11 +50,11 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { Account } from "@/types/Account";
-import { collection, onSnapshot } from "@firebase/firestore";
-import db from "@/firebase";
 import { Review } from "@/types/Review";
 import { Videos } from "@/types/Videos";
 import { Channels } from "@/types/Channels";
+import db from "@/firebase";
+import { collection, onSnapshot } from "@firebase/firestore";
 @Component
 export default class XXXComponent extends Vue {
   // メールアドレス
@@ -85,7 +85,7 @@ export default class XXXComponent extends Vue {
         }
       }
     }
-
+    //DBからアカウント一覧を取得する
     const post = collection(db, "アカウント一覧");
     onSnapshot(post, (post) => {
       const accountListByDb = post.docs.map((doc) => ({ ...doc.data() }));
@@ -143,28 +143,22 @@ export default class XXXComponent extends Vue {
       }
     });
   } //end created
-
   /**
    * ログイン.
    */
   public login(): void {
     this.loginError = "";
-    // const accountList = this.$store.getters.getAccountList;
-
     for (const account of this.accountList) {
       if (
         account.mailaddless === this.email &&
         account.password === this.password
       ) {
         const currentAccountId = account.id;
-        // console.log(currentAccount);
-
         this.$store.commit("addCurrentUserId", { id: currentAccountId });
         this.$router.push("/top");
         return;
       }
     }
-
     this.loginError = "メールアドレスまたはパスワードが誤っています";
   }
 }

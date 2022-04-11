@@ -79,25 +79,29 @@
 import { Component, Vue } from "vue-property-decorator";
 import { format } from "date-fns";
 import { Videos } from "@/types/Videos";
-import axios from "axios";
+import { Review } from "@/types/Review";
+import { Channels } from "@/types/Channels";
 import { Account } from "@/types/Account";
+import axios from "axios";
 import db from "@/firebase";
 import { collection, doc, onSnapshot, setDoc } from "@firebase/firestore";
-import { Channels } from "@/types/Channels";
-import { Review } from "@/types/Review";
 @Component
 export default class XXXComponent extends Vue {
+  /* eslint @typescript-eslint/no-explicit-any: 0 */
+  //レビューの5段階評価
   private evaluation = 0;
+  //レビューの内容
   private review = "";
+  //レビューのID（DBから取得する）
   private reviewId = 0;
+  //レビューした動画の情報
   private videoDetail = new Videos(0, "", "", "", "", "", "");
+  //レビューした動画のID（DBから取得する）
+  private reviewVideosId = "";
   //DBの中のアカウントリスト
   private accountList = Array<Account>();
-  private reviewVideosId = "";
 
   async created(): Promise<void> {
-    console.log("start");
-
     //DBからアカウント一覧を取得
     const post = collection(db, "アカウント一覧");
     onSnapshot(post, async (post) => {
@@ -154,18 +158,7 @@ export default class XXXComponent extends Vue {
           )
         );
       }
-
       const reviewId = Number(this.$route.params.id);
-      // const review = this.$store.getters.getReviewByReviewId(reviewId);
-      // let review = new Review(
-      //   "",
-      //   0,
-      //   0,
-      //   new Videos(0, "", "", "", "", "", ""),
-      //   0,
-      //   "",
-      //   new Array<number>()
-      // );
       for (const account of this.accountList) {
         for (const review of account.reviewList) {
           if (review.reviewId === reviewId) {
@@ -176,7 +169,6 @@ export default class XXXComponent extends Vue {
           }
         }
       }
-
       const keys = this.$store.getters.getApiKey;
       for (const key of keys) {
         try {
@@ -207,19 +199,12 @@ export default class XXXComponent extends Vue {
   }
 
   editReview(): void {
-    // this.$store.commit("editReview", {
-    //   date: this.getDate(),
-    //   evaluation: this.evaluation,
-    //   review: this.review,
-    //   reviewId: this.reviewId,
-    // });
     for (const account of this.accountList) {
       for (const review of account.reviewList) {
         if (review.reviewId === this.reviewId) {
           review.evaluation = this.evaluation;
           review.review = this.review;
           review.reviewDate = this.getDate();
-
           try {
             const reviewArr = Array<any>();
             for (const review of account.reviewList) {
@@ -289,9 +274,7 @@ export default class XXXComponent extends Vue {
                 reviewList: reviewArr,
               }
             );
-            console.log("DBに保存");
             console.log(docRef);
-            // console.log("Document written with ID: ", docRef.id);
           } catch (e) {
             console.error("Error adding document: ", e);
             console.log("Error adding document: ");

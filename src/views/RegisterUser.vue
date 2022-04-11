@@ -94,11 +94,9 @@ import { Component, Vue } from "vue-property-decorator";
 import { Account } from "@/types/Account";
 import { Channels } from "@/types/Channels";
 import { Review } from "@/types/Review";
-
+import { Videos } from "@/types/Videos";
 import db from "@/firebase";
 import { collection, doc, onSnapshot, setDoc } from "firebase/firestore";
-import { Videos } from "@/types/Videos";
-
 @Component
 export default class XXXComponent extends Vue {
   // 姓
@@ -129,8 +127,8 @@ export default class XXXComponent extends Vue {
   private errorChecker = false;
   //DBの中のアカウントリスト
   private accountList = Array<Account>();
-  //最後に登録したアカウントのID
-  private accountLastId = 30;
+  //最後に登録したアカウントのID(DBから取得する)
+  private accountLastId = 0;
 
   created(): void {
     // スクロールトップボタン
@@ -151,7 +149,6 @@ export default class XXXComponent extends Vue {
         }
       }
     } //end scrollTop
-
     //DBからアカウント一覧を取得
     const post = collection(db, "アカウント一覧");
     onSnapshot(post, (post) => {
@@ -209,26 +206,22 @@ export default class XXXComponent extends Vue {
         );
       } //end for accountListByDb
     });
-
     //DBからアカウントラストＩＤを取得
     onSnapshot(doc(db, "アカウントラストID", "アカウントラストID"), (doc) => {
       this.accountLastId = { ...doc.data() }.accountLastId;
-      console.log("createdアカウントラストID" + this.accountLastId);
     });
   } //end created
-
   /**
-   * ユーザー登録情報をstoreに送る.
+   * ユーザー登録情報をDBに送る.
    */
   public register(): void {
-    // 空にする
+    // エラーメッセージを空にする
     this.lastNameError = "";
     this.firstNameError = "";
     this.emailError = "";
     this.telError = "";
     this.passwordError = "";
     this.passwordConfirmError = "";
-
     // エラーハンドリング
     if (this.lastName === "") {
       this.lastNameError = "姓を入力してください";
@@ -258,8 +251,6 @@ export default class XXXComponent extends Vue {
       this.passwordError = "パスワードと確認用パスワードが異なります";
       this.errorChecker = true;
     }
-
-    // const accountList = this.$store.getters.getAccountList;
     // 既に登録されたメールアドレスが入力された時にエラーを出す
     for (const account of this.accountList) {
       if (this.email === account.mailaddless) {
@@ -267,16 +258,14 @@ export default class XXXComponent extends Vue {
         this.errorChecker = true;
       }
     }
-
+    //１つでもエラーがあれば処理を中断する.
     if (this.errorChecker === true) {
       this.errorChecker = false;
       return;
     }
-
-    // 登録されているユーザー情報の取得
-    // const accountLastId = this.$store.getters.getLastUserId;
-    // 新たなユーザーに使用するID１
+    // 新たなユーザーに使用するID
     let newUserId = 0;
+    //新たなユーザーの情報（DBから格納する）
     let newAccount = new Account(
       0,
       this.lastName + this.firstName,
@@ -314,8 +303,8 @@ export default class XXXComponent extends Vue {
         new Array<Review>()
       );
     }
+    //作成したアカウントのIDを取得する
     newUserId = newAccount.id;
-
     //DBのアカウントラストIDを更新する
     try {
       setDoc(doc(db, "アカウントラストID", "アカウントラストID"), {
@@ -324,8 +313,7 @@ export default class XXXComponent extends Vue {
     } catch (e) {
       console.error("Error adding document: ", e);
     }
-
-    //dbに保存
+    //DBにアカウントを保存
     try {
       setDoc(doc(db, "アカウント一覧", String(newUserId)), {
         id: newAccount.id,
@@ -338,8 +326,6 @@ export default class XXXComponent extends Vue {
         favoriteChannelList: [],
         reviewList: [],
       });
-      // console.log(docRef2);
-      // console.log("Document written with ID: ", docRef.id);
     } catch (e) {
       console.error("Error adding document: ", e);
     }

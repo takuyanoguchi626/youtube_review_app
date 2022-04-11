@@ -92,6 +92,7 @@ import db from "@/firebase";
 import { collection, doc, onSnapshot, setDoc } from "@firebase/firestore";
 @Component
 export default class XXXComponent extends Vue {
+  /* eslint @typescript-eslint/no-explicit-any: 0 */
   // ステートから取得したユーザー情報
   private targetAccount = new Account(
     0,
@@ -114,8 +115,6 @@ export default class XXXComponent extends Vue {
     "",
     new Array<number>()
   );
-  //DBの中のアカウントリスト
-  private accountList = Array<Account>();
   // 取得したレビューのいいねカウント
   private favoriteCount = this.targetReview.favoriteCount;
   // ボタンの使用可否
@@ -124,132 +123,14 @@ export default class XXXComponent extends Vue {
   private currentUserId = this.$store.getters.getCurrentUserId;
   //本人かの識別
   private isMyAccount = false;
-
-  // ステートから取得したレビュー
-  // get reviewFavorite(): Review {
-  //   // URLから取得したid
-  //   const reviewParamsId = this.$route.params.id;
-
-  //   // ステートの情報の中からURLで付与されたものと同一の一意のidのレビューを取得する
-  //   for (const account of this.accountList) {
-  //     for (const review of account.reviewList) {
-  //       if (Number(reviewParamsId) === review.reviewId) {
-  //         this.targetReview = review;
-  //       }
-  //     }
-  //   }
-  //   return this.targetReview;
-  // }
+  //DBの中のアカウントリスト
+  private accountList = Array<Account>();
   // レビューのいいねカウント
   private count = 0;
-
-  transitionEdit(): void {
-    this.$router.push("/EditReview/" + this.targetReview.reviewId);
-  }
-
-  deleteReview(): void {
-    const result = confirm("本当に削除しますか？");
-    if (result === true) {
-      // this.$store.commit("deleteReview", {
-      //   reviewId: this.targetReview.reviewId,
-      // });
-
-      for (let i = 0; i < this.targetAccount.reviewList.length; i++) {
-        if (
-          this.targetAccount.reviewList[i].reviewId ===
-          this.targetReview.reviewId
-        ) {
-          this.targetAccount.reviewList.splice(i, 1);
-        }
-      }
-
-      try {
-        const reviewArr = Array<any>();
-        for (const review of this.targetAccount.reviewList) {
-          if (review.favoriteCount === undefined) {
-            reviewArr.push({
-              reviewDate: review.reviewDate,
-              reviewId: review.reviewId,
-              accountId: review.accountId,
-              videos: {
-                id: review.videos.id,
-                publishedAt: review.videos.publishedAt,
-                title: review.videos.title,
-                description: review.videos.description,
-                thumbnailsUrl: review.videos.thumbnailsUrl,
-                channelTitle: review.videos.channelTitle,
-                viewCount: review.videos.viewCount,
-              },
-              evaluation: review.evaluation,
-              review: review.review,
-              favoriteCount: [],
-            });
-          } else {
-            reviewArr.push({
-              reviewDate: review.reviewDate,
-              reviewId: review.reviewId,
-              accountId: review.accountId,
-              videos: {
-                id: review.videos.id,
-                publishedAt: review.videos.publishedAt,
-                title: review.videos.title,
-                description: review.videos.description,
-                thumbnailsUrl: review.videos.thumbnailsUrl,
-                channelTitle: review.videos.channelTitle,
-                viewCount: review.videos.viewCount,
-              },
-              evaluation: review.evaluation,
-              review: review.review,
-              favoriteCount: review.favoriteCount,
-            });
-          }
-        }
-
-        const channelArr = Array<any>();
-        for (const channel of this.targetAccount.favoriteChannelList) {
-          channelArr.push({
-            id: channel.id,
-            title: channel.title,
-            description: channel.description,
-            publishedAt: channel.publishedAt,
-            thumbnailsUrl: channel.thumbnailsUrl,
-            viewCount: channel.viewCount,
-            subscriberCount: channel.subscriberCount,
-            videoCount: channel.videoCount,
-          });
-        }
-
-        // dbに保存
-        const docRef = setDoc(
-          doc(db, "アカウント一覧", String(this.targetAccount.id)),
-          {
-            id: this.targetAccount.id,
-            name: this.targetAccount.name,
-            introduction: this.targetAccount.introduction,
-            img: this.targetAccount.img,
-            mailaddless: this.targetAccount.mailaddless,
-            telephone: this.targetAccount.telephone,
-            password: this.targetAccount.password,
-            favoriteChannelList: channelArr,
-            reviewList: reviewArr,
-          }
-        );
-        console.log("DBに保存");
-        console.log(docRef);
-        // console.log("Document written with ID: ", docRef.id);
-      } catch (e) {
-        console.error("Error adding document: ", e);
-        console.log("Error adding document: ");
-      }
-
-      this.$router.push("/videoDetail/" + this.targetReview.videos.id);
-    }
-  }
 
   created(): void {
     // スクロールトップボタン
     scrollTop(1); // 遅すぎるとガクガクになるので注意
-
     function scrollTop(duration: number) {
       let currentY = window.pageYOffset; // 現在のスクロール位置を取得
       let step = duration / currentY > 1 ? 10 : 100; // 三項演算子
@@ -257,7 +138,6 @@ export default class XXXComponent extends Vue {
       let intervalId = setInterval(scrollUp, timeStep);
       // timeStepの間隔でscrollUpを繰り返す。
       // clearItervalのために返り値intervalIdを定義する。
-
       function scrollUp() {
         currentY = window.pageYOffset;
         if (currentY === 0) {
@@ -267,7 +147,6 @@ export default class XXXComponent extends Vue {
         }
       }
     }
-
     //DBからアカウント一覧を取得
     const post = collection(db, "アカウント一覧");
     onSnapshot(post, (post) => {
@@ -324,10 +203,8 @@ export default class XXXComponent extends Vue {
           )
         );
       }
-
       // URLから取得したid
       const reviewParamsId = Number(this.$route.params.id);
-
       // ステートの情報の中からURLで付与されたものと同一の一意のidのレビューを取得する
       for (const account of this.accountList) {
         for (const review of account.reviewList) {
@@ -352,35 +229,114 @@ export default class XXXComponent extends Vue {
       }
     });
   } //end created
-
+  /**
+   * レビュー編集画面へ遷移する.
+   */
+  transitionEdit(): void {
+    this.$router.push("/EditReview/" + this.targetReview.reviewId);
+  }
+  /**
+   * レビューを削除する.
+   * @remarks
+   * DBからアカウント情報を取得し、レビューを削除して、再度格納しなおす
+   */
+  deleteReview(): void {
+    const result = confirm("本当に削除しますか？");
+    if (result === true) {
+      for (let i = 0; i < this.targetAccount.reviewList.length; i++) {
+        if (
+          this.targetAccount.reviewList[i].reviewId ===
+          this.targetReview.reviewId
+        ) {
+          this.targetAccount.reviewList.splice(i, 1);
+        }
+      }
+      try {
+        const reviewArr = Array<any>();
+        for (const review of this.targetAccount.reviewList) {
+          if (review.favoriteCount === undefined) {
+            reviewArr.push({
+              reviewDate: review.reviewDate,
+              reviewId: review.reviewId,
+              accountId: review.accountId,
+              videos: {
+                id: review.videos.id,
+                publishedAt: review.videos.publishedAt,
+                title: review.videos.title,
+                description: review.videos.description,
+                thumbnailsUrl: review.videos.thumbnailsUrl,
+                channelTitle: review.videos.channelTitle,
+                viewCount: review.videos.viewCount,
+              },
+              evaluation: review.evaluation,
+              review: review.review,
+              favoriteCount: [],
+            });
+          } else {
+            reviewArr.push({
+              reviewDate: review.reviewDate,
+              reviewId: review.reviewId,
+              accountId: review.accountId,
+              videos: {
+                id: review.videos.id,
+                publishedAt: review.videos.publishedAt,
+                title: review.videos.title,
+                description: review.videos.description,
+                thumbnailsUrl: review.videos.thumbnailsUrl,
+                channelTitle: review.videos.channelTitle,
+                viewCount: review.videos.viewCount,
+              },
+              evaluation: review.evaluation,
+              review: review.review,
+              favoriteCount: review.favoriteCount,
+            });
+          }
+        }
+        const channelArr = Array<any>();
+        for (const channel of this.targetAccount.favoriteChannelList) {
+          channelArr.push({
+            id: channel.id,
+            title: channel.title,
+            description: channel.description,
+            publishedAt: channel.publishedAt,
+            thumbnailsUrl: channel.thumbnailsUrl,
+            viewCount: channel.viewCount,
+            subscriberCount: channel.subscriberCount,
+            videoCount: channel.videoCount,
+          });
+        }
+        // dbに保存
+        const docRef = setDoc(
+          doc(db, "アカウント一覧", String(this.targetAccount.id)),
+          {
+            id: this.targetAccount.id,
+            name: this.targetAccount.name,
+            introduction: this.targetAccount.introduction,
+            img: this.targetAccount.img,
+            mailaddless: this.targetAccount.mailaddless,
+            telephone: this.targetAccount.telephone,
+            password: this.targetAccount.password,
+            favoriteChannelList: channelArr,
+            reviewList: reviewArr,
+          }
+        );
+        console.log(docRef);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+      this.$router.push("/videoDetail/" + this.targetReview.videos.id);
+    }
+  }
   /**
    * レビューにいいねをする.
    */
   favoriteReview(): void {
     this.count = this.count + 1;
     this.targetReview.favoriteCount.push(this.currentUserId);
-
     // レビューのいいね情報に現在のユーザー情報が含まれていたらボタンを押せなくする
-
     if (this.targetReview.favoriteCount.includes(this.currentUserId)) {
       this.flag = true;
     }
-
-    // this.$store.commit("addFavorite", this.reviewFavorite.favoriteCount);
-    // for (const account of this.accountList) {
-    //   for (let review of account.reviewList) {
-    //     if (payload.reviewId === review.reviewId) {
-    //       review = payload;
-    //     }
-    //   }
-    // }
-
-    // for (let review of this.targetAccount.reviewList) {
-    //   if (review.reviewId === this.targetReview.reviewId) {
-    //     review = this.targetReview;
-    //   }
-    // }
-
     for (let i = 0; i < this.targetAccount.reviewList.length; i++) {
       if (
         this.targetAccount.reviewList[i].reviewId === this.targetReview.reviewId
@@ -388,7 +344,6 @@ export default class XXXComponent extends Vue {
         this.targetAccount.reviewList[i] = this.targetReview;
       }
     }
-
     try {
       const reviewArr = Array<any>();
       for (const review of this.targetAccount.reviewList) {
@@ -430,7 +385,6 @@ export default class XXXComponent extends Vue {
           });
         }
       }
-
       const channelArr = Array<any>();
       for (const channel of this.targetAccount.favoriteChannelList) {
         channelArr.push({
@@ -444,7 +398,6 @@ export default class XXXComponent extends Vue {
           videoCount: channel.videoCount,
         });
       }
-
       // dbに保存
       const docRef = setDoc(
         doc(db, "アカウント一覧", String(this.targetAccount.id)),
@@ -460,12 +413,10 @@ export default class XXXComponent extends Vue {
           reviewList: reviewArr,
         }
       );
-      console.log("DBに保存");
       console.log(docRef);
       // console.log("Document written with ID: ", docRef.id);
     } catch (e) {
       console.error("Error adding document: ", e);
-      console.log("Error adding document: ");
     }
   } //end iine
 }

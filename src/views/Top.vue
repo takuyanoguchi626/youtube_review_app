@@ -123,9 +123,8 @@ import { Videos } from "@/types/Videos";
 import { Channels } from "@/types/Channels";
 import { Account } from "@/types/Account";
 import { Review } from "@/types/Review";
-import { collection, onSnapshot } from "@firebase/firestore";
 import db from "@/firebase";
-
+import { collection, onSnapshot } from "@firebase/firestore";
 @Component
 export default class XXXComponent extends Vue {
   // 急上昇動画50件分
@@ -138,7 +137,7 @@ export default class XXXComponent extends Vue {
   private recommendationYoutuberList = Array<Channels>();
   // 人気アカウントの一覧
   private recommendationAccountList = Array<Account>();
-  // フラッグ
+  // YouTubeAPIから情報を取得するまでのロードのフラッグ
   private flag = true;
   // 総レビュー数
   private reviewCounts = 0;
@@ -157,7 +156,6 @@ export default class XXXComponent extends Vue {
       let intervalId = setInterval(scrollUp, timeStep);
       // timeStepの間隔でscrollUpを繰り返す。
       // clearItervalのために返り値intervalIdを定義する。
-
       function scrollUp() {
         currentY = window.pageYOffset;
         if (currentY === 0) {
@@ -167,7 +165,6 @@ export default class XXXComponent extends Vue {
         }
       }
     }
-
     /**
      *Vuexストアのアクション経由非同期でWebAPIから急上昇動画Top5を取得する.
      *@returns Promiseオブジェクト
@@ -265,9 +262,6 @@ export default class XXXComponent extends Vue {
       }
       this.reviewCounts = reviewCounts;
 
-      // 人気アカウントとレビューした動画のサムネMAX3件表示
-      // this.$store.commit("sortByReviewCount");
-
       //アカウント一覧をレビュー投稿の多い順にソート
       this.accountList.sort(function (before: Account, after: Account) {
         //ある順序の基準において a が b より小
@@ -281,10 +275,8 @@ export default class XXXComponent extends Vue {
         // a と b が等しい場合
         return 0;
       });
-
       this.recommendationAccountList = this.accountList;
-      console.log(this.recommendationAccountList);
-
+      // 人気アカウントのレビューした動画のサムネMAX3件表示
       for (let i = 0; i <= 2; i++) {
         for (let j = 0; j <= 2; j++) {
           if (this.recommendationAccountList[i] !== undefined) {
@@ -297,7 +289,6 @@ export default class XXXComponent extends Vue {
                 this.videoThumnails[i].push(
                   this.recommendationAccountList[i].reviewList[j]
                 );
-                // this.recommendationAccountList[i].reviewList[j]
               }
             }
           }
@@ -305,7 +296,6 @@ export default class XXXComponent extends Vue {
       }
     });
   } //end created
-
   /**
    *ユーザー登録画面に遷移する.
    */
