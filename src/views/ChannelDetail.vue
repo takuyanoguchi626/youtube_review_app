@@ -44,7 +44,6 @@
         ><i class="material-icons left">star_border</i>お気に入り</a
       >
     </div>
-
     <div class="videos item col card white video-card">
       <div v-for="videoDetail of videoArr" :key="videoDetail.id">
         <router-link :to="'/videoDetail/' + videoDetail.id"

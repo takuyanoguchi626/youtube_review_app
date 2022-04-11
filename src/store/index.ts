@@ -1,11 +1,11 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import createPersistedState from "vuex-persistedstate";
-
 import axios from "axios";
 import { Account } from "@/types/Account";
 import { Videos } from "@/types/Videos";
 import { Channels } from "@/types/Channels";
+//sessionstorageのためのimport
+import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex);
 
@@ -143,7 +143,7 @@ export default new Vuex.Store({
       return state.youtubersInfo;
     },
     /**
-     *
+     *ログイン中のアカウントのIDを取得.
      *
      * @param state
      * @returns
@@ -152,10 +152,10 @@ export default new Vuex.Store({
       return state.currentUserId;
     },
     /**
-     *
+     *引数に入れたアカウントがログイン中のアカウントかどうかのflagを取得.
      *
      * @param state
-     * @returns
+     * @returns - 引数に入れたアカウントがログイン中のアカウントかどうかのflag
      */
     getMyAccountFlag(state) {
       return (account: Account) => {
@@ -175,6 +175,7 @@ export default new Vuex.Store({
     createPersistedState({
       // ストレージのキーを指定
       key: "youtube_review_app",
+      //保存するステートの内容
       paths: ["currentUserId"],
       // ストレージの種類を指定
       storage: window.sessionStorage,
