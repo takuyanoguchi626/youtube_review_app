@@ -9,16 +9,16 @@ const routes: Array<RouteConfig> = [
     component: () => import("../views/Top.vue"),
   },
   {
+    path: "/registerUser",
+    component: () => import("../views/RegisterUser.vue"),
+  },
+  {
     path: "/login",
     component: () => import("../views/Login.vue"),
   },
   {
-    path: "/iconChange/:id",
-    component: () => import("../views/IconChange.vue"),
-  },
-  {
-    path: "/registerUser",
-    component: () => import("../views/RegisterUser.vue"),
+    path: "/top",
+    component: () => import("../views/Top.vue"),
   },
   {
     path: "/channelDetail/:id",
@@ -30,16 +30,12 @@ const routes: Array<RouteConfig> = [
     component: () => import("../views/VideoDetail.vue"),
   },
   {
-    path: "/top",
-    component: () => import("../views/Top.vue"),
+    path: "/2searchedList/:searchText",
+    component: () => import("../views/SearchedList2.vue"),
   },
   {
-    path: "/myProfile/:id",
-    component: () => import("../views/MyProfile.vue"),
-  },
-  {
-    path: "/selfIntroductionChange/:id",
-    component: () => import("../views/SelfIntroductionChange.vue"),
+    path: "/searchedList/:searchText",
+    component: () => import("../views/SearchedList.vue"),
   },
   {
     path: "/addReview/:id",
@@ -54,12 +50,16 @@ const routes: Array<RouteConfig> = [
     component: () => import("../views/EditReview.vue"),
   },
   {
-    path: "/2searchedList/:searchText",
-    component: () => import("../views/SearchedList2.vue"),
+    path: "/myProfile/:id",
+    component: () => import("../views/MyProfile.vue"),
   },
   {
-    path: "/searchedList/:searchText",
-    component: () => import("../views/SearchedList.vue"),
+    path: "/iconChange/:id",
+    component: () => import("../views/IconChange.vue"),
+  },
+  {
+    path: "/selfIntroductionChange/:id",
+    component: () => import("../views/SelfIntroductionChange.vue"),
   },
   {
     path: "/404",

@@ -88,13 +88,7 @@
                   >マイページ</router-link
                 >
               </li>
-
               <li class="icon">
-                <!-- <router-link
-                  v-if="currentUserId !== 0"
-                  :to="'/myProfile/' + currentUserId"
-                  aria-current="page"
-                > -->
                 <img
                   v-if="currentUserId !== 0"
                   class="userIcon circle myPageIcon"
@@ -106,7 +100,6 @@
                   class="userIcon circle"
                   src="/img/blank.png"
                 />
-                <!-- </router-link> -->
               </li>
             </ul>
           </div>
@@ -131,7 +124,7 @@ export default class XXXComponent extends Vue {
   private searchText = "";
   // パス
   private path = "";
-
+  //アカウントのアイコン画像URL
   private imgSource = "";
   //DBの中のアカウントリスト
   private accountList = Array<Account>();
@@ -195,24 +188,22 @@ export default class XXXComponent extends Vue {
         );
       }
     });
-  }
-
+  } //end created
   /**
    * ログイン中のユーザーのID取得.
+   *
    * @returns - ログイン中のユーザーのID
    */
   get currentUserId(): number {
     const currentUserId = this.$store.getters.getCurrentUserId;
     return currentUserId;
   }
-
   /**
    * ログイン中のユーザーのアイコン取得.
+   *
    * @returns - ログイン中のユーザーのアイコン
    */
   get accountImg(): string {
-    // const accountList = this.$store.getters.getAccountList;
-
     for (const account of this.accountList) {
       if (this.currentUserId === account.id) {
         this.imgSource = account.img;
@@ -226,10 +217,6 @@ export default class XXXComponent extends Vue {
    * @param searchText - 検索ワード
    */
   search(searchText: string): void {
-    console.log(searchText);
-    // 現在のパスを検出
-    console.log("path:" + location.pathname);
-
     // 検索表示画面でこのメソッドを実行するとcreatedメソッドは動かずリロードされないため、同一のページを行き来するように条件分岐する
     if (location.pathname.startsWith("/searchedList")) {
       // 入力欄を空にする
@@ -244,7 +231,6 @@ export default class XXXComponent extends Vue {
       this.$router.push(`/searchedList/${searchText}`);
       return;
     }
-
     // 通常実行する処理
     // 入力欄を空にする
     this.searchText = "";
@@ -258,6 +244,9 @@ export default class XXXComponent extends Vue {
     this.$store.commit("removeUser");
     console.log(this.$store.state.currentUser);
   }
+  /**
+   * MyProfileに遷移する.
+   */
   ToMyPage(): void {
     this.$router.push("/myProfile/" + this.currentUserId);
   }
