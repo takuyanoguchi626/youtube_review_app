@@ -13,12 +13,20 @@ const routes: Array<RouteConfig> = [
     component: () => import("../views/Login.vue"),
   },
   {
+    path: "/2login/:id",
+    component: () => import("../views/Login2.vue"),
+  },
+  {
     path: "/iconChange/:id",
     component: () => import("../views/IconChange.vue"),
   },
   {
     path: "/registerUser",
     component: () => import("../views/RegisterUser.vue"),
+  },
+  {
+    path: "/2registerUser/:id",
+    component: () => import("../views/RegisterUser2.vue"),
   },
   {
     path: "/channelDetail/:id",

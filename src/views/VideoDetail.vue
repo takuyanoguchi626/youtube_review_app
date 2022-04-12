@@ -202,7 +202,7 @@ export default class XXXComponent extends Vue {
     const user = this.$store.getters.getCurrentUser;
 
     if (user.id === 0) {
-      this.$router.push("/login");
+      this.$router.push(`/2login/${this.videoDetail.id}`);
       return;
     }
     this.$router.push(`/addReview/${this.videoDetail.id}`);
