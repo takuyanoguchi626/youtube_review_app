@@ -34,12 +34,7 @@
               >&nbsp;Facebookで登録</span
             >
           </button>
-          <button class="button4 btn" type="button">
-            <img
-              class="button-icon"
-              src="/img/2021 Twitter logo - white.png"
-            /><span>&nbsp;Twitterで登録</span>
-          </button>
+          <Twitter></Twitter>
         </div>
       </div>
 
@@ -119,10 +114,12 @@ import { Videos } from "@/types/Videos";
 import { Channels } from "@/types/Channels";
 import { Account } from "@/types/Account";
 import { Review } from "@/types/Review";
+import Twitter from "@/components/Twitter.vue";
 import Google from "@/components/Google.vue";
 
 @Component({
   components: {
+    Twitter,
     Google,
   },
 })
