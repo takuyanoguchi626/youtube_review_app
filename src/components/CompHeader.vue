@@ -156,6 +156,11 @@ export default class XXXComponent extends Vue {
    * @param searchText - 検索ワード
    */
   search(searchText: string): void {
+    // 検索ワードが空だったら警告を出す
+    if (this.searchText === "") {
+      alert("検索ワードを入力してください");
+      return;
+    }
     console.log(searchText);
     // 現在のパスを検出
     console.log("path:" + location.pathname);

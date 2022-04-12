@@ -25,9 +25,9 @@ export default new Vuex.Store({
       "",
       "",
       "",
+      "b",
       "",
-      "",
-      "",
+      "b",
       new Array<Channels>(),
       new Array<Review>()
     ),
@@ -107,15 +107,6 @@ export default new Vuex.Store({
      * @param state - ステート
      * @param payload - ペイロード
      */
-    addFavoriteCount(state, payload) {
-      for (const account of state.accountList) {
-        for (let review of account.reviewList) {
-          if (payload.reviewId === review.reviewId) {
-            review = payload;
-          }
-        }
-      }
-    },
     /**
      * ユーザー登録時のIDの更新.
      * @param state - ステート
@@ -124,6 +115,11 @@ export default new Vuex.Store({
     addLastUserId(state, payload) {
       state.lastUserId = payload;
     },
+    /**
+     * stateのユーザーリスト中の当該ユーザーにお気に入りチャンネルのデータを入れる.
+     * @param state - ステート
+     * @param payload - ペイロード
+     */
     addChannelData(state, payload) {
       for (const account of state.accountList) {
         if (account.id === state.currentUser.id) {
@@ -131,12 +127,41 @@ export default new Vuex.Store({
         }
       }
     },
+    /**
+     * stateのユーザーリスト中のレビュー情報にいいねカウントを入れる.
+     * @param state - ステート
+     * @param payload - ペイロード
+     */
     addFavorite(state, payload) {
       for (const account of state.accountList) {
         for (const review of account.reviewList) {
           if (payload.reviewId === review.reviewId) {
-            review.favoriteCount.push(payload.favoriteCount);
+            review.favoriteCount.push(payload);
           }
+        }
+      }
+    },
+    /**
+     * stateのユーザーリスト中の当該ユーザーにお気に入りチャンネルのデータを消す.
+     * @param state - ステート
+     * @param payload - ペイロード
+     */
+    removeFavoriteChannels(state, payload) {
+      for (const account of state.accountList) {
+        account.favoriteChannelList = payload;
+      }
+    },
+    /**
+     * stateのユーザーリスト中のレビュー情報にいいねカウントを減らす.
+     * @param state - ステート
+     * @param payload - ペイロード
+     */
+    removeFavoriteReview(state, payload) {
+      for (const account of state.accountList) {
+        for (const review of account.reviewList) {
+          review.favoriteCount = review.favoriteCount.filter(
+            (num) => num !== payload
+          );
         }
       }
     },
