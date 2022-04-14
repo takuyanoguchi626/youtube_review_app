@@ -60,19 +60,19 @@
           <div class="review-data">
             <p>レビュー投稿日：{{ targetReview.reviewDate }}</p>
             <a
-              class="waves-effect waves-light btn"
+              class="btn"
               v-on:click="favoriteReview()"
               v-if="currentUserId !== 0 && !isMyAccount && !flagState"
               ><i class="material-icons left">thumb_up</i>いいね{{ count }}</a
             >
             <a
-              class="waves-effect waves-light btn remove-btn"
+              class="btn remove-btn"
               v-on:click="removeFavoriteReview(currentUserId)"
               v-if="currentUserId !== 0 && !isMyAccount && flagState"
               ><i class="material-icons left">thumb_up</i>いいね{{ count }}</a
             >
             <a
-              class="waves-effect waves-light btn disable-btn"
+              class="btn disable-btn"
               :disabled="true"
               v-if="currentUserId === 0 || isMyAccount"
               ><i class="material-icons left">thumb_up</i>いいね{{ count }}</a

@@ -38,19 +38,19 @@
         </div>
       </div>
       <a
-        class="waves-effect waves-light btn favorite favoriteBtn"
+        class="btn favorite favoriteBtn"
         v-on:click="favoriteChannel()"
         v-if="currentUserId !== 0 && !flagState"
         ><i class="material-icons left">star_border</i>お気に入り</a
       >
       <a
-        class="waves-effect waves-light btn favorite favoriteBtn remove-btn"
+        class="btn favorite favoriteBtn remove-btn"
         v-on:click="removeFavoriteChannel(currentChannel.id)"
         v-if="currentUserId !== 0 && flagState"
         ><i class="material-icons left">star_border</i>お気に入り</a
       >
       <a
-        class="waves-effect waves-light btn favorite favoriteBtn"
+        class="btn favorite favoriteBtn"
         v-if="currentUserId === 0"
         :disabled="true"
         ><i class="material-icons left">star_border</i>お気に入り</a

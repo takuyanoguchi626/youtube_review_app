@@ -106,6 +106,7 @@ import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
 import { Videos } from "@/types/Videos";
 import { Channels } from "@/types/Channels";
+// import linkify from "vue-linkify";
 @Component
 export default class XXXComponent extends Vue {
   // 動画情報の検索結果
