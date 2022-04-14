@@ -32,11 +32,17 @@ export default {
       photoURL: "",
       newAccount: [],
       accountList:[],
-      accountLastId:0
+      accountLastId:0,
+      currentUserId:0
     };
   },
   methods: {
     onClick: async function () {
+      this.currentUserId=this.$store.getters.getCurrentUserId
+      if(this.currentUserId!==0){
+        alert("ログアウトしてください")
+        return
+      }
       const provider = new GoogleAuthProvider();
       const auth =getAuth()
       await signInWithPopup(auth, provider)

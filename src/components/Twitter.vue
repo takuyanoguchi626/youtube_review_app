@@ -31,10 +31,16 @@ export default {
       accountList: [],
       accountLastId: 0,
       createdAt: "",
+      currentUserId: 0,
     };
   },
   methods: {
     onClick: async function () {
+      this.currentUserId = this.$store.getters.getCurrentUserId;
+      if (this.currentUserId !== 0) {
+        alert("ログアウトしてください");
+        return;
+      }
       const provider = new TwitterAuthProvider();
       const auth = getAuth();
       await signInWithPopup(auth, provider)
@@ -76,6 +82,7 @@ export default {
       // 新たなユーザーに使用するID
       let newUserId = 0;
       // 既にログインしたことのあるアカウントの判別
+      console.log(this.createdAt);
       for (let i = 0; i < this.accountList.length; i++) {
         if (this.accountList[i].mailaddless === this.createdAt) {
           newUserId = this.accountList[i].id;
