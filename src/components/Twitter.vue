@@ -30,13 +30,14 @@ export default {
       newAccount: [],
       accountList: [],
       accountLastId: 0,
+      createdAt: "",
     };
   },
   methods: {
     onClick: async function () {
       const provider = new TwitterAuthProvider();
       const auth = getAuth();
-      signInWithPopup(auth, provider)
+      await signInWithPopup(auth, provider)
         .then((result) => {
           // This gives you a the Twitter OAuth 1.0 Access Token and Secret.
           // You can use these server side with your app's credentials to access the Twitter API.
@@ -51,6 +52,7 @@ export default {
             console.log(result.user);
             this.userName = result.user.displayName;
             this.photoURL = result.user.photoURL;
+            this.createdAt = result.user.metadata.createdAt;
           } else {
             alert("有効なアカウントではありません");
           }
@@ -75,7 +77,7 @@ export default {
       let newUserId = 0;
       // 既にログインしたことのあるアカウントの判別
       for (let i = 0; i < this.accountList.length; i++) {
-        if (this.accountList[i].mailaddless === this.email) {
+        if (this.accountList[i].mailaddless === this.createdAt) {
           newUserId = this.accountList[i].id;
           console.log(newUserId);
           this.$store.commit("addCurrentUserId", this.accountList[i]);
@@ -90,7 +92,7 @@ export default {
           this.userName,
           "",
           this.photoURL,
-          this.email,
+          this.createdAt,
           "",
           "passwordpeirghowfowdkfmowdifowkfowdifhs",
           [],
@@ -106,7 +108,7 @@ export default {
           this.userName,
           "",
           this.photoURL,
-          this.email,
+          this.createdAt,
           "",
           "passwordpeirghowfowdkfmowdifowkfowdifhs",
           [],
