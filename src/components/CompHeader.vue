@@ -217,6 +217,12 @@ export default class XXXComponent extends Vue {
    * @param searchText - 検索ワード
    */
   search(searchText: string): void {
+    // 検索ワードが空だったら警告を出す
+    if (this.searchText === "") {
+      alert("検索ワードを入力してください");
+      return;
+    }
+
     // 検索表示画面でこのメソッドを実行するとcreatedメソッドは動かずリロードされないため、同一のページを行き来するように条件分岐する
     if (location.pathname.startsWith("/searchedList")) {
       // 入力欄を空にする

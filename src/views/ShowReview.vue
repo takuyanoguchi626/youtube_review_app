@@ -62,9 +62,21 @@
           </div>
           <div>
             <a
-              class="waves-effect waves-light btn"
+              class="btn"
               v-on:click="favoriteReview()"
-              :disabled="flag"
+              v-if="currentUserId !== 0 && !isMyAccount && !flagState"
+              ><i class="material-icons left">thumb_up</i>いいね{{ count }}</a
+            >
+            <a
+              class="btn remove-btn"
+              v-on:click="removeFavoriteReview(currentUserId)"
+              v-if="currentUserId !== 0 && !isMyAccount && flagState"
+              ><i class="material-icons left">thumb_up</i>いいね{{ count }}</a
+            >
+            <a
+              class="btn disable-btn"
+              :disabled="true"
+              v-if="currentUserId === 0 || isMyAccount"
               ><i class="material-icons left">thumb_up</i>いいね{{ count }}</a
             >
           </div>
@@ -127,6 +139,12 @@ export default class XXXComponent extends Vue {
   private accountList = Array<Account>();
   // レビューのいいねカウント
   private count = 0;
+  // URLから取得したレビューID
+  private reviewParamsId = this.$route.params.id;
+  // ボタンの使用可否の取得
+  get flagState(): boolean {
+    return this.flag;
+  }
 
   created(): void {
     // スクロールトップボタン
@@ -147,6 +165,7 @@ export default class XXXComponent extends Vue {
         }
       }
     }
+
     //DBからアカウント一覧を取得
     const post = collection(db, "アカウント一覧");
     onSnapshot(post, (post) => {
@@ -419,6 +438,19 @@ export default class XXXComponent extends Vue {
       console.error("Error adding document: ", e);
     }
   } //end iine
+
+  /**
+   * レビューのいいねを取り消す.
+   */
+  removeFavoriteReview(currentUserId: number): void {
+    this.count = this.count - 1;
+    this.targetReview.favoriteCount = this.targetReview.favoriteCount.filter(
+      (num) => num !== currentUserId
+    );
+    this.flag = false;
+    this.$store.commit("removeFavoriteReview", this.currentUserId);
+    console.log(this.$store.state.accountList);
+  }
 }
 </script>
 
@@ -465,6 +497,14 @@ export default class XXXComponent extends Vue {
 
 .delete {
   margin-left: 20px;
+}
+.remove-btn {
+  margin-bottom: 5px;
+  background-color: rgb(223, 223, 223);
+  color: rgb(159, 159, 159);
+}
+.disable-btn {
+  margin-bottom: 5px;
 }
 
 .movieDescription {

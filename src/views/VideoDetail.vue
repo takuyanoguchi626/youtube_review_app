@@ -294,7 +294,8 @@ export default class XXXComponent extends Vue {
   postReview(): void {
     const currentUserId = this.$store.getters.getCurrentUserId;
     if (currentUserId === 0) {
-      this.$router.push("/login");
+      this.$router.push(`/2login/${this.videoDetail.id}`);
+
       return;
     }
     this.$router.push(`/addReview/${this.videoDetail.id}`);
@@ -463,4 +464,9 @@ iframe {
 .star5_rating[data-rate="0"]:after {
   width: 0%;
 } /* 星0 */
+
+.img:hover {
+  opacity: 0.6;
+  transition-duration: 0.3s;
+}
 </style>

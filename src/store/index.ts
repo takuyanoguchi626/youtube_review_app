@@ -63,6 +63,33 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    //DB連携する
+    /**
+     * stateのユーザーリスト中の当該ユーザーにお気に入りチャンネルのデータを消す.
+     * @param state - ステート
+     * @param payload - ペイロード
+     */
+    removeFavoriteChannels(state, payload) {
+      for (const account of state.accountList) {
+        account.favoriteChannelList = payload;
+      }
+    },
+    //DB連携する
+    /**
+     * stateのユーザーリスト中のレビュー情報にいいねカウントを減らす.
+     * @param state - ステート
+     * @param payload - ペイロード
+     */
+    removeFavoriteReview(state, payload) {
+      for (const account of state.accountList) {
+        for (const review of account.reviewList) {
+          review.favoriteCount = review.favoriteCount.filter(
+            (num) => num !== payload
+          );
+        }
+      }
+    },
+
     /**
      * 急上昇動画をステートに格納する.
      * @param state - ステート

@@ -38,10 +38,23 @@
         </div>
       </div>
       <a
-        class="waves-effect waves-light btn favorite favoriteBtn"
-        v-on:click="favoriteChannel"
-        :disabled="favoriteFlag"
+        class="btn favorite favoriteBtn"
+        v-on:click="favoriteChannel()"
+        v-if="currentUserId !== 0 && !flagState"
         ><i class="material-icons left">star_border</i>お気に入り</a
+      >
+      <a
+        class="btn favorite favoriteBtn remove-btn"
+        v-on:click="removeFavoriteChannel(currentChannel.id)"
+        v-if="currentUserId !== 0 && flagState"
+        ><i class="material-icons left">star_border</i>お気に入り</a
+      >
+      <a
+        class="btn favorite favoriteBtn"
+        v-if="currentUserId === 0"
+        :disabled="true"
+        >>>>>>> test ><i class="material-icons left">star_border</i
+        >お気に入り</a
       >
     </div>
     <div class="videos item col card white video-card">
@@ -89,6 +102,12 @@ export default class XXXComponent extends Vue {
   private apiKey = this.$store.getters.getApiKey;
   //DBの中のアカウントリスト
   private accountList = Array<Account>();
+  // ボタンの使用可否の取得
+  get flagState(): boolean {
+    return this.favoriteFlag;
+  }
+  // ログイン中のアカウントのお気に入りチャンネルリスト
+  private channelList = new Array<Channels>();
 
   async created(): Promise<void> {
     // スクロールトップボタン
@@ -109,15 +128,10 @@ export default class XXXComponent extends Vue {
         }
       }
     }
+    const channelId = this.$route.params.id;
     // ログインしていない場合を押せなくする
     if (this.currentUserId === 0) {
       this.favoriteFlag = true;
-    }
-    const channelId = this.$route.params.id;
-    // 概要欄がない場合の処理
-    if (this.currentChannel.description === "") {
-      this.currentChannel.description =
-        "このYoutuberの概要欄は見つかりませんでした";
     }
     //DBからアカウント一覧を取得
     const post = collection(db, "アカウント一覧");
@@ -223,6 +237,17 @@ export default class XXXComponent extends Vue {
             )
           );
         }
+        // 概要欄がない場合の処理
+        if (this.currentChannel.description === "") {
+          this.currentChannel.description =
+            "このYoutuberの概要欄は見つかりませんでした";
+        }
+        //ログイン中のアカウントのお気に入りチャンネルリストを取得
+        for (const account of this.accountList) {
+          if (this.currentUserId === account.id) {
+            this.channelList = account.favoriteChannelList;
+          }
+        }
         return;
       } catch (e) {
         console.log("APIerror");
@@ -324,6 +349,21 @@ export default class XXXComponent extends Vue {
         console.error("Error adding document: ", e);
       }
     }
+
+    console.log(this.$store.state.accountList);
+  }
+  /**
+   * アカウントのお気に入りchannelListからchannelを消す.
+   */
+  removeFavoriteChannel(currentChannelId: string): void {
+    const newChannelList = new Array<Channels>();
+    for (const channel of this.channelList) {
+      if (channel.id !== currentChannelId) {
+        newChannelList.push(channel);
+      }
+    }
+    this.favoriteFlag = false;
+    this.$store.commit("removeFavoriteChannels", newChannelList);
   }
 }
 </script>
@@ -380,6 +420,10 @@ export default class XXXComponent extends Vue {
 }
 .favoriteBtn {
   margin-bottom: 20px;
+}
+.remove-btn {
+  background-color: rgb(223, 223, 223);
+  color: rgb(159, 159, 159);
 }
 .channel-description {
   margin-top: 5px;
