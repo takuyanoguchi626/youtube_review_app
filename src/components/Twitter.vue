@@ -1,50 +1,64 @@
 <template>
   <div>
     <router-link to="/top">
-      <button class="button2 btn" type="button" v-on:click="onClick">
-        <img class="button-icon" src="/img/google.png" /><span
-          >&nbsp;Googleでログイン</span
-        >
+      <button class="button4 btn" type="button" v-on:click="onClick">
+        <img
+          class="button-icon"
+          src="/img/2021 Twitter logo - white.png"
+        /><span>&nbsp;Twitterでログイン</span>
       </button>
     </router-link>
   </div>
 </template>
 
-<script lang="js">
-// import { Component, Vue } from "vue-property-decorator";
+<script>
 // import firebase from "firebase";
-// import {firebase} from "firebase";
-import { getAuth,signInWithPopup,GoogleAuthProvider } from "firebase/auth";
+import { getAuth, signInWithPopup, TwitterAuthProvider } from "firebase/auth";
 import { Account } from "@/types/Account";
-// import { Channels } from "@/types/Channels";
-// import { Review } from "@/types/Review";
+
 export default {
-  name: "Google",
+  name: "Signin",
   data() {
     return {
       userName: "",
-      email: "",
       photoURL: "",
       newAccount: [],
     };
   },
   methods: {
     onClick: async function () {
-      const provider = new GoogleAuthProvider();
-      const auth =getAuth()
-      await signInWithPopup(auth, provider)
-        .then(
-          (result) => {
-            console.log(result);
+      const provider = new TwitterAuthProvider();
+      const auth = getAuth();
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          // This gives you a the Twitter OAuth 1.0 Access Token and Secret.
+          // You can use these server side with your app's credentials to access the Twitter API.
+          const credential = TwitterAuthProvider.credentialFromResult(result);
+          const token = credential.accessToken;
+          const secret = credential.secret;
+
+          // The signed-in user info.
+          const user = result.user;
+          // ...
+          if (user) {
+            console.log(result.user);
             this.userName = result.user.displayName;
-            this.email = result.user.email;
             this.photoURL = result.user.photoURL;
-          },
-          (error) => {
-            alert("ログインに失敗しました");
+          } else {
+            alert("有効なアカウントではありません");
           }
-        );
-      console.log(this.userName + "/" + this.email + "/" + this.photoURL);
+        })
+        .catch((error) => {
+          alert("error");
+          // // Handle Errors here.
+          // const errorCode = error.code;
+          // const errorMessage = error.message;
+          // // The email of the user's account used.
+          // const email = error.email;
+          // // The AuthCredential type that was used.
+          // const credential = TwitterAuthProvider.credentialFromError(error);
+          // // ...
+        });
       // 登録されているユーザー情報の取得
       const accountLastId = this.$store.getters.getLastUserId;
       // 現在のアカウントリスト
@@ -71,7 +85,7 @@ export default {
           this.photoURL,
           this.email,
           "",
-          "passwordpeirghowfowdkfmowdifowkfowdifhs",
+          "",
           [],
           []
         );
@@ -87,7 +101,7 @@ export default {
           this.photoURL,
           this.email,
           "",
-          "passwordpeirghowfowdkfmowdifowkfowdifhs",
+          "",
           [],
           []
         );
@@ -103,21 +117,22 @@ export default {
 </script>
 
 <style scoped>
-.button2 {
+.button4 {
   position: absolute;
-  top: 50%;
+  top: 70%;
   left: 72%;
   -ms-transform: translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-  background-color: white;
+  background-color: cornflowerblue;
+  border: none;
 }
-.button2:hover {
+.button4:hover {
   opacity: 0.6;
   transition-duration: 0.3s;
 }
-.button2 span {
-  color: black;
+.button4 span {
+  color: white;
 }
 .button-icon {
   width: 15px;

@@ -34,7 +34,7 @@
               >&nbsp;Facebookで登録</span
             >
           </button>
-          <!-- <Twitter></Twitter> -->
+          <Twitter></Twitter>
         </div>
       </div>
 
@@ -116,12 +116,12 @@ import { Account } from "@/types/Account";
 import { Review } from "@/types/Review";
 import db from "@/firebase";
 import { collection, onSnapshot } from "@firebase/firestore";
-// import Twitter from "@/components/Twitter.vue";
+import Twitter from "@/components/Twitter.vue";
 import Google from "@/components/Google.vue";
 
 @Component({
   components: {
-    // Twitter,
+    Twitter,
     Google,
   },
 })
