@@ -274,7 +274,9 @@ export default class XXXComponent extends Vue {
         // a と b が等しい場合
         return 0;
       });
-      this.recommendationAccountList = this.accountList;
+      this.recommendationAccountList[0] = this.accountList[0];
+      this.recommendationAccountList[1] = this.accountList[1];
+      this.recommendationAccountList[2] = this.accountList[2];
       // 人気アカウントのレビューした動画のサムネMAX3件表示
       for (let i = 0; i <= 2; i++) {
         for (let j = 0; j <= 2; j++) {
