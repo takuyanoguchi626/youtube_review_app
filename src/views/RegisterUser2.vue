@@ -94,6 +94,9 @@ import { Component, Vue } from "vue-property-decorator";
 import { Account } from "@/types/Account";
 import { Channels } from "@/types/Channels";
 import { Review } from "@/types/Review";
+import { Videos } from "@/types/Videos";
+import db from "@/firebase";
+import { collection, doc, onSnapshot, setDoc } from "firebase/firestore";
 @Component
 export default class XXXComponent extends Vue {
   // 姓
@@ -122,6 +125,10 @@ export default class XXXComponent extends Vue {
   private passwordConfirmError = "";
   // エラーチェッカー
   private errorChecker = false;
+  //DBの中のアカウントリスト
+  private accountList = Array<Account>();
+  //最後に登録したアカウントのID(DBから取得する)
+  private accountLastId = 0;
 
   created(): void {
     // スクロールトップボタン
@@ -141,21 +148,80 @@ export default class XXXComponent extends Vue {
           scrollBy(0, -step); // step分上へスクロール
         }
       }
-    }
-  }
-
+    } //end scrollTop
+    //DBからアカウント一覧を取得
+    const post = collection(db, "アカウント一覧");
+    onSnapshot(post, (post) => {
+      const accountListByDb = post.docs.map((doc) => ({ ...doc.data() }));
+      for (const account of accountListByDb) {
+        const favoriteChannelList = Array<Channels>();
+        for (const channel of account.favoriteChannelList) {
+          favoriteChannelList.push(
+            new Channels(
+              channel.id,
+              channel.title,
+              channel.description,
+              channel.publishedAt,
+              channel.thumbnailsUrl,
+              channel.viewCount,
+              channel.subscriberCount,
+              channel.videoCount
+            )
+          );
+        }
+        const reviewList = Array<Review>();
+        for (const review of account.reviewList) {
+          reviewList.push(
+            new Review(
+              review.reviewDate,
+              review.reviewId,
+              review.accountId,
+              new Videos(
+                review.videos.id,
+                review.videos.publishedAt,
+                review.videos.title,
+                review.videos.description,
+                review.videos.thumbnailsUrl,
+                review.videos.channelTitle,
+                review.videos.viewCount
+              ),
+              review.evaluation,
+              review.review,
+              review.favoriteCount
+            )
+          );
+        }
+        this.accountList.push(
+          new Account(
+            account.id,
+            account.name,
+            account.introduction,
+            account.img,
+            account.mailaddless,
+            account.telephone,
+            account.password,
+            favoriteChannelList,
+            reviewList
+          )
+        );
+      } //end for accountListByDb
+    });
+    //DBからアカウントラストＩＤを取得
+    onSnapshot(doc(db, "アカウントラストID", "アカウントラストID"), (doc) => {
+      this.accountLastId = { ...doc.data() }.accountLastId;
+    });
+  } //end created
   /**
-   * ユーザー登録情報をstoreに送る.
+   * ユーザー登録情報をDBに送る.
    */
   public register(): void {
-    // 空にする
+    // エラーメッセージを空にする
     this.lastNameError = "";
     this.firstNameError = "";
     this.emailError = "";
     this.telError = "";
     this.passwordError = "";
     this.passwordConfirmError = "";
-
     // エラーハンドリング
     if (this.lastName === "") {
       this.lastNameError = "姓を入力してください";
@@ -185,27 +251,36 @@ export default class XXXComponent extends Vue {
       this.passwordError = "パスワードと確認用パスワードが異なります";
       this.errorChecker = true;
     }
-    //既にの登録されているアカウント情報の取得
-    const accountList = this.$store.getters.getAccountList;
     // 既に登録されたメールアドレスが入力された時にエラーを出す
-    for (let account of accountList) {
+    for (const account of this.accountList) {
       if (this.email === account.mailaddless) {
         this.emailError = "既に登録されたメールアドレスが入力されています";
         this.errorChecker = true;
       }
     }
+    //１つでもエラーがあれば処理を中断する.
     if (this.errorChecker === true) {
       this.errorChecker = false;
       return;
     }
     const videoId = this.$route.params.id;
-    // 登録されているユーザー情報の取得
-    const accountLastId = this.$store.getters.getLastUserId;
-    // 新たなユーザーに使用するID１
+    // 新たなユーザーに使用するID
     let newUserId = 0;
+    //新たなユーザーの情報（DBから格納する）
+    let newAccount = new Account(
+      0,
+      this.lastName + this.firstName,
+      "",
+      "",
+      "",
+      "",
+      "",
+      new Array<Channels>(),
+      new Array<Review>()
+    );
     // idが既に存在する場合と存在しない場合で新たに付与するidを分ける
-    if (accountLastId === 0) {
-      const newAccount = new Account(
+    if (this.accountLastId === 0) {
+      newAccount = new Account(
         1,
         this.lastName + this.firstName,
         "",
@@ -216,13 +291,9 @@ export default class XXXComponent extends Vue {
         new Array<Channels>(),
         new Array<Review>()
       );
-      newUserId = newAccount.id;
-      this.$store.commit("addUser", newAccount);
-      this.$store.commit("addLastUserId", newUserId);
-      this.$router.push(`/2login/${videoId}`);
     } else {
-      const newAccount = new Account(
-        accountLastId + 1,
+      newAccount = new Account(
+        this.accountLastId + 1,
         this.lastName + this.firstName,
         "",
         "/img/egg.png",
@@ -232,12 +303,36 @@ export default class XXXComponent extends Vue {
         new Array<Channels>(),
         new Array<Review>()
       );
-      newUserId = newAccount.id;
-      this.$store.commit("addUser", newAccount);
-      this.$store.commit("addLastUserId", newUserId);
-      this.$router.push(`/2login/${videoId}`);
     }
-  }
+    //作成したアカウントのIDを取得する
+    newUserId = newAccount.id;
+    //DBのアカウントラストIDを更新する
+    try {
+      setDoc(doc(db, "アカウントラストID", "アカウントラストID"), {
+        accountLastId: Number(newUserId),
+      });
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+    //DBにアカウントを保存
+    try {
+      setDoc(doc(db, "アカウント一覧", String(newUserId)), {
+        id: newAccount.id,
+        name: newAccount.name,
+        introduction: newAccount.introduction,
+        img: newAccount.img,
+        mailaddless: newAccount.mailaddless,
+        telephone: newAccount.telephone,
+        password: newAccount.password,
+        favoriteChannelList: [],
+        reviewList: [],
+      });
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+    // this.$router.push("/login");
+    this.$router.push(`/2login/${videoId}`);
+  } //end register
 }
 </script>
 

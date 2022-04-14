@@ -263,6 +263,7 @@ export default class XXXComponent extends Vue {
       this.errorChecker = false;
       return;
     }
+    // const videoId = this.$route.params.id;
     // 新たなユーザーに使用するID
     let newUserId = 0;
     //新たなユーザーの情報（DBから格納する）
@@ -330,6 +331,7 @@ export default class XXXComponent extends Vue {
       console.error("Error adding document: ", e);
     }
     this.$router.push("/login");
+    // this.$router.push(`/2login/${videoId}`);
   } //end register
 }
 </script>

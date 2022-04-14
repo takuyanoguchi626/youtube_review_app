@@ -65,6 +65,7 @@ export default class XXXComponent extends Vue {
   private loginError = "";
   //DBの中のアカウントリスト
   private accountList = Array<Account>();
+  // private videoId = this.$route.params.id;
 
   created(): void {
     // スクロールトップボタン
@@ -156,6 +157,7 @@ export default class XXXComponent extends Vue {
         const currentAccountId = account.id;
         this.$store.commit("addCurrentUserId", { id: currentAccountId });
         this.$router.push("/top");
+        // this.$router.push(`/addReview/${this.videoId}`);
         return;
       }
     }
