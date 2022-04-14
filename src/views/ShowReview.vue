@@ -449,6 +449,62 @@ export default class XXXComponent extends Vue {
     );
     this.flag = false;
     this.$store.commit("removeFavoriteReview", this.currentUserId);
+
+    try {
+      const reviewArr = Array<any>();
+      for (const review of this.targetAccount.reviewList) {
+        reviewArr.push({
+          reviewDate: review.reviewDate,
+          reviewId: review.reviewId,
+          accountId: review.accountId,
+          videos: {
+            id: review.videos.id,
+            publishedAt: review.videos.publishedAt,
+            title: review.videos.title,
+            description: review.videos.description,
+            thumbnailsUrl: review.videos.thumbnailsUrl,
+            channelTitle: review.videos.channelTitle,
+            viewCount: review.videos.viewCount,
+          },
+          evaluation: review.evaluation,
+          review: review.review,
+          favoriteCount: this.targetReview.favoriteCount,
+        });
+      }
+      const channelArr = Array<any>();
+      for (const channel of this.targetAccount.favoriteChannelList) {
+        channelArr.push({
+          id: channel.id,
+          title: channel.title,
+          description: channel.description,
+          publishedAt: channel.publishedAt,
+          thumbnailsUrl: channel.thumbnailsUrl,
+          viewCount: channel.viewCount,
+          subscriberCount: channel.subscriberCount,
+          videoCount: channel.videoCount,
+        });
+      }
+      // dbに保存
+      const docRef = setDoc(
+        doc(db, "アカウント一覧", String(this.targetAccount.id)),
+        {
+          id: this.targetAccount.id,
+          name: this.targetAccount.name,
+          introduction: this.targetAccount.introduction,
+          img: this.targetAccount.img,
+          mailaddless: this.targetAccount.mailaddless,
+          telephone: this.targetAccount.telephone,
+          password: this.targetAccount.password,
+          favoriteChannelList: channelArr,
+          reviewList: reviewArr,
+        }
+      );
+      console.log(docRef);
+      // console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+
     console.log(this.$store.state.accountList);
   }
 }
