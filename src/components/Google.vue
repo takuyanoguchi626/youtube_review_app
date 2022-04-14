@@ -11,11 +11,16 @@
 </template>
 
 <script lang="js">
+import { getAuth,signInWithPopup,GoogleAuthProvider } from "firebase/auth";
+import { Account } from "@/types/Account";
+import { Channels } from "@/types/Channels";
+import { Review } from "@/types/Review";
+import { Videos } from "@/types/Videos";
+import db from "@/firebase";
+import { collection, doc, onSnapshot, setDoc } from "firebase/firestore";
 // import { Component, Vue } from "vue-property-decorator";
 // import firebase from "firebase";
 // import {firebase} from "firebase";
-import { getAuth,signInWithPopup,GoogleAuthProvider } from "firebase/auth";
-import { Account } from "@/types/Account";
 // import { Channels } from "@/types/Channels";
 // import { Review } from "@/types/Review";
 export default {
@@ -26,6 +31,8 @@ export default {
       email: "",
       photoURL: "",
       newAccount: [],
+      accountList:[],
+      accountLastId:0
     };
   },
   methods: {
@@ -46,24 +53,24 @@ export default {
         );
       console.log(this.userName + "/" + this.email + "/" + this.photoURL);
       // 登録されているユーザー情報の取得
-      const accountLastId = this.$store.getters.getLastUserId;
+      // const accountLastId = this.$store.getters.getLastUserId;
       // 現在のアカウントリスト
-      const currentAccountList = this.$store.getters.getAccountList;
-      console.log(currentAccountList);
+      // const currentAccountList = this.$store.getters.getAccountList;
+      console.log(this.accountList);
       // 新たなユーザーに使用するID
       let newUserId = 0;
       // 既にログインしたことのあるアカウントの判別
-      for (let i = 0; i < currentAccountList.length; i++) {
-        if (currentAccountList[i].mailaddless === this.email) {
-          newUserId = currentAccountList[i].id;
+      for (let i = 0; i < this.accountList.length; i++) {
+        if (this.accountList[i].mailaddless === this.email) {
+          newUserId = this.accountList[i].id;
           console.log(newUserId);
+          this.$store.commit("addCurrentUserId", this.accountList[i]);
           this.$router.push(`/myProfile/${newUserId}`);
-          this.$store.commit("addCurrentUser", currentAccountList[i]);
           return;
         }
       }
       // idが既に存在する場合と存在しない場合で新たに付与するidを分ける
-      if (accountLastId === 0) {
+      if (this.accountLastId === 0) {
         this.newAccount = new Account(
           1,
           this.userName,
@@ -76,12 +83,12 @@ export default {
           []
         );
         newUserId = this.newAccount.id;
-        this.$store.commit("addUser", this.newAccount);
-        this.$store.commit("addCurrentUser", this.newAccount);
-        this.$store.commit("addLastUserId", newUserId);
+        // this.$store.commit("addUser", this.newAccount);
+        this.$store.commit("addCurrentUserId", this.newAccount);
+        // this.$store.commit("addLastUserId", newUserId);
       } else {
         this.newAccount = new Account(
-          accountLastId + 1,
+          this.accountLastId + 1,
           this.userName,
           "",
           this.photoURL,
@@ -92,13 +99,99 @@ export default {
           []
         );
         newUserId = this.newAccount.id;
-        this.$store.commit("addUser", this.newAccount);
-        this.$store.commit("addCurrentUser", this.newAccount);
-        this.$store.commit("addLastUserId", newUserId);
+        // this.$store.commit("addUser", this.newAccount);
+        this.$store.commit("addCurrentUserId", this.newAccount);
+        // this.$store.commit("addLastUserId", newUserId);
       }
+       try {
+      setDoc(doc(db, "アカウントラストID", "アカウントラストID"), {
+        accountLastId: Number(newUserId),
+      });
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+     //DBにアカウントを保存
+    try {
+      setDoc(doc(db, "アカウント一覧", String(newUserId)), {
+        id: this.newAccount.id,
+        name: this.newAccount.name,
+        introduction: this.newAccount.introduction,
+        img: this.newAccount.img,
+        mailaddless: this.newAccount.mailaddless,
+        telephone: this.newAccount.telephone,
+        password: this.newAccount.password,
+        favoriteChannelList: [],
+        reviewList: [],
+      });
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
     },
     // firebase.auth().signOut();
   },
+mounted() {
+  //DBからアカウント一覧を取得
+    const post = collection(db, "アカウント一覧");
+    onSnapshot(post, (post) => {
+      const accountListByDb = post.docs.map((doc) => ({ ...doc.data() }));
+      for (const account of accountListByDb) {
+        const favoriteChannelList = []
+        for (const channel of account.favoriteChannelList) {
+          favoriteChannelList.push(
+            new Channels(
+              channel.id,
+              channel.title,
+              channel.description,
+              channel.publishedAt,
+              channel.thumbnailsUrl,
+              channel.viewCount,
+              channel.subscriberCount,
+              channel.videoCount
+            )
+          );
+        }
+        const reviewList = []
+        for (const review of account.reviewList) {
+          reviewList.push(
+            new Review(
+              review.reviewDate,
+              review.reviewId,
+              review.accountId,
+              new Videos(
+                review.videos.id,
+                review.videos.publishedAt,
+                review.videos.title,
+                review.videos.description,
+                review.videos.thumbnailsUrl,
+                review.videos.channelTitle,
+                review.videos.viewCount
+              ),
+              review.evaluation,
+              review.review,
+              review.favoriteCount
+            )
+          );
+        }
+        this.accountList.push(
+          new Account(
+            account.id,
+            account.name,
+            account.introduction,
+            account.img,
+            account.mailaddless,
+            account.telephone,
+            account.password,
+            favoriteChannelList,
+            reviewList
+          )
+        );
+      } //end for accountListByDb
+    });
+    //DBからアカウントラストＩＤを取得
+    onSnapshot(doc(db, "アカウントラストID", "アカウントラストID"), (doc) => {
+      this.accountLastId = { ...doc.data() }.accountLastId;
+    });
+},
 };
 </script>
 
