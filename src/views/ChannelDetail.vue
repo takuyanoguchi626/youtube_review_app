@@ -53,8 +53,7 @@
         class="btn favorite favoriteBtn"
         v-if="currentUserId === 0"
         :disabled="true"
-        >>>>>>> test ><i class="material-icons left">star_border</i
-        >お気に入り</a
+        ><i class="material-icons left">star_border</i>お気に入り</a
       >
     </div>
     <div class="videos item col card white video-card">
