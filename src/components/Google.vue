@@ -10,9 +10,11 @@
   </div>
 </template>
 
-<script>
+<script lang="js">
 // import { Component, Vue } from "vue-property-decorator";
-import firebase from "firebase";
+// import firebase from "firebase";
+// import {firebase} from "firebase";
+import { getAuth,signInWithPopup,GoogleAuthProvider } from "firebase/auth";
 import { Account } from "@/types/Account";
 // import { Channels } from "@/types/Channels";
 // import { Review } from "@/types/Review";
@@ -28,10 +30,11 @@ export default {
   },
   methods: {
     onClick: async function () {
-      var provider = new firebase.auth.GoogleAuthProvider();
-      await firebase
-        .auth()
-        .signInWithPopup(provider)
+      const provider = new GoogleAuthProvider();
+      const auth =getAuth()
+      await
+
+        signInWithPopup(auth, provider)
         .then(
           (result) => {
             console.log(result);
@@ -70,7 +73,7 @@ export default {
           this.photoURL,
           this.email,
           "",
-          "",
+          "passwordpeirghowfowdkfmowdifowkfowdifhs",
           [],
           []
         );
@@ -86,7 +89,7 @@ export default {
           this.photoURL,
           this.email,
           "",
-          "",
+          "passwordpeirghowfowdkfmowdifowkfowdifhs",
           [],
           []
         );
