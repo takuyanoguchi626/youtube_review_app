@@ -81,7 +81,7 @@ import { format } from "date-fns";
 import { Videos } from "@/types/Videos";
 import axios from "axios";
 import { Account } from "@/types/Account";
-import db from "@/firebase";
+import db from "../firebase.js";
 import { collection, doc, onSnapshot, setDoc } from "@firebase/firestore";
 import { Review } from "@/types/Review";
 import { Channels } from "@/types/Channels";

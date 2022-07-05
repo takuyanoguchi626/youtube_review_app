@@ -45,7 +45,7 @@ export default new Vuex.Store({
             `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&chart=mostPopular&regionCode=JP&maxResults=50&key=${key}`
           );
           const payload = responce.data.items;
-          const youtuberArray = [];
+          const youtuberArray: any[] = [];
           for (let i = 0; i <= 49; i++) {
             const responce2 = await axios.get(
               `https://www.googleapis.com/youtube/v3/channels?key=${key}&part=snippet,contentDetails,statistics,status&id=${payload[i].snippet.channelId}`
